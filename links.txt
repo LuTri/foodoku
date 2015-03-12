@@ -1,0 +1,2 @@
+http://de.wikipedia.org/wiki/Sudoku#Algorithmus
+https://www.hochschule-trier.de/uploads/tx_rfttheses/Eckart_Sussenburger_-_Loesungs-_und_Generierungsalgorithmen_fuer_Sudoku.pdf
