@@ -1,3 +1,22 @@
+/* 
+   ============================================================================
+   Programmname: tableui.h
+   Autor       : Tristan Lucas
+                 Heinrich-Hertz-Berufskolleg
+   Datum       : 
+   Thema       : Sudoku
+   Version     : 1.0
+   Beschreibung: Modularisierung von Programm-Funkionen zum Anzeigen des Spiel-
+                 Status.
+   ============================================================================ 
+*/
+
+/* 
+   ============================================================================
+   Präprozessor-Anweisungen, globale defines
+   ============================================================================ 
+*/
+
 #ifndef _TABLEUI_H
 #define _TABLEUI_H
 
@@ -9,16 +28,24 @@
 
 #define _CRT_SECURE_NO_WARNINGS
 
+
+/* 
+   ============================================================================
+   Nach außen verfügbare Schnittstellen
+   ============================================================================ 
+*/
+
 void  move_cursor(char cDirection);
 
 void  show_ui(char cShowHelp);
 
 char* help_text(char* cpText);
 
-void  set_sudoku(char cSudoku[9][9]);
+void  set_sudoku(char cSudoku[BOUNDARY][BOUNDARY]);
 void  set_sudoku_pos(int iX, int iY, char cValue);
 
-void  set_help(char cHelp[9][9][9]);
+void  clear_help(int iX, int iY);
+void  set_help(char cHelpData[BOUNDARY][BOUNDARY][BOUNDARY]);
 void  set_help_pos(int iX, int iY, char iValue);
 
 void  startup_sudoku(void);
