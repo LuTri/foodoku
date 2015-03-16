@@ -47,6 +47,22 @@ char cHelp[BOUNDARY][BOUNDARY][BOUNDARY];
 
 char cCursorPos[2] = {0,0};
 
+char pretty_value(char cValue)
+/*
+   ============================================================================
+   Gibt je nach Wert entweder den Wert oder ein Leerzeichen zurück
+      1. Parameter: Der zu überprüfende Wert
+      2. Rückgabewert: Der verarbeitete Wert
+   ============================================================================
+*/ 
+{
+   if (cValue > 0)
+   {
+      return cValue + '0';
+   }
+   return ' ';
+}
+
 void show_help(void)
 /*
    ============================================================================
@@ -72,22 +88,6 @@ void show_help(void)
       cValue = cHelp[cCursorPos[0]][cCursorPos[1]][i];
       mvaddch(iY, iX, pretty_value(cValue));
    }
-}
-
-char pretty_value(char cValue)
-/*
-   ============================================================================
-   Gibt je nach Wert entweder den Wert oder ein Leerzeichen zurück
-      1. Parameter: Der zu überprüfende Wert
-      2. Rückgabewert: Der verarbeitete Wert
-   ============================================================================
-*/ 
-{
-   if (cValue > 0)
-   {
-      return cValue + '0';
-   }
-   return ' ';
 }
 
 void move_cursor(char cDirection)
