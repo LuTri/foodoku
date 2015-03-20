@@ -12,6 +12,7 @@ DROP TABLE IF EXISTS `games`;
 CREATE TABLE `games` (
 	`game_id` INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
 	`user` INTEGER NOT NULL,
+	`schwierigkeit` INTEGER NOT NULL,
 	`spielzeitpunkt` TEXT NOT NULL,
 	`zeit` INTEGER NOT NULL,
 	`angezeigte_hilfen` INTEGER NOT NULL,
