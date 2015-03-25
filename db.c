@@ -37,6 +37,10 @@
    "SELECT spielername, vorname, nachname, anmeldedatum "\
    "FROM userdata WHERE user_id = %d;"
 
+/* Query zum Auflisten aller registrierten User-IDs */
+#define QUERY_GET_USERS ""\
+   "SELECT user_id FROM userdata;"
+
 /* Query zum Eintragen eines Spiels */
 #define QUERY_INSERT_GAMEDATA ""\
    "INSERT INTO games"\
@@ -80,7 +84,6 @@
 */
 
 #include "db.h"
-#include "sqlite3.h"
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -127,7 +130,7 @@ char* encrypt(char* sClear)
 /*
    ============================================================================
    Verschlüsselt einen String mit einer einfachen Vigenère-Verschlüsselung. Der
-   Schlüssel ist der Head-Datei zu entnehmen
+   Schlüssel ist der Header-Datei zu entnehmen
       1. Parameter: Der zu verschlüsselnde Text
       2. Rückgabewert: Der verschlüsselte Text in hexadezimaler Darstellung
    ============================================================================
@@ -183,11 +186,13 @@ char* encrypt(char* sClear)
    return sEncrypted;
 }
 
-sqlite3* get_db(void)
+sqlite3* handle_db(char cUsage)
 /*
    ============================================================================
    Öffnet eine Datenbank und speichert diese zur Wiederverwendung als statische
-   Variable zwischen
+   Variable zwischen - oder schließt die geöffnete Datenbank
+      1. Parameter: Der Parameter ob die Datenbank genutzt oder geschlossen
+                    werden soll
       1. Rückgabewert: Der Zeiger auf die SQLite-Datenbank
    ============================================================================
 */
@@ -196,7 +201,7 @@ sqlite3* get_db(void)
    static sqlite3 *dbpDatabase = NULL;
    int iReturnCode;
 
-   if (dbpDatabase == NULL)
+   if (dbpDatabase == NULL && cUsage == DB_USE)
    {
       /* 
          Falls diese Programminstanz noch keine Datenbank geöffnet hat, öffne
@@ -211,11 +216,16 @@ sqlite3* get_db(void)
          dbpDatabase = NULL;
       }
    }
+   else if (cUsage == DB_CLOSE)
+   {
+      sqlite3_close(dbpDatabase);
+      dbpDatabase = NULL;
+   }
 
    /* Der gültige Datenbankzeiger oder NULL wird zurückgegeben */
    return dbpDatabase;
 }
-
+ 
 int authenticate(char* sNickname, char* sPassword)
 /*
    ============================================================================
@@ -238,7 +248,7 @@ int authenticate(char* sNickname, char* sPassword)
    sSql = sqlite3_mprintf(QUERY_AUTHENTICATE, sNickname, sEncrypted);
 
    /* Query auf der Datenbank ausführen und anschließend den String freigeben */
-   iReturnCode = sqlite3_prepare_v2(get_db(),
+   iReturnCode = sqlite3_prepare_v2(handle_db(DB_USE),
                                     sSql,
                                     strlen(sSql),
                                     &stmt,
@@ -269,10 +279,7 @@ int authenticate(char* sNickname, char* sPassword)
    return iUserId;
 }
 
-char register_user(char* sNickname,
-                   char* sName,
-                   char* sLastname,
-                   char* sPassword)
+char register_user(USER* uUser)
 /*
    ============================================================================
    Registriert einen neuen Benutzer in der Datenbank, gibt den Erfolgsstatus
@@ -295,18 +302,18 @@ char register_user(char* sNickname,
       Das Passwort sollte nicht im Klartext gespeichert werden, es wird
       verschlüsselt. Wie: Siehe Kommentare zu encrypt().
    */
-   sEncrypted = encrypt(sPassword);
+   sEncrypted = encrypt(uUser->sPassword);
    
 
    /* Query mit Parametern vorbereiten */
    sSql = sqlite3_mprintf(QUERY_INSERT_USER,
-      sEncrypted, sNickname, sName, sLastname);
+      sEncrypted, uUser->sNickname, uUser->sName, uUser->sLastname);
 
    /* Den verschlüsselten String wieder löschen*/
    free(sEncrypted);
 
    /* Query auf der Datenbank ausführen und anschließend den String freigeben */
-   iReturnCode = sqlite3_exec(get_db(),
+   iReturnCode = sqlite3_exec(handle_db(DB_USE),
                               sSql,
                               NULL,
                               NULL,
@@ -326,22 +333,57 @@ char register_user(char* sNickname,
    return 1;
 }
 
-char get_userdata(int iUserId,
-                  char** spNickname,
-                  char** spName,
-                  char** spLastname,
-                  char** spDate)
+int get_users(int** ippUserIds)
+/*
+   ============================================================================
+   Holt die IDs aller Nutzer aus der Datenbank und schreibt diese in ein Array.
+   Die Adresse des erhaltenen Arrays wird an die übergebene Adresse geschrieben.
+      1. Parameter: Die Adresse auf die geschrieben werden soll
+      2. Rückgabewert: Die Anzahl der erhaltenen IDs
+   ============================================================================
+*/
+{   /* Variablen-Definition */
+   int iReturnCode;
+   int iLastLength = 0;
+   sqlite3_stmt *stmt;
+   
+   /* Query auf Datenbank ausführen, Query löschen */
+   iReturnCode = sqlite3_prepare_v2(handle_db(DB_USE),
+                                    QUERY_GET_USERS,
+                                    strlen(QUERY_GET_USERS),
+                                    &stmt,
+                                    NULL);
+
+   if (iReturnCode != SQLITE_OK)
+   {
+      /*
+         Falls ein Fehler auftrat, den Fehlertext ausgeben, freigeben und die
+         Funktion mit 0-Rückgabe beenden
+      */
+      printf(QUERY_ERROR_NOSTAT);
+      return 0;
+   }
+
+   while (sqlite3_step( stmt ) == SQLITE_ROW)
+   {
+      /* Schreibe die gefundenen Spiel-Ids an die übergebene Adresse */
+      iLastLength = append_to_intarray(ippUserIds,
+                                       atoi((char*)sqlite3_column_text(stmt, 0)),
+                                       iLastLength);
+   }
+
+   /* Gib die Anzahl der gefundenen Spiele zurück */
+   return iLastLength;
+
+}
+
+USER* get_user_data(int iUserId)
 /*
    ============================================================================
    Holt die Nutzerdaten aus der Datenbank und schreibt diese an die übergebenen
    Adressen
       1. Parameter: Die User-Id
-      2. Parameter: Die Adresse, an die der Spielername geschrieben werden soll
-      3. Parameter: Die Adresse, an die der Vorname geschrieben werden soll
-      4. Parameter: Die Adresse, an die der Nachname geschrieben werden soll
-      5. Parameter: Die Adresse, an die das Anmeldedatum geschrieben werden
-                    soll
-      6. Rückgabewert: Der Status (0 = Fehler, 1 = Erfolg)
+      2. Rückgabewert: Der Zeiger auf die Nutzerdaten-Struktur
    ============================================================================
 */
 {
@@ -349,13 +391,15 @@ char get_userdata(int iUserId,
    int iReturnCode;
    char* sSql;
    sqlite3_stmt *stmt;
+
+   USER* upUserData;
    
    /* Query mit Parametern vorbereiten */
    sSql = sqlite3_mprintf(QUERY_GET_USERDATA, iUserId); 
 
 
    /* Query auf Datenbank ausführen, Query löschen */
-   iReturnCode = sqlite3_prepare_v2(get_db(),
+   iReturnCode = sqlite3_prepare_v2(handle_db(DB_USE),
                                     sSql,
                                     strlen(sSql),
                                     &stmt,
@@ -374,44 +418,54 @@ char get_userdata(int iUserId,
 
    if (sqlite3_step( stmt ) == SQLITE_ROW)
    {
+      char* sTemp;
+
+      upUserData = (USER*)malloc(sizeof(USER));
       /* 
          Wenn eine Zeile zur gewünschten User-Id gefunden wurde, lies die Werte
-         aus den Spalten
+         aus den Spalten.
+         Wir kennen die Abfolge der Spalten, da wir sie selbst angeben.
       */
-      *spNickname = (char*)sqlite3_column_text(stmt, 0);
-      *spName = (char*)sqlite3_column_text(stmt, 1);
-      *spLastname= (char*)sqlite3_column_text(stmt, 2);
-      *spDate = (char*)sqlite3_column_text(stmt, 3);
-      /* Wir kennen die Abfolge der Spalten, da wir sie selbst angeben */
+      sTemp = (char*)sqlite3_column_text(stmt, 0);
+      upUserData->sNickname = (char*)calloc(strlen(sTemp) + 1, sizeof(char));
+      strcpy(upUserData->sNickname, sTemp);
+      /*
+         Jeder String aus der Datenbank muss einzeln neu kopiert werden.
+         Dazu wird Speicherplatz entsprechend der String-Länge + 1 (für das
+         abschließende \0) alloziert und der String entsprechend hinein kopiert.
 
-      /* 1 ( = Erfolg ) zurückgeben*/
-      return 1;
+         Gilt auch für die folgende Anweisungen
+      */
+
+
+      sTemp = (char*)sqlite3_column_text(stmt, 1);
+      upUserData->sName = (char*)calloc(strlen(sTemp) + 1, sizeof(char));
+      strcpy(upUserData->sName, sTemp);
+
+      sTemp = (char*)sqlite3_column_text(stmt, 2);
+      upUserData->sLastname = (char*)calloc(strlen(sTemp) + 1, sizeof(char));
+      strcpy(upUserData->sLastname, sTemp);
+
+      sTemp = (char*)sqlite3_column_text(stmt, 3);
+      upUserData->sRegisterdate = (char*)calloc(strlen(sTemp) + 1, sizeof(char));
+      strcpy(upUserData->sRegisterdate,sTemp);
+
+      upUserData->sPassword = NULL;
+      /* Abschließend die User-ID eintragen */
+      upUserData->iUserId = iUserId;
    }
-   else
-   {
-      /* Falls keine Zeile gefunden wurde gib 0 ( = Fehler ) zurück */
-      return 0;
-   }
+
+   /* NULL oder den Zeiger auf die neuen Userdaten zurückgeben */
+   return upUserData;
 }
 
-char insert_game_data(int iUserId,
-                      int iMode,
-                      int iSeconds,
-                      int iHelps,
-                      int iFilled,
-                      char cFinished,
-                      char cRanked)
+char insert_game_data(GAME* upGameData)
 /*
    ============================================================================
    Speichert Spiel-Daten in der Datenbank, abhängig von der übegebenen User-Id,
    gibt den Erfolgsstatus( 0=Fehler, 1=Erfolg ) zurück
-      1. Parameter: Die User-Id des Spielers
-      2. Parameter: Die Zeit die das Spiel in Sekunden dauerte
-      3. Parameter: Anzahl der gezeigten Hilfestellungen
-      4. Parameter: Anzahl der gefüllten Felder
-      5. Parameter: Angabe, ob das Spiel gewonnen wurde (1 Ja, 0 Nein)
-      6. Parameter: Angabe, ob das Spiel gewertet wurde (1 Ja, 0 Nein)
-      7. Rückgabewert: Der Status (0 = Fehler, 1 = Erfolg)
+      1. Parameter: Der Zeiger auf die Spieldaten-Struktur
+      2. Rückgabewert: Der Status (0 = Fehler, 1 = Erfolg)
    ============================================================================
 */
 {
@@ -422,10 +476,12 @@ char insert_game_data(int iUserId,
 
    /* Verbereitung der Query mit Parametern */
    sSql = sqlite3_mprintf(QUERY_INSERT_GAMEDATA,
-      iUserId, iSeconds, iHelps, iFilled, cFinished, cRanked, iMode);
+      upGameData->iUserId, upGameData->iSeconds, upGameData->iHelps,
+      upGameData->iFilled, upGameData->cFinished, upGameData->cRanked,
+      upGameData->iMode);
 
    /* Query auf der Datenbank ausführen und anschließend den String freigeben */
-   iReturnCode = sqlite3_exec(get_db(),
+   iReturnCode = sqlite3_exec(handle_db(DB_USE),
                               sSql,
                               NULL,
                               NULL,
@@ -445,7 +501,7 @@ char insert_game_data(int iUserId,
    return 1;
 }
 
-int get_user_games(int iUserId, int **ippGames)
+int get_user_games(int iUserId, int **ippGamesIdList)
 /*
    ============================================================================
    Holt die Spiel-Ids des übergebenen Benutzers aus der Datenbank und schreibt
@@ -467,7 +523,7 @@ int get_user_games(int iUserId, int **ippGames)
 
 
    /* Query auf Datenbank ausführen, Query löschen */
-   iReturnCode = sqlite3_prepare_v2(get_db(),
+   iReturnCode = sqlite3_prepare_v2(handle_db(DB_USE),
                                     sSql,
                                     strlen(sSql),
                                     &stmt,
@@ -487,7 +543,7 @@ int get_user_games(int iUserId, int **ippGames)
    while (sqlite3_step( stmt ) == SQLITE_ROW)
    {
       /* Schreibe die gefundenen Spiel-Ids an die übergebene Adresse */
-      iLastLength = append_to_intarray(ippGames,
+      iLastLength = append_to_intarray(ippGamesIdList,
                                        atoi((char*)sqlite3_column_text(stmt, 0)),
                                        iLastLength);
    }
@@ -496,25 +552,12 @@ int get_user_games(int iUserId, int **ippGames)
    return iLastLength;
 }
 
-char get_game_data(int iGameId,
-                   int* ipUserId,
-                   int* ipMode,
-                   int* ipSeconds,
-                   int* ipHelps,
-                   int* ipFilled,
-                   char* cpFinished,
-                   char* cpRanked,
-                   char** spDate)
+GAME* get_game_data(int iGameId)
 /*
    ============================================================================
    Holt die Spiel-Daten zu einer Spiel-Id aus der Datenbank
       1. Parameter: Die User-Id
-      2. Parameter: Die Adresse, an die der Spielername geschrieben werden soll
-      3. Parameter: Die Adresse, an die der Vorname geschrieben werden soll
-      4. Parameter: Die Adresse, an die der Nachname geschrieben werden soll
-      5. Parameter: Die Adresse, an die das Anmeldedatum geschrieben werden
-                    soll
-      6. Rückgabewert: Der Status (0 = Fehler, 1 = Erfolg)
+      2. Rückgabewert: Der Zeiger auf die Spieldaten
    ============================================================================
 */
 {
@@ -522,13 +565,15 @@ char get_game_data(int iGameId,
    int iReturnCode;
    char* sSql;
    sqlite3_stmt *stmt;
+
+   GAME* gSpieldaten = NULL;
    
    /* Query mit Parametern vorbereiten */
    sSql = sqlite3_mprintf(QUERY_GET_GAMEDATA, iGameId); 
 
 
    /* Query auf Datenbank ausführen, Query löschen */
-   iReturnCode = sqlite3_prepare_v2(get_db(),
+   iReturnCode = sqlite3_prepare_v2(handle_db(DB_USE),
                                     sSql,
                                     strlen(sSql),
                                     &stmt,
@@ -547,31 +592,38 @@ char get_game_data(int iGameId,
 
    if (sqlite3_step( stmt ) == SQLITE_ROW)
    {
+      char* sDate;
+      /* 
+         Erst wenn tatsächlich Daten in der DB gefunden wurden wird Speicher für
+         die Spieldaten
+      */
+      gSpieldaten = (GAME*)malloc(sizeof(GAME));
+
       /* 
          Wenn eine Zeile zur gewünschten User-Id gefunden wurde, lies die Werte
          aus den Spalten
       */
-      /* Wir kennen die Abfolge der Spalten, da wir sie selbst angeben */
-      *ipUserId = atoi((char*)sqlite3_column_text(stmt, 0));
-      *spDate = (char*)sqlite3_column_text(stmt, 1);
-      *ipSeconds = atoi((char*)sqlite3_column_text(stmt, 2));
-      *ipHelps = atoi((char*)sqlite3_column_text(stmt, 3));
-      *ipFilled = atoi((char*)sqlite3_column_text(stmt, 4));
-      *cpFinished = atoi((char*)sqlite3_column_text(stmt, 5));
-      *cpRanked = atoi((char*)sqlite3_column_text(stmt, 6));
-      *ipMode = atoi((char*)sqlite3_column_text(stmt, 7));
+      gSpieldaten->iUserId = atoi((char*)sqlite3_column_text(stmt, 0));
+      gSpieldaten->iSeconds = atoi((char*)sqlite3_column_text(stmt, 2));
+      gSpieldaten->iHelps = atoi((char*)sqlite3_column_text(stmt, 3));
+      gSpieldaten->iFilled = atoi((char*)sqlite3_column_text(stmt, 4));
+      gSpieldaten->cFinished = atoi((char*)sqlite3_column_text(stmt, 5));
+      gSpieldaten->cRanked = atoi((char*)sqlite3_column_text(stmt, 6));
+      gSpieldaten->iMode = atoi((char*)sqlite3_column_text(stmt, 7));
 
-      /* 1 ( = Erfolg ) zurückgeben*/
-      return 1;
+      /* Der Datumsstring muss kopiert werden */
+      sDate = (char*)sqlite3_column_text(stmt, 1);
+      gSpieldaten->sDate = (char*)malloc(strlen(sDate) + 1);
+      strcpy(gSpieldaten->sDate,sDate);
+
+      /* Wir kennen die Abfolge der Spalten, da wir sie selbst angeben */
    }
-   else
-   {
-      /* Falls keine Zeile gefunden wurde gib 0 ( = Fehler ) zurück */
-      return 0;
-   }
+
+   /* NULL oder den Zeiger auf die geholten Spieldaten zurück geben */
+   return gSpieldaten;
 }
 
-int get_best_games(int iMode, rankedgame* ugGames, int iLength)
+int get_best_games(int iMode, GAMERANKING* rpGames, int iLength)
 /*
    ============================================================================
    Holt die besten Spiele zu einem Schwierigkeitsgrad, samt relevanter Daten
@@ -587,7 +639,7 @@ int get_best_games(int iMode, rankedgame* ugGames, int iLength)
    int iResultLength = 0;
    int iReturnCode;
    char* sSql;
-   rankedgame* ugActGame = ugGames;
+   GAMERANKING* ugActGame = rpGames;
    sqlite3_stmt *stmt;
 
    
@@ -596,7 +648,7 @@ int get_best_games(int iMode, rankedgame* ugGames, int iLength)
 
 
    /* Query auf Datenbank ausführen, Query löschen */
-   iReturnCode = sqlite3_prepare_v2(get_db(),
+   iReturnCode = sqlite3_prepare_v2(handle_db(DB_USE),
                                     sSql,
                                     strlen(sSql),
                                     &stmt,
@@ -622,26 +674,26 @@ int get_best_games(int iMode, rankedgame* ugGames, int iLength)
       char* sText;
 
       /* Wir kennen die Abfolge der Spalten, da wir sie selbst angeben */
-      ugGames[iResultLength].iGameId = atoi((char*)sqlite3_column_text(stmt, 0));
-      ugGames[iResultLength].iUserId = atoi((char*)sqlite3_column_text(stmt, 1));
-      ugGames[iResultLength].iSeconds = atoi((char*)sqlite3_column_text(stmt, 2));
-      ugGames[iResultLength].iMode = atoi((char*)sqlite3_column_text(stmt, 3));
-      ugGames[iResultLength].iHelps = atoi((char*)sqlite3_column_text(stmt, 4));
+      rpGames[iResultLength].iGameId = atoi((char*)sqlite3_column_text(stmt, 0));
+      rpGames[iResultLength].iUserId = atoi((char*)sqlite3_column_text(stmt, 1));
+      rpGames[iResultLength].iSeconds = atoi((char*)sqlite3_column_text(stmt, 2));
+      rpGames[iResultLength].iMode = atoi((char*)sqlite3_column_text(stmt, 3));
+      rpGames[iResultLength].iHelps = atoi((char*)sqlite3_column_text(stmt, 4));
 
       /*
          Der aus der Datenbank erhaltene Text muss kopiert werden.
          Dazu muss entsprechender Speicher alloziert werden.
       */
       sText = (char*)sqlite3_column_text(stmt, 5);
-      ugGames[iResultLength].sGameDate = (char*)malloc(strlen(sText) + 1);
-      strcpy(ugGames[iResultLength].sGameDate, sText);
+      rpGames[iResultLength].sGameDate = (char*)malloc(strlen(sText) + 1);
+      strcpy(rpGames[iResultLength].sGameDate, sText);
 
       /* Der aus der Datenbank erhaltene Text muss kopiert werden */
       sText = (char*)sqlite3_column_text(stmt, 6);
-      ugGames[iResultLength].sUserName = (char*)malloc(strlen(sText) + 1);
-      strcpy(ugGames[iResultLength].sUserName, sText);
+      rpGames[iResultLength].sUserName = (char*)malloc(strlen(sText) + 1);
+      strcpy(rpGames[iResultLength].sUserName, sText);
 
-      ugGames[iResultLength].iScore = atoi((char*)sqlite3_column_text(stmt, 7));
+      rpGames[iResultLength].iScore = atoi((char*)sqlite3_column_text(stmt, 7));
       iResultLength++;
    }
 
@@ -649,18 +701,70 @@ int get_best_games(int iMode, rankedgame* ugGames, int iLength)
    return iResultLength;
 }
 
-void delete_game_data_texts(rankedgame* ugGame)
+void delete_gameranking_data(GAMERANKING* rpGame, char cWholeStruct)
 /*
    ============================================================================
-   Löscht die aus der Datenbank kopierten String in der rankedgame-Struktur
+   Löscht die aus der Datenbank kopierten Strings in der GAMERANKING-Struktur
+   und bei Bedarf die Struktur selbst
       1. Parameter: das Usergame
    ============================================================================
 */
 {
    /* Datums-text löschen */
-   free(ugGame->sGameDate);
+   free(rpGame->sGameDate);
    /* Spielernamen löschen */
-   free(ugGame->sUserName);
+   free(rpGame->sUserName);
+
+   if (cWholeStruct)
+   {
+      /* Wenn gewünscht Struktur löschen */
+      free(rpGame);
+   }
 }
+
+void delete_game_data(GAME* gpGame, char cWholeStruct)
+/*
+   ============================================================================
+   Löscht die aus der Datenbank kopierten Strings in der GAME-Struktur und bei
+   Bedarf die Struktur selbst
+      1. Parameter: das Game
+   ============================================================================
+*/
+{
+   /* Datums-text löschen */
+   free(gpGame->sDate);
+
+   if (cWholeStruct)
+   {
+      /* Wenn gewünscht Game löschen */
+      free(gpGame);
+   }
+}
+
+void delete_user_data(USER* upUser, char cWholeStruct)
+/*
+   ============================================================================
+   Löscht die aus der Datenbank kopierten Strings in der USER-Struktur und bei
+   Bedarf die Struktur selbst
+      1. Parameter: Die Userdaten
+   ============================================================================
+*/
+{
+   /* Nachnamen-String löschen */
+   free(upUser->sLastname);
+   /* Spielernamen-String löschen */
+   free(upUser->sNickname);
+   /* Passwort-String löschen */
+   free(upUser->sPassword);
+   /* Datums-String löschen */
+   free(upUser->sRegisterdate);
+
+   if (cWholeStruct)
+   {
+      /* Wenn gewünscht die Struktur löschen */
+      free(upUser);
+   }
+}
+
 
 /* EOF */

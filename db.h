@@ -19,6 +19,13 @@
    Präprozessor-Anweisungen: globale defines
    ============================================================================ 
 */
+#include "sqlite3.h"
+
+/* 
+   ============================================================================
+   Präprozessor-Anweisungen: globale defines
+   ============================================================================ 
+*/
 
 #define DATABASE_FILE "sudoku.sqlite3"
 
@@ -37,12 +44,38 @@
 #define QUERY_ERROR_NOSTAT "In der Datenbank ist ein Fehler aufgetreten.\n"
 #define QUERY_ERROR "Ein Fehler ist aufgetreten: \"%s\".\n"
 
+#define DB_USE 1
+#define DB_CLOSE 0
+
 /* 
    ============================================================================
-   Typdefinition "rankedgame"
+   Typdefinitionen
    ============================================================================ 
 */
 
+/* Userdata-Struktur */
+typedef struct {
+   char* sNickname;
+   char* sName;
+   char* sLastname;
+   char* sPassword;
+   char* sRegisterdate;
+   int iUserId;
+} USER;
+
+/* Gamedata-Struktur */
+typedef struct {
+   int iUserId;
+   int iMode;
+   int iSeconds;
+   int iHelps;
+   int iFilled;
+   char cFinished;
+   char cRanked;
+   char* sDate;
+} GAME;
+
+/* Ranked-Gamedata-Struktur */
 typedef struct {
    char* sUserName;
    char* sGameDate;
@@ -52,7 +85,7 @@ typedef struct {
    int iMode;
    int iHelps;
    int iScore;
-} rankedgame;
+} GAMERANKING;
 
 /* 
    ============================================================================
@@ -60,43 +93,34 @@ typedef struct {
    ============================================================================ 
 */
 
-int authenticate(char* sNickname, char* sPassword);
+/*
+   ============================================================================ 
+   Funktionalitäten
+   ============================================================================ 
+*/
 
-char register_user(   char* sNickname,
-                      char* sName,
-                      char* sLastname,
-                      char* sPassword);
-char get_userdata(    int iUserId,
-                      char** spNickname,
-                      char** spName,
-                      char** spLastname,
-                      char** spDate);
+sqlite3* handle_db(char cUsage);
+void  close_shutdown(void);
 
-char insert_game_data(int iUserId,
-                      int iMode,
-                      int iSeconds,
-                      int iHelps,
-                      int iFilled,
-                      char cFinished,
-                      char cRanked);
+int   authenticate(char* sNickname, char* sPassword);
 
-/* ALLOZIERT FREI ZU GEBENDEN SPEICHER */
-int get_user_games(int iUserId, int **ippGames);
+char  register_user(USER* uUser);
+char  insert_game_data(GAME* upGameData);
 
-char get_game_data(int iGameId,
-                   int* ipUserId,
-                   int* ipMode,
-                   int* ipSeconds,
-                   int* ipHelps,
-                   int* ipFilled,
-                   char* cpFinished,
-                   char* cpRanked,
-                   char** spDate);
+int   get_users(int** ippUserIds);
+USER* get_user_data(int iUserId);
+int   get_user_games(int iUserId, int **ippGameIdList);
+GAME* get_game_data(int iGameId);
+int   get_best_games(int iMode, GAMERANKING* rpGames, int iLength);
 
-/* ALLOZIERT FREI ZU GEBENDEN SPEICHER */
-int get_best_games(int iMode, rankedgame* ugGames, int iLength);
-void delete_game_data_texts(rankedgame* ugGame);
-
+/*
+   ============================================================================ 
+   Speicherverwaltung
+   ============================================================================ 
+*/
+void delete_gameranking_data(GAMERANKING* rpGame, char cWholeStruct);
+void delete_game_data(GAME* gpGame, char cWholeStruct);
+void delete_user_data(USER* upUser, char cWholeStruct);
 
 #endif
 
