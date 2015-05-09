@@ -1,0 +1,37 @@
+#########################
+MARIAN
+
+ - sudoku-creation
+ - sudoku-solving
+ - define difficulties
+ - rendering-loop
+
+#########################
+Lennard
+
+ - mainmenu
+ - submenus
+ - formatting specifications
+ - find and / or describe rules
+
+#########################
+Erick
+
+ - Fancy Box
+ - pagination
+ - merging tech-docs
+
+#########################
+Kevin
+
+ - ladderboard
+ - personal ladderboard
+ - user doc
+
+#########################
+Tristan
+
+ - database
+ - ui-api
+ - testing
+
