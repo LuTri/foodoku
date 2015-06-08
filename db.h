@@ -111,6 +111,7 @@ int   get_users(int** ippUserIds);
 USER* get_user_data(int iUserId);
 int   get_user_games(int iUserId, int **ippGameIdList);
 GAME* get_game_data(int iGameId);
+int   get_best_user_games(int iMode, int iUserId, GAMERANKING* rpGames, int iLength);
 int   get_best_games(int iMode, GAMERANKING* rpGames, int iLength);
 
 /*

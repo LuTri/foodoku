@@ -77,6 +77,21 @@
       "WHERE user.user_id = game.user AND game.schwierigkeit = %d "\
       "ORDER BY score ASC LIMIT %d;"
 
+/*
+   Query zum Erhalten aller der besten Spiele eines Users, analog zu
+   QUERY_GET_TOPRANKED
+*/
+#define QUERY_GET_USER_TOP ""\
+      "SELECT "\
+         "game.user, game.game_id, game.zeit, game.schwierigkeit, game.angezei"\
+         "gte_hilfen, game.spielzeitpunkt, user.spielername, game.zeit + game."\
+         "angezeigte_hilfen * %d AS 'score' "\
+      "FROM games game INNER JOIN userdata user "\
+      "WHERE user.user_id = game.user AND game.schwierigkeit = %d "\
+         "AND user.user_id = %d "\
+      "ORDER BY score ASC LIMIT %d;"
+
+
 /* 
    ============================================================================
    Includedateien
@@ -645,6 +660,88 @@ int get_best_games(int iMode, GAMERANKING* rpGames, int iLength)
    
    /* Query mit Parametern vorbereiten */
    sSql = sqlite3_mprintf(QUERY_GET_TOPRANKED,HELP_FACTOR, iMode, iLength);
+
+
+   /* Query auf Datenbank ausführen, Query löschen */
+   iReturnCode = sqlite3_prepare_v2(handle_db(DB_USE),
+                                    sSql,
+                                    strlen(sSql),
+                                    &stmt,
+                                    NULL);
+   free(sSql);
+
+   if (iReturnCode != SQLITE_OK)
+   {
+      /*
+         Falls ein Fehler auftrat, den Fehlertext ausgeben, freigeben und die
+         Funktion mit 0-Rückgabe beenden
+      */
+      printf(QUERY_ERROR_NOSTAT);
+      return 0;
+   }
+
+   while (sqlite3_step( stmt ) == SQLITE_ROW)
+   {
+      /*
+         sText dient als Zwischenspeicher für einen Zeiger auf Text aus der
+         Datenbank
+      */
+      char* sText;
+
+      /* Wir kennen die Abfolge der Spalten, da wir sie selbst angeben */
+      rpGames[iResultLength].iGameId = atoi((char*)sqlite3_column_text(stmt, 0));
+      rpGames[iResultLength].iUserId = atoi((char*)sqlite3_column_text(stmt, 1));
+      rpGames[iResultLength].iSeconds = atoi((char*)sqlite3_column_text(stmt, 2));
+      rpGames[iResultLength].iMode = atoi((char*)sqlite3_column_text(stmt, 3));
+      rpGames[iResultLength].iHelps = atoi((char*)sqlite3_column_text(stmt, 4));
+
+      /*
+         Der aus der Datenbank erhaltene Text muss kopiert werden.
+         Dazu muss entsprechender Speicher alloziert werden.
+      */
+      sText = (char*)sqlite3_column_text(stmt, 5);
+      rpGames[iResultLength].sGameDate = (char*)malloc(strlen(sText) + 1);
+      strcpy(rpGames[iResultLength].sGameDate, sText);
+
+      /* Der aus der Datenbank erhaltene Text muss kopiert werden */
+      sText = (char*)sqlite3_column_text(stmt, 6);
+      rpGames[iResultLength].sUserName = (char*)malloc(strlen(sText) + 1);
+      strcpy(rpGames[iResultLength].sUserName, sText);
+
+      rpGames[iResultLength].iScore = atoi((char*)sqlite3_column_text(stmt, 7));
+      iResultLength++;
+   }
+
+   /* Die erhaltene Anzahl an Spielen wird zurückgegeben */
+   return iResultLength;
+}
+
+int get_best_user_games(int iMode, int iUserId, GAMERANKING* rpGames, int iLength)
+/*
+   ============================================================================
+   Holt die besten Spiele zu einem Schwierigkeitsgrad, samt relevanter Daten
+   aus der Datenbank.
+      1. Parameter: Der Schwierigkeitsgrad
+      2. Parameter: Das Array aus Spieldaten
+      3. Parameter: Die Länge des Arrays
+      4. Rückgabewert: Die Anzahl der Ergebnisse
+   ============================================================================
+*/
+{
+   /* Variablen-Definition */
+   int iResultLength = 0;
+   int iReturnCode;
+   char* sSql;
+   GAMERANKING* ugActGame = rpGames;
+   sqlite3_stmt *stmt;
+
+   
+   /* Query mit Parametern vorbereiten */
+   sSql = sqlite3_mprintf(QUERY_GET_USER_TOP,
+                          HELP_FACTOR,
+                          iMode,
+                          iUserId,
+                          iLength);
 
 
    /* Query auf Datenbank ausführen, Query löschen */

@@ -11,13 +11,14 @@ int main(void)
 
    nUsers = get_users(&UserIds);
    for(i = 0; i < nUsers; i++) {
+      GAMERANKING games[3];
       USER* user = get_user_data(UserIds[i]);
       int iUserId = user->iUserId;
       int* GameList;
       int nGames;
       int j;
 
-      nGames = get_user_games(iUserId,&GameList);
+      nGames = get_best_user_games(1,iUserId,games,3);
       printf("Nummer: %d\n",i);
       printf("\tID:                %d\n",user->iUserId);
       printf("\tNick:              %s\n",user->sNickname);
@@ -27,14 +28,14 @@ int main(void)
       printf("\tNumber of Games:   %d\n",nGames);
 
       for (j = 0; j < nGames; j++) {
-         GAME* game = get_game_data(GameList[j]);
          printf("\t\tNummer:        %d\n",j);
-         printf("\t\tDauer:         %d\n",game->iSeconds);
-         delete_game_data(game,1);
+         printf("\t\tDauer:         %d\n",games[j].iSeconds);
+         printf("\t\tSchwierigkeit: %d\n",games[j].iMode);
+         printf("\t\tScore:         %d\n",games[j].iScore);
+         printf("\t\tZeitpunkt:     %s\n",games[j].sGameDate);
+//         delete_gameranking_data(&(games[j]),1);
       }
    
-      if (nGames > 0)
-         free(GameList);
       delete_user_data(user,0);
    }
    printf("Gruppe B rockt das!\n");
