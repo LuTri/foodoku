@@ -1,7 +1,11 @@
 *.vcxproj*
 *.sln
 *.sdf
+*.o
+*.swp
 Debug/
 ipch/
 *.opensdf
 *.suo
+Makefile
+foodoku
