@@ -232,39 +232,15 @@ char* help_text(char* cpText)
    return cpHelpText;
 }
 
-void set_sudoku(char sudoku[BOUNDARY][BOUNDARY])
-/*
-   ============================================================================
-   Setzt das gesamte Spielfeld auf den übergebenen Status
-      1. Parameter: Der neue Spiel-Status als 9x9 Matrix
-   ============================================================================
-*/
-{
+void null_sudoku(void) {
    int i,j;
-
-   for (i = 0; i < BOUNDARY; i++)
-      /* Für jede Zeile */
+   for (i = 0; i < 9; i++)
    {
-      for (j = 0; j < BOUNDARY; j++)
-         /* Für jede Spalte */
+      for (j = 0; j < 9; j++)
       {
-         /* Übernehme den neuen Wert */
-         cSudoku[i][j] = sudoku[i][j];
+         cSudoku[i][j] = 0;
       }
    }
-}
-
-void set_sudoku_pos(int iX, int iY, char cValue)
-/*
-   ============================================================================
-   Setzt den Status des Spiels an der gewünschten Stelle
-      1. Parameter: Die gewünschte x-Koordinate
-      2. Parameter: Die gewünschte y-Koordinate
-      3. Parameter: Der neue Werte
-   ============================================================================
-*/
-{
-   cSudoku[iY][iX] = cValue;
 }
 
 void clear_help(int iX, int iY)
