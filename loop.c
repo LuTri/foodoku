@@ -137,7 +137,7 @@ void game_loop(int iSchwierigkeit, int iSpielart, int iUserId)
 				{
 					if(cTempTaste != 0){
 						get_cursor_pos(&iX, &iY);
-						set_sudoku_pos(iX, iY, cTempTaste);
+						cSudoku[iY][iX] = cTempTaste;
 						cTempTaste = 0;
 					}
 				}

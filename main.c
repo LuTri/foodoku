@@ -20,7 +20,9 @@
 */
 #include <stdio.h>
 #include <stdlib.h>
-#include "menue.h"
+#include "generate.h"
+#include <time.h>
+#include "curses_os.h"
 
 int main(void)
 /*
