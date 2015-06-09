@@ -20,6 +20,8 @@
 */
 #include "tableui.h"
 #include "curses_os.h"
+#include "fancy_box.h"
+#include "menue.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -191,8 +193,10 @@ void show_ui(char cShowHelp)
    /* Falls Hilfe aktiviert, zeige Hilfe an */
    if (cShowHelp)
    {
-      show_help();
+     show_help();
    }
+
+   show_fancy_box(REGELN,0);
 
    /* Daten auf den Bildschirm, Cursor an die richtige Position bringen */
    refresh();
