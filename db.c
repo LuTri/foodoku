@@ -719,12 +719,13 @@ int get_best_games(int iMode, GAMERANKING* rpGames, int iLength)
 int get_best_user_games(int iMode, int iUserId, GAMERANKING* rpGames, int iLength)
 /*
    ============================================================================
-   Holt die besten Spiele zu einem Schwierigkeitsgrad, samt relevanter Daten
-   aus der Datenbank.
+   Holt die besten Spiele eines Spielers zu einem Schwierigkeitsgrad, samt 
+   relevanter Daten aus der Datenbank.
       1. Parameter: Der Schwierigkeitsgrad
-      2. Parameter: Das Array aus Spieldaten
-      3. Parameter: Die Länge des Arrays
-      4. Rückgabewert: Die Anzahl der Ergebnisse
+      2. Parameter: Die UserId
+      3. Parameter: Das Array aus Spieldaten
+      4. Parameter: Die Länge des Arrays
+      5. Rückgabewert: Die Anzahl der Ergebnisse
    ============================================================================
 */
 {
