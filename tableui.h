@@ -53,4 +53,6 @@ void  shutdown_sudoku(void);
 
 char  get_input(void);
 
+int getTerminalSize(void);
+
 #endif

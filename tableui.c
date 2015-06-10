@@ -373,3 +373,24 @@ char get_input(void)
 {
    return wgetch(stdscr);
 }
+
+int getTerminalSize(void) {
+/*
+   ============================================================================
+   Überprüft die derzeitige Größe des Konsolen-Fensters und gibt diese aus.
+      1. Rückgabewert: Entweder 1 falls Fenster größer als 145 x 45 oder 0 bei
+         kleinerer Größe.
+   ============================================================================
+*/
+
+   int iSizeY = getmaxy(stdscr);
+   int iSizeX = getmaxx(stdscr);
+
+   if (iSizeY < 45 || iSizeX < 145) {
+      return 0;
+   }
+
+   initscr();
+
+   return 1;
+}
