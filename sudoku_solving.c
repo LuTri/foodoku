@@ -85,6 +85,9 @@ int setValueForField(int iCurrentArray[9][9], int x, int y) {
    int iRueckgabe;
 
    /* Zahlen von 1-9 durchtesten und die erste Zahl setzen, die funktioniert */
+
+   ////// ANMERKUNG: Das wird nicht funktionieren - nur wenn genau nur eine Zahl passt kannst du die einsetzen
+   ////// ODER: benutz Backtracking
    for (iZaehler = 0; iZaehler <= 9; iZaehler++) {
       iCurrentArray[x][y] = iZaehler;
       iRueckgabe = checkIfOk(iCurrentArray, x, y);
