@@ -30,8 +30,8 @@ Include Dateien
 Preprozesse und Konstanten
 ========================================================================
 */
-void DatenAnzeige(GAMERANKING Daten[], int iLength);
-void PersonAnzeigen(GAMERANKING pDaten[], int iLength);
+void DatenAnzeige(GAMERANKING Daten[]);
+void PersonAnzeigen(GAMERANKING pDaten[]);
 /*
 ========================================================================
 Funktion Bestenliste()
@@ -42,12 +42,16 @@ void Bestenliste()
 	//Variablen-Definition
 	GAMERANKING Daten [10];
 	int iMode = 0;
-	int iLength; 
+	int iLenght = 0; 
 	int iError = 0;
 
-	//Ausgabe welche Anzeige gewünscht
+	//Ausgabe welche Anzeige gewünscht ist
 	system ("cls");
-	printf ("\t\tBestenliste\n\n");
+	printf("*************************************");
+	printf("******************************************\n\n");
+	printf("\t\t\t\t Bestenliste\n\n");
+	printf("*************************************");
+	printf("******************************************\n\n");
 	printf ("Bitte W\204hlen Sie den Schwierigkeitsgrad aus\n");
 	printf ("Geben Sie (1) f\201r Schwer ein.\n");
 	printf ("Geben Sie (2) f\201r Mittel ein.\n");
@@ -57,19 +61,17 @@ void Bestenliste()
 	fflush (stdin);
 	//Abfrage der Eingabe
 	iError = scanf ("%i", &iMode);
-	if (iMode < 1 || iMode > 3 ||iError != 1)
-	{
-		system ("cls");
 
-		Bestenliste();
-	}
+	if (iMode >= 1 && iMode <= 3)
+	{
 	//Aufruf der get_best_games Funktion zur ermittlung der besten Spiele
-	iLength = get_best_games(iMode, Daten, 10);
+	iLenght = get_best_games(iMode, Daten, 10);
 
 	//Auf der DatanAnzeigen Funktion mit übergabe des Daten Array´s 
 	//und der Anzahl der gefundenen Einträge
-	DatenAnzeige(Daten, iLength);
+	DatenAnzeige(Daten, iLenght);
 	system ("pause");
+	}
 
 }
 /*
@@ -77,7 +79,7 @@ void Bestenliste()
 Funktion DatenAnzeigen()
 ========================================================================
 */
-void DatenAnzeige(GAMERANKING Daten[],int iLength)
+void DatenAnzeige(GAMERANKING Daten[],int iLenght)
 {
 	//Variablen-Definition
 	int iZaehler = 0;
@@ -86,15 +88,19 @@ void DatenAnzeige(GAMERANKING Daten[],int iLength)
 	system("cls");
 	printf("*************************************");
 	printf("******************************************\n\n");
-	printf("\t\t\t\t Bestenliste\n\n");
+	printf("\t\t\t\tBestenliste\n\n");
 	printf("*************************************");
 	printf("******************************************\n\n");
 	printf("Rang |\t\tName   | ben\224t. Hilfen | Punktzahl |\tDatum\n");
 	printf("*************************************");
 	printf("******************************************\n\n");
 
+
+
+	if (iLenght > 0)
+	{
 	//Schleichen zum Anzeigen der Besten Spiele 
-	do
+	while (iZaehler < iLenght)
 	{
 		printf("%3i", iZaehler+1);
 		printf("%20s ", Daten[iZaehler].sUserName);
@@ -105,8 +111,13 @@ void DatenAnzeige(GAMERANKING Daten[],int iLength)
 		printf("*************************************");
 		printf("******************************************\n\n");
 		iZaehler++;
-	} while (iZaehler < iLength);
+	} 
 	printf("\n");
+	}
+	else
+	{
+		printf ("es sind noch keine Daten Vorhanden\n\n");
+	}
 
 }
 /*
@@ -120,12 +131,16 @@ void PersListe()
 	GAMERANKING pDaten [9];
 	int iZaehler = 0;
 	int iMode = 0;
-	int iLength; 
+	int iLenght; 
 	int iError = 0;
 
 	//Ausgabe welche Anzeige gewünscht
 	system ("cls");
-	printf ("\t Pers\224nliche Bestenliste\n\n");
+	printf("*************************************");
+	printf("******************************************\n\n");
+	printf ("\t\t\t\tPers\224nliche Bestenliste\n\n");
+	printf("*************************************");
+	printf("******************************************\n\n");
 	printf ("Bitte W\204hlen Sie den Schwierigkeitsgrad aus\n");
 	printf ("Geben Sie (1) f\201r Schwer ein.\n");
 	printf ("Geben Sie (2) f\201r Mittel ein.\n");
@@ -135,27 +150,35 @@ void PersListe()
 	fflush (stdin);
 	//Abfrage der Eingabe
 	iError = scanf ("%i", &iMode);
-	if (iMode < 1 || iMode > 3 ||iError != 1)
+	fflush (stdin);
+/*	if (iMode < 1 || iMode > 3 ||iError != 1)
 	{
-		system ("cls");
-
-		PersListe();
+		
 	}
-	//Aufruf der get_best_user_games Funktion zur ermittlung der besten Spiele
+	*/
+	if (iMode >= 1 && iMode <= 3)
+	{
+			//Aufruf der get_best_user_games Funktion zur ermittlung der besten Spiele
 	//anhand des gewählten Schwierigkeitgrads
-	iLength = get_best_user_games(iMode,iGUserID,pDaten, 9);
+	iLenght = get_best_user_games(iMode,iGUserID,pDaten, 9);
 
 	//Auf der PersonAnzeigen Funktion mit übergabe des pDaten Array´s 
 	//und der Anzahl der gefundenen Einträge
-	PersonAnzeigen(pDaten, iLength);
+	PersonAnzeigen(pDaten, iLenght);
 	system ("pause");
+	}
+	else
+	{
+		system ("cls");
+		PersListe();
+	}
 }
 /*
 ========================================================================
 Funktion PersonAnzeigen()
 ========================================================================
 */
-void PersonAnzeigen(GAMERANKING pDaten[],int iLength)
+void PersonAnzeigen(GAMERANKING pDaten[],int iLenght)
 {
 	//Variablen-Definition
 	int iZaehler = 0;
@@ -173,9 +196,9 @@ void PersonAnzeigen(GAMERANKING pDaten[],int iLength)
 
 	//Schleichen zum Anzeigen der Besten Spiele 
 	//anhand des Schwierigkeitsgrad
-	if (iLength > 0)
+	if (iLenght > 0)
 	{
-		do
+		while (iZaehler < iLenght || iZaehler == 5)
 		{
 		printf("%3i", iZaehler+1);
 		printf("%20s ", pDaten[iZaehler].sUserName);
@@ -187,7 +210,7 @@ void PersonAnzeigen(GAMERANKING pDaten[],int iLength)
 		printf("******************************************\n\n");
 			iZaehler++;
 		}
-		while (iZaehler < iLength || iZaehler == 5);
+		
 		printf("\n");
 	}
 	else
