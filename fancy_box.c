@@ -19,6 +19,7 @@
 #include "fancy_box.h"
 #include "curses.h"
 #include "tableui.h"
+#include "menue.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -51,18 +52,58 @@ char show_fancy_box(char* fancy_output, int page)
 	for(iPosition = 0; (iPosition < (int)strlen(fancy_output) 
 		&& iPosition < ( (MAX_WIDTH - 4) * (MAX_HEIGHT -2))); iPosition++)
 	{
+		int posx, posy;
+		posx = 57 + (iPosition%(MAX_WIDTH - 4));
+		posy = 2 + (iPosition/(MAX_WIDTH - 4));
 		if (iPosition + page * ((MAX_HEIGHT - 2) * (MAX_WIDTH - 4)) < strlen(fancy_output)) {
-			mvaddch( 2 + (iPosition/(MAX_HEIGHT -2)),57 + (iPosition%(MAX_WIDTH - 4))
+			mvaddch(posy,posx
 				,fancy_output[iPosition + page * ((MAX_HEIGHT - 2) * (MAX_WIDTH - 4))] );
 		} else {
 			break;
 		}
 	}
+}
 
-	for(iPosition = 0; (iPosition < (int)strlen(fancy_output) 
-		&& iPosition < ( (MAX_WIDTH - 4) * (MAX_HEIGHT -2))); iPosition++)
+void fancy_loop(void)
+/*
+	Funktion zum Abfangen von Fehleingaben und Curserbewegung
+	1. Parameter	:		
+	2. Rückgabewert	:	
+*/
+{
+	char cInput;
+
+	do
 	{
+		cInput = get_input();
 
+		show_fancy_box(REGELN, 0);
+
+	}while(cInput != 'q' );
+}
+
+char will_fit(int iColumn, int iMax, char* fancy_output, int iStringpos)
+/*
+	Lorme Ipsum
+		1. Parameter	:	
+		2. Parameter	:	
+		3. Parameter	:	
+		4. Parameter	:	
+		5. Rückegabewert:
+*/
+{
+	iMax = MAX_WIDTH - 2; // ALs Parameter eintragen
+
+	for(iColumn = 0; iColumn < (MAX_HEIGHT -2); iColumn++)
+	{
+		for(iStringpos = 0; (iStringpos < (int)strlen(fancy_output) 
+			&& iStringpos < (MAX_WIDTH - 4)); iStringpos++)
+		{
+			if( iStringpos == '\n' || iStringpos == '\t')
+			{
+				printw("foo");
+			}
+		}
 	}
 }
 
