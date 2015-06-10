@@ -44,6 +44,7 @@ Diese Warnung kann durch die obige Definition unterdrückt werden.
 #include "menue.h"
 #include <stdio.h>
 #include <string.h>
+#include "ladderboard.h"
 
 int iGUserID;
 
@@ -386,11 +387,14 @@ void eingeloggt(int iUserID)
 
 		if(iAuswahl_e == 3)
 		{
+			Bestenliste();
 			iAuswahl_e = 0;
+			
 		}
 
 		if(iAuswahl_e == 4)
 		{
+			PersListe();
 			iAuswahl_e = 0;
 		}
 
