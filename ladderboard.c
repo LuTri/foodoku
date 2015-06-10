@@ -42,12 +42,16 @@ void Bestenliste()
 	//Variablen-Definition
 	GAMERANKING Daten [10];
 	int iMode = 0;
-	int iLenght; 
+	int iLenght = 0; 
 	int iError = 0;
 
-	//Ausgabe welche Anzeige gewünscht
+	//Ausgabe welche Anzeige gewünscht ist
 	system ("cls");
-	printf ("\t\tBestenliste\n\n");
+	printf("*************************************");
+	printf("******************************************\n\n");
+	printf("\t\t\t\t Bestenliste\n\n");
+	printf("*************************************");
+	printf("******************************************\n\n");
 	printf ("Bitte W\204hlen Sie den Schwierigkeitsgrad aus\n");
 	printf ("Geben Sie (1) f\201r Schwer ein.\n");
 	printf ("Geben Sie (2) f\201r Mittel ein.\n");
@@ -57,12 +61,9 @@ void Bestenliste()
 	fflush (stdin);
 	//Abfrage der Eingabe
 	iError = scanf ("%i", &iMode);
-	if (iMode < 1 || iMode > 3 ||iError != 1)
-	{
-		system ("cls");
 
-		Bestenliste();
-	}
+	if (iMode >= 1 && iMode <= 3)
+	{
 	//Aufruf der get_best_games Funktion zur ermittlung der besten Spiele
 	iLenght = get_best_games(iMode, Daten, 10);
 
@@ -70,6 +71,7 @@ void Bestenliste()
 	//und der Anzahl der gefundenen Einträge
 	DatenAnzeige(Daten, iLenght);
 	system ("pause");
+	}
 
 }
 /*
@@ -86,15 +88,19 @@ void DatenAnzeige(GAMERANKING Daten[],int iLenght)
 	system("cls");
 	printf("*************************************");
 	printf("******************************************\n\n");
-	printf("\t\t\t\t Bestenliste\n\n");
+	printf("\t\t\t\tBestenliste\n\n");
 	printf("*************************************");
 	printf("******************************************\n\n");
 	printf("Rang |\t\tName   | ben\224t. Hilfen | Punktzahl |\tDatum\n");
 	printf("*************************************");
 	printf("******************************************\n\n");
 
+
+
+	if (iLenght > 0)
+	{
 	//Schleichen zum Anzeigen der Besten Spiele 
-	do
+	while (iZaehler < iLenght)
 	{
 		printf("%3i", iZaehler+1);
 		printf("%20s ", Daten[iZaehler].sUserName);
@@ -105,8 +111,13 @@ void DatenAnzeige(GAMERANKING Daten[],int iLenght)
 		printf("*************************************");
 		printf("******************************************\n\n");
 		iZaehler++;
-	} while (iZaehler < iLenght);
+	} 
 	printf("\n");
+	}
+	else
+	{
+		printf ("es sind noch keine Daten Vorhanden\n\n");
+	}
 
 }
 /*
@@ -125,7 +136,11 @@ void PersListe()
 
 	//Ausgabe welche Anzeige gewünscht
 	system ("cls");
-	printf ("\t Pers\224nliche Bestenliste\n\n");
+	printf("*************************************");
+	printf("******************************************\n\n");
+	printf ("\t\t\t\tPers\224nliche Bestenliste\n\n");
+	printf("*************************************");
+	printf("******************************************\n\n");
 	printf ("Bitte W\204hlen Sie den Schwierigkeitsgrad aus\n");
 	printf ("Geben Sie (1) f\201r Schwer ein.\n");
 	printf ("Geben Sie (2) f\201r Mittel ein.\n");
@@ -135,13 +150,15 @@ void PersListe()
 	fflush (stdin);
 	//Abfrage der Eingabe
 	iError = scanf ("%i", &iMode);
-	if (iMode < 1 || iMode > 3 ||iError != 1)
+	fflush (stdin);
+/*	if (iMode < 1 || iMode > 3 ||iError != 1)
 	{
-		system ("cls");
-
-		PersListe();
+		
 	}
-	//Aufruf der get_best_user_games Funktion zur ermittlung der besten Spiele
+	*/
+	if (iMode >= 1 && iMode <= 3)
+	{
+			//Aufruf der get_best_user_games Funktion zur ermittlung der besten Spiele
 	//anhand des gewählten Schwierigkeitgrads
 	iLenght = get_best_user_games(iMode,iGUserID,pDaten, 9);
 
@@ -149,6 +166,12 @@ void PersListe()
 	//und der Anzahl der gefundenen Einträge
 	PersonAnzeigen(pDaten, iLenght);
 	system ("pause");
+	}
+	else
+	{
+		system ("cls");
+		PersListe();
+	}
 }
 /*
 ========================================================================
@@ -175,7 +198,7 @@ void PersonAnzeigen(GAMERANKING pDaten[],int iLenght)
 	//anhand des Schwierigkeitsgrad
 	if (iLenght > 0)
 	{
-		do
+		while (iZaehler < iLenght || iZaehler == 5)
 		{
 		printf("%3i", iZaehler+1);
 		printf("%20s ", pDaten[iZaehler].sUserName);
@@ -187,7 +210,7 @@ void PersonAnzeigen(GAMERANKING pDaten[],int iLenght)
 		printf("******************************************\n\n");
 			iZaehler++;
 		}
-		while (iZaehler < iLenght || iZaehler == 5);
+		
 		printf("\n");
 	}
 	else
