@@ -150,6 +150,9 @@ void PersListe()
 	fflush (stdin);
 	//Abfrage der Eingabe
 	iError = scanf ("%i", &iMode);
+
+   /////// TODO: Kommentierten Code rausschmeiﬂen
+   /////// UND: wolltest du nicht alle Schwierigkeitsgrade anzeigen?
 	fflush (stdin);
 /*	if (iMode < 1 || iMode > 3 ||iError != 1)
 	{
