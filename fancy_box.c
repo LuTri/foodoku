@@ -25,6 +25,65 @@
 #include <stdlib.h>
 #include <string.h>
 
+char will_fit(int iColumn, int iMax, char* fancy_output, int iStringpos)
+/*
+	Eine Funktion zum "klären" des Textes in der Box. Soll \n, \t und Leerzeichen
+	erkennen und automatisch in die neue Zeile verschoben werden.
+		1. Parameter	:	die aktuelle Länge des Strings
+		2. Parameter	:	die Maximale länge des Strings in einer Reihe
+		3. Parameter	:	Texteingabe
+		4. Parameter	:	aktuelle Position des Strings
+		5. Rückegabewert:
+*/
+{
+	// Variabl Deklaration
+	int iPos, iLength;
+	iMax = MAX_WIDTH - 2; // ALs Parameter eintragen
+	
+	iPos = iStringpos;
+
+	while( fancy_output[iPos] != '\n' && fancy_output[iPos] != '\t' && fancy_output[iPos] != ' ' && iPos < strlen(fancy_output))
+	{	
+		iPos++;
+	}
+
+	iLength = iPos - iStringpos;
+
+	if(iLength < iMax - iColumn)
+	{
+		return iLength;
+	}
+	else
+	{
+		return -1;
+	}
+	// Maybe return fitting length
+}
+
+void clear_fancy_box(void)
+/*
+	Funktion zum füllen/klären des derzeitigen Feldes -> optionale Funktion
+		1. Parameter	:	keiner
+		2. Rückgabewert	:	ein mit Leerzeichen gefülltes Feld
+*/
+{
+	// initialisierte Variabeln
+	int iHoehe_v2, iBreite_v2;
+
+
+	//Begin mit füllen der Box 
+	for(iHoehe_v2 = 0; iHoehe_v2 < MAX_HEIGHT; iHoehe_v2++ )// Schleife zur Erstellung der maximalen Höhe
+	{
+		for(iBreite_v2 = 0; iBreite_v2 < MAX_WIDTH; iBreite_v2++)//Schleife zur Erstellung der maximalen Breite
+		{
+			if(iHoehe_v2 == 0 || iBreite_v2 == 0 || iHoehe_v2 == MAX_HEIGHT -1 || iBreite_v2 == MAX_WIDTH -1)
+			{
+				mvaddch( 0 + iHoehe_v2, 55 + iBreite_v2 , ' ');// Abfrage, wenn dann füge ' ' ein
+			}
+		}
+	}
+}
+
 char show_fancy_box(char* fancy_output, int page)
 /*
 	anzeigen des Feldes für Hilfen und Hinweise
@@ -49,6 +108,10 @@ char show_fancy_box(char* fancy_output, int page)
 	}
 
 	//Positionierung des Textes
+
+	/*
+		while()
+	*/
 	for(iPosition = 0; (iPosition < (int)strlen(fancy_output) 
 		&& iPosition < ( (MAX_WIDTH - 4) * (MAX_HEIGHT -2))); iPosition++)
 	{
@@ -56,6 +119,10 @@ char show_fancy_box(char* fancy_output, int page)
 		posx = 57 + (iPosition%(MAX_WIDTH - 4));
 		posy = 2 + (iPosition/(MAX_WIDTH - 4));
 		if (iPosition + page * ((MAX_HEIGHT - 2) * (MAX_WIDTH - 4)) < strlen(fancy_output)) {
+			int i_to_write = will_fit(posx, 0, fancy_output, iPosition);
+
+			// i_to_write > 0 -> write the fitting word
+			// i_to_write = -1 -> new line WILL_FIT
 			mvaddch(posy,posx
 				,fancy_output[iPosition + page * ((MAX_HEIGHT - 2) * (MAX_WIDTH - 4))] );
 		} else {
@@ -67,8 +134,8 @@ char show_fancy_box(char* fancy_output, int page)
 void fancy_loop(void)
 /*
 	Funktion zum Abfangen von Fehleingaben und Curserbewegung
-	1. Parameter	:		
-	2. Rückgabewert	:	
+	1. Parameter	:
+	2. Rückgabewert	:	Eingabe CUrsor Bewegung oder Abbruch Sequenz
 */
 {
 	char cInput;
@@ -80,46 +147,4 @@ void fancy_loop(void)
 		show_fancy_box(REGELN, 0);
 
 	}while(cInput != 'q' );
-}
-
-char will_fit(int iColumn, int iMax, char* fancy_output, int iStringpos)
-/*
-	Lorme Ipsum
-		1. Parameter	:	
-		2. Parameter	:	
-		3. Parameter	:	
-		4. Parameter	:	
-		5. Rückegabewert:
-*/
-{
-	iMax = MAX_WIDTH - 2; // ALs Parameter eintragen
-
-	for(iColumn = 0; iColumn < (MAX_HEIGHT -2); iColumn++)
-	{
-		for(iStringpos = 0; (iStringpos < (int)strlen(fancy_output) 
-			&& iStringpos < (MAX_WIDTH - 4)); iStringpos++)
-		{
-			if( iStringpos == '\n' || iStringpos == '\t')
-			{
-				printw("foo");
-			}
-		}
-	}
-}
-
-void clear_fancy_box(void)
-{
-		// initislisiere Variabeln
-	int iHoehe_v2, iBreite_v2;
-
-	for(iHoehe_v2 = 0; iHoehe_v2 < MAX_HEIGHT; iHoehe_v2++ )// Schleife zur Erstellung der maximalen Höhe
-	{
-		for(iBreite_v2 = 0; iBreite_v2 < MAX_WIDTH; iBreite_v2++)//Schleife zur Erstellung der maximalen Breite
-		{
-			if(iHoehe_v2 == 0 || iBreite_v2 == 0 || iHoehe_v2 == MAX_HEIGHT -1 || iBreite_v2 == MAX_WIDTH -1)
-			{
-				mvaddch( 0 + iHoehe_v2, 55 + iBreite_v2 , ' ');// Abfrage, wenn dann füge ' ' ein
-			}
-		}
-	}
 }

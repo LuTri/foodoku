@@ -27,6 +27,7 @@
    Prototypen
    ============================================================================
 */
+char will_fit(int iColumn, int iMax, char* fancy_output, int iStringpos);
 char show_fancy_box(char* fancy_output, int page);
 void clear_fancy_box(void);
 void fancy_loop(void);
