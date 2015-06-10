@@ -136,6 +136,8 @@ void Spieleregeln(void)
 	//Anzeige der Sodokuregeln aus #define REGELN
 	printf("%s", REGELN);
 
+   ///// mach hier "printf(REGELN);"
+
 	system("pause");
 
 }
@@ -214,6 +216,8 @@ void Registrieren(void)
 	register_user(&myUser);
 	}
 
+
+   ///// Kommentare?
 	if (strcmp(cNickname, "abbruch") == 0 || strcmp(cName, "abbruch") == 0 || 
 		strcmp(cLastname, "abbruch") == 0 || strcmp(cPassword, "abbruch") == 0)
 	{
