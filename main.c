@@ -6,6 +6,10 @@
 
 int main(void)
 {
- 
-	menue();
+	startup_sudoku();
+	show_ui(1);
+
+	get_input();
+	shutdown_sudoku();
+	return 0;
 }
