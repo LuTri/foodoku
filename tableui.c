@@ -19,7 +19,7 @@
    ============================================================================ 
 */
 #include "tableui.h"
-#include "curses.h"
+#include "curses_os.h"
 
 #include <stdio.h>
 #include <stdlib.h>

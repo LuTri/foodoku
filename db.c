@@ -99,6 +99,7 @@
 */
 
 #include "db.h"
+#include "curses_os.h"
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -268,7 +269,7 @@ int authenticate(char* sNickname, char* sPassword)
                                     strlen(sSql),
                                     &stmt,
                                     NULL);
-   free(sSql);
+   FREE_SQL(sSql)
 
    if (iReturnCode != SQLITE_OK)
    {
@@ -333,7 +334,7 @@ char register_user(USER* uUser)
                               NULL,
                               NULL,
                               &sErrMsg);
-   free(sSql);
+   FREE_SQL(sSql)
 
    if (iReturnCode != SQLITE_OK)
    {
@@ -419,7 +420,7 @@ USER* get_user_data(int iUserId)
                                     strlen(sSql),
                                     &stmt,
                                     NULL);
-   free(sSql);
+   FREE_SQL(sSql)
 
    if (iReturnCode != SQLITE_OK)
    {
@@ -501,7 +502,7 @@ char insert_game_data(GAME* upGameData)
                               NULL,
                               NULL,
                               &sErrMsg);
-   free(sSql);
+   FREE_SQL(sSql)
    
    if (iReturnCode != SQLITE_OK)
    {
@@ -543,7 +544,7 @@ int get_user_games(int iUserId, int **ippGamesIdList)
                                     strlen(sSql),
                                     &stmt,
                                     NULL);
-   free(sSql);
+   FREE_SQL(sSql)
 
    if (iReturnCode != SQLITE_OK)
    {
@@ -593,7 +594,7 @@ GAME* get_game_data(int iGameId)
                                     strlen(sSql),
                                     &stmt,
                                     NULL);
-   free(sSql);
+   FREE_SQL(sSql)
 
    if (iReturnCode != SQLITE_OK)
    {
@@ -668,7 +669,7 @@ int get_best_games(int iMode, GAMERANKING* rpGames, int iLength)
                                     strlen(sSql),
                                     &stmt,
                                     NULL);
-   free(sSql);
+   FREE_SQL(sSql)
 
    if (iReturnCode != SQLITE_OK)
    {
@@ -751,7 +752,7 @@ int get_best_user_games(int iMode, int iUserId, GAMERANKING* rpGames, int iLengt
                                     strlen(sSql),
                                     &stmt,
                                     NULL);
-   free(sSql);
+   FREE_SQL(sSql)
 
    if (iReturnCode != SQLITE_OK)
    {
