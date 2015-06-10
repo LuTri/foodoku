@@ -66,10 +66,14 @@ void menue (void)
 	//Schleife zur Abfrage der Auswahl(Eingabe zwischen 1 und 5)
 	do
 	{
+		do
+		{
 		system("cls");
-		printf("            SUDOKU TASKFORCE            \n");
-		printf("            ________________\n");
-		printf("\n\n\n");
+		printf("*************************************");
+		printf("******************************************\n\n");
+		printf("\t\t\t\tSUDOKU TASKFORCE\n\n");
+		printf("*************************************");
+		printf("******************************************\n\n");
 
 		//Auswahl der einzelnen Menüs und Eingabe der Auswahl
 		printf("1: Einloggen\n");
@@ -77,8 +81,7 @@ void menue (void)
 		printf("3: Freies Spiel\n");
 		printf("4: Spieleanleitung\n");
 		printf("5: Beenden\n\n");
-		do
-		{
+		
 			printf("Auswahl: ");
 			fflush(stdin);
 			iError = scanf("%i", &iAuswahl);
@@ -125,8 +128,11 @@ void Spieleregeln(void)
 {
 	system("cls");
 
-	printf("Spieleregeln & Anleitung\n");
-	printf("________________________\n\n\n");
+	printf("*************************************");
+	printf("******************************************\n\n");
+	printf("\t\t\tSpieleregeln & Anleitung\n\n");
+	printf("*************************************");
+	printf("******************************************\n\n");
 	//Anzeige der Sodokuregeln aus #define REGELN
 	printf("%s", REGELN);
 
@@ -155,39 +161,66 @@ void Registrieren(void)
 
 	system("cls");
 
-	printf("Registrierung\n");
-	printf("*************\n\n\n");
+	printf("*************************************");
+	printf("******************************************\n\n");
+	printf("\t\t\t\tRegistrierung\n\n");
+	printf("*************************************");
+	printf("******************************************\n\n");
 
 	//Eingabe des Spielernamens
 	printf("Gewuenschter Spielername: ");
 	scanf("%s", cNickname);
 	printf("\n");
-	myUser.sNickname =(char*)malloc(sizeof(char)*strlen(cNickname)+1);
-	strcpy(myUser.sNickname, cNickname);
-
+	
+	if (strcmp(cNickname, "abbruch") != 0)
+	{
 	//Eingabe des Vornamens
 	printf("Vorname: ");
 	scanf("%s", cName);
 	printf("\n");
-	myUser.sName =(char*)malloc(sizeof(char)*strlen(cName)+1);
-	strcpy(myUser.sName, cName);
+	
 
+	if (strcmp(cName, "abbruch") != 0)
+	{
 	//Eingabe des Nachnamens
 	printf("Nachname: ");
 	scanf("%s", cLastname);
 	printf("\n");
-	myUser.sLastname =(char*)malloc(sizeof(char)*strlen(cLastname)+1);
-	strcpy(myUser.sLastname, cLastname);
-
+	
+	
+	if (strcmp(cLastname, "abbruch") != 0)
+	{
 	//Eingabe des Passwortes
 	printf("Gewuenschtes Password: ");
 	scanf("%s", cPassword);
 	printf("\n");
+	}
+	}
+	}
+
+	if (strcmp(cNickname, "abbruch") != 0 && strcmp(cName, "abbruch") != 0 && 
+		strcmp(cLastname, "abbruch") != 0 && strcmp(cPassword, "abbruch") != 0)
+	{
+	myUser.sNickname =(char*)malloc(sizeof(char)*strlen(cNickname)+1);
+	strcpy(myUser.sNickname, cNickname);
+	myUser.sName =(char*)malloc(sizeof(char)*strlen(cName)+1);
+	strcpy(myUser.sName, cName);
+	myUser.sLastname =(char*)malloc(sizeof(char)*strlen(cLastname)+1);
+	strcpy(myUser.sLastname, cLastname);
 	myUser.sPassword =(char*)malloc(sizeof(char)*strlen(cPassword)+1);
 	strcpy(myUser.sPassword, cPassword);
 
 	//Übergabe der Werte an die Funktion register_user
 	register_user(&myUser);
+	}
+
+	if (strcmp(cNickname, "abbruch") == 0 || strcmp(cName, "abbruch") == 0 || 
+		strcmp(cLastname, "abbruch") == 0 || strcmp(cPassword, "abbruch") == 0)
+	{
+		printf("Registrierung abgebrochen!\n\n");
+	}
+
+	
 
 	system("pause");
 }
@@ -206,8 +239,11 @@ void Einloggen(void)
 	int iUserID;
 
 	system("cls");
-	printf("Anmelden\n");
-	printf("________\n\n");
+	printf("*************************************");
+	printf("******************************************\n\n");
+	printf("\t\t\t\tAnmelden\n\n");
+	printf("*************************************");
+	printf("******************************************\n\n");
 
 	//Eingabe des Nutzernamens
 	printf("Nutzername: ");
@@ -244,22 +280,24 @@ void FreiesSpiel(void)
 {
 	//Speicherdeklaration
 	int iAuswahlFS;
-	int iError;
 
 	//Schleife solange Auswahl > 4 oder < 1
 	do{
 		system("cls");
 
 		//Ausgabe der Auswahl und Eingabe der Auswahl
-		printf("Freies Spiel\n");
-		printf("________________________\n\n\n");
+		printf("*************************************");
+		printf("******************************************\n\n");
+		printf("\t\t\t\tFreies Spiel\n\n");
+		printf("*************************************");
+		printf("******************************************\n\n");
 
 		printf("1: Anfaenger\n"
 			   "2: Normal\n"
 			   "3: Profi\n"
 			   "4: zurueck\n\n");
 		printf("Auswahl: ");
-		iError = scanf("%i", &iAuswahlFS);
+		scanf("%i", &iAuswahlFS);
 		fflush(stdin);
 	}
 	while(iAuswahlFS > 4 || iAuswahlFS < 1);
@@ -267,14 +305,17 @@ void FreiesSpiel(void)
 	//Aufrufen des Sodokus je nach Schwierigkeitsstufe
 	if(iAuswahlFS == 1)
 	{
+		//randomfunktion(iGUserID, iAuswahlFS, 0);
 	}
 
 	if(iAuswahlFS == 2)
 	{
+		//randomfunktion(iGUserID, iAuswahlFS, 0);
 	}
 
 	if(iAuswahlFS == 3)
 	{
+		//randomfunktion(iGUserID, iAuswahlFS, 0,);
 	}
 
 	if(iAuswahlFS == 4)
@@ -291,22 +332,25 @@ void GewertetesSpiel(void)
 {
 	//Speicherdeklaration
 	int iAuswahlGS;
-	int iError;
+	
 
 	//Schleife solange Auswahl > 4 oder < 1
 	do{
 		system("cls");
 
 		//Ausgabe der Auswahl und Eingabe der Auswahl
-		printf("Gewertetes Spiel\n");
-		printf("________________________\n\n\n");
+		printf("*************************************");
+		printf("******************************************\n\n");
+		printf("\t\t\t\tGewertetes Spiel\n\n");
+		printf("*************************************");
+		printf("******************************************\n\n");
 
 		printf("1: Anfaenger\n"
 			   "2: Normal\n"
 			   "3: Profi\n"
 			   "4: zurueck\n\n");
 		printf("Auswahl: ");
-		iError = scanf("%i", &iAuswahlGS);
+		scanf("%i", &iAuswahlGS);
 		fflush(stdin);
 	}
 	while(iAuswahlGS > 4 || iAuswahlGS < 1);
@@ -314,14 +358,17 @@ void GewertetesSpiel(void)
 	//Aufrufen des Sodokus je nach Schwierigkeitsstufe
 	if(iAuswahlGS == 1)
 	{
+		//randomfunktion(iGUserID, iAuswahlGS, 1);
 	}
 
 	if(iAuswahlGS == 2)
 	{
+		//randomfunktion(iGUserID, iAuswahlGS, 1);
 	}
 
 	if(iAuswahlGS == 3)
 	{
+		//randomfunktion(iGUserID, iAuswahlGS, 1);
 	}
 
 	if(iAuswahlGS == 4)
@@ -351,8 +398,11 @@ void eingeloggt(int iUserID)
 		do{
 
 			system("cls");
-			printf("Angemeldet als: %s\n", myuser->sNickname);
-			printf("_____________________\n\n");
+			printf("*************************************");
+			printf("******************************************\n\n");
+			printf("Angemeldet als: %s\t\tHauptmen\204\n\n", myuser->sNickname);
+			printf("*************************************");
+			printf("******************************************\n\n");
 
 			//Löschen der Userinformationen
 			delete_user_data(myuser, 1);
@@ -375,27 +425,27 @@ void eingeloggt(int iUserID)
 		if(iAuswahl_e == 1)
 		{
 			GewertetesSpiel();
-			iAuswahl_e = 0;
+			
 
 		}
 
 		if(iAuswahl_e == 2)
 		{
 			FreiesSpiel();
-			iAuswahl_e = 0;
+			
 		}
 
 		if(iAuswahl_e == 3)
 		{
 			Bestenliste();
-			iAuswahl_e = 0;
+			
 			
 		}
 
 		if(iAuswahl_e == 4)
 		{
 			PersListe();
-			iAuswahl_e = 0;
+			
 		}
 
 	}
