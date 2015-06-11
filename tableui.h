@@ -26,9 +26,15 @@
 #define CURS_DOWN 2
 #define CURS_LEFT 4
 #define CURS_RIGHT 5
+/* Kantenlänge des gesamten Sudokus */
 #define BOUNDARY 9
+/* Anzahl der Felder im Sudoku */
 #define BOUNDARY_SQUARE (BOUNDARY * BOUNDARY)
+/* Kangentlänge des kleinen Quadrats */
 #define BOUNDARY_ROOT (int)(sqrt((double)BOUNDARY))
+
+#define MIN_WIDTH 145
+#define MIN_HEIGHT 45
 
 #define _CRT_SECURE_NO_WARNINGS
 
