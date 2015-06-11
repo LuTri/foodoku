@@ -1,4 +1,7 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 35f9884576679a18e41576a04992b17ed26afa48
 /*
    ========================================================================
    Autor                 : Marian Klemm
@@ -100,6 +103,7 @@ int setValueForField(int iCurrentArray[9][9], int x, int y) {
    }
    /* Wenn kein Wert funktioniert, dann 0 zurückgeben */
    return 0;
+<<<<<<< HEAD
 =======
 /*
    ========================================================================
@@ -217,4 +221,6 @@ char setValueForField(char cCurrentArray[9][9], char cCompleteArray[9][9], int x
 
    ///// Wie besprochen, funktioniert nicht
 >>>>>>> a8648ecefca005caf7ba8cce9219169e04ec47ac
+=======
+>>>>>>> 35f9884576679a18e41576a04992b17ed26afa48
 }

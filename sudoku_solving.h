@@ -23,6 +23,7 @@
 */
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 int checkIfOk(int iCurrentArray[9][9], int x, int y);
 
 int setValueForField(int iCurrentArray[9][9], int x, int y);
@@ -31,3 +32,8 @@ char checkIfOk(char cCurrentArray[9][9], int x, int y);
 
 char setValueForField(char cCurrentArray[9][9], char cCompleteArray[9][9], int x, int y);
 >>>>>>> a8648ecefca005caf7ba8cce9219169e04ec47ac
+=======
+int checkIfOk(int iCurrentArray[9][9], int x, int y);
+
+int setValueForField(int iCurrentArray[9][9], int x, int y);
+>>>>>>> 35f9884576679a18e41576a04992b17ed26afa48

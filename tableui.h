@@ -65,4 +65,6 @@ extern char cSudoku[9][9];
 
 int getTerminalSize(void);
 
+int getTerminalSize(void);
+
 #endif

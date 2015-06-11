@@ -375,6 +375,7 @@ int getTerminalSize(void) {
    return 1;
 }
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 
 void get_cursor_pos(int* iX, int* iY)
@@ -391,3 +392,5 @@ void get_cursor_pos(int* iX, int* iY)
    *iY = cCursorPos[0];
 }
 >>>>>>> a8648ecefca005caf7ba8cce9219169e04ec47ac
+=======
+>>>>>>> 35f9884576679a18e41576a04992b17ed26afa48
