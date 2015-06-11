@@ -398,3 +398,17 @@ int getTerminalSize(void) {
 
    return 1;
 }
+
+void get_cursor_pos(int* iX, int* iY)
+/*
+   ============================================================================
+   Schreibt die aktuelle Position des Cursors in iX und iY
+      1. Parameter: Adresse von iX
+      2. Parameter: Adresse von iY
+      3. Rückgabewert: -- 
+   ============================================================================
+*/
+{
+   *iX = cCursorPos[1];
+   *iY = cCursorPos[0];
+}

@@ -52,7 +52,10 @@ void  startup_sudoku(void);
 void  shutdown_sudoku(void);
 
 char  get_input(void);
+void  get_cursor_pos(int* iX, int* iY);
 
 int getTerminalSize(void);
+
+extern char cSudoku[9][9];
 
 #endif
