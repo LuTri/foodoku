@@ -347,20 +347,9 @@ void GewertetesSpiel(void)
 	while(iAuswahlGS > 4 || iAuswahlGS < 1);
 
 	//Aufrufen des Sodokus je nach Schwierigkeitsstufe
-	if(iAuswahlGS == 1)
-	{
-		game_loop(0,1,iGUserID);
-	}
-
-	if(iAuswahlGS == 2)
-	{
-		game_loop(1,1,iGUserID);
-	}
-
-	if(iAuswahlGS == 3)
-	{
-		game_loop(2,1,iGUserID);
-	}
+   if (iAuswahlGS != 4) {
+      game_loop(iAuswahlGS,1,iGUserID);
+   }
 }
 /*
 ==================================
