@@ -29,6 +29,7 @@ Diese Warnung kann durch die obige Definition unterdrückt werden.
 #include <stdio.h>
 #include <string.h>
 #include "ladderboard.h"
+#include "loop.h"
 
 int iGUserID;
 
@@ -227,9 +228,8 @@ void Einloggen(void)
 	//Speicherdeklaration
 	char cNutzername[20];
 	char cPassword[20];
-	int iUserID;
 
-	system("cls");
+   system("cls");
 	printf("*************************************");
 	printf("******************************************\n\n");
 	printf("\t\t\t\tAnmelden\n\n");
@@ -246,17 +246,17 @@ void Einloggen(void)
 
 	//Aufrufen der Funktion authenticate und übergabe des Rückgabewertes
 	//an den Speicher iUserID
-	iUserID = authenticate(cNutzername, cPassword);
+	iGUserID = authenticate(cNutzername, cPassword);
 
 	//Abfragen der UserID und Aufrufen der Funktion eingeloggt
-	if(iUserID == 0)
+	if(iGUserID == 0)
 	{
 		printf("\nIhr Nutzername oder ihr Password ist falsch\n\n");
 		system("pause");
 	}
-	if(iUserID >= 1)
+	if(iGUserID >= 1)
 	{
-		eingeloggt(iUserID);
+		eingeloggt(iGUserID);
 	}
 
 
