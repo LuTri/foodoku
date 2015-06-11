@@ -103,7 +103,6 @@ char show_fancy_box(char* fancy_output, int page)
 			{
 				mvaddch( 0 + iHoehe, 55 + iBreite , BORDERS);// Abfrage, wenn dann füge '#' ein
 			}
-			help_text(fancy_output);//Aufruf Funktion help_text()
 		}
 	}
 

@@ -37,13 +37,22 @@
 #define SEP_INNER "@-----+-----+-----@-----+-----+-----@-----+-----+-----@\n"
 #define SEP_VERTI "@     |     |     @     |     |     @     |     |     @\n"
 
+
 /* 
    ============================================================================
-   Für dieses Modul globale Dateien
+   globale Variablen
    ============================================================================ 
 */
 
 char cSudoku[BOUNDARY][BOUNDARY];
+
+char cShownSudoku[BOUNDARY][BOUNDARY];
+
+/* 
+   ============================================================================
+   Für dieses Modul globale Variablen
+   ============================================================================ 
+*/
 
 char cHelp[BOUNDARY][BOUNDARY][BOUNDARY];
 
@@ -183,13 +192,6 @@ void show_ui(char cShowHelp)
    /* Untersten Trenner ausgeben */
    printw(SEP_OUTER);
 
-   /* Falls ein Hilfetext vorhanden ist, wird dieser angezeigt */
-   cpHelpText = help_text(NULL);
-   if (cpHelpText)
-   {
-      printw("\n\n%s",cpHelpText);
-   }
-
    /* Falls Hilfe aktiviert, zeige Hilfe an */
    if (cShowHelp)
    {
@@ -201,35 +203,6 @@ void show_ui(char cShowHelp)
    /* Daten auf den Bildschirm, Cursor an die richtige Position bringen */
    refresh();
    wmove(stdscr,cCursorPos[0] * 4 + 2, cCursorPos[1] * 6 + 3);
-}
-
-char* help_text(char* cpText)
-/*
-   ============================================================================
-   Setzt den anzuzeigenden Hilfetext und gibt ihn zur Weiterverwendung zurück,
-   gibt nur den String zurück falls kein neuer angegeben wird
-      1. Parameter: Der einzutragende Text
-      2. Rückgabewert: Der zwischengespeicherte String
-   ============================================================================
-*/
-{
-   static char* cpHelpText = NULL;
-   
-   if (cpText && cpHelpText)
-      /* Falls schon ein String gespeichert wurde und ein neuer gespeichert
-      werden soll, lösche den alten String und speichere den neuen*/
-   {
-      free(cpHelpText);
-   }
-
-   if (cpText)
-   {
-      cpHelpText = (char*) malloc(strlen(cpText) + 1);
-      strcpy(cpHelpText,cpText);
-   }
-
-   /* Gib in jedem Fall den gespeicherten String zurück */
-   return cpHelpText;
 }
 
 void null_sudoku(void) {

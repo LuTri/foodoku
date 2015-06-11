@@ -23,6 +23,7 @@
 #include "generate.h"
 #include <time.h>
 #include "curses_os.h"
+#include "menue.h"
 
 int main(void)
 /*

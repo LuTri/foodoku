@@ -33,6 +33,7 @@
 #define _CRT_SECURE_NO_WARNINGS
 
 extern char cSudoku[BOUNDARY][BOUNDARY];
+extern char cShownSudoku[BOUNDARY][BOUNDARY];
 
 
 /* 
@@ -44,8 +45,6 @@ extern char cSudoku[BOUNDARY][BOUNDARY];
 void  move_cursor(char cDirection);
 
 void  show_ui(char cShowHelp);
-
-char* help_text(char* cpText);
 
 void  null_sudoku(void);
 
