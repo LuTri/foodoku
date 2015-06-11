@@ -110,4 +110,7 @@ char setValueForField(char cCurrentArray[9][9], char cCompleteArray[9][9], int x
 
    /* Wenn kein Wert funktioniert, dann 0 zurückgeben */
    return 0;
+
+
+   ///// Wie besprochen, funktioniert nicht
 }

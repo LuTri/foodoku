@@ -19,6 +19,8 @@
 #include <stdlib.h>
 #include "sudoku_solving.h"
 
+
+///// benutz bitte das globale Array
 char * showValuesForHelp(char aCurrentArray[9][9], int x, int y) {
 /*
    ============================================================================
@@ -36,7 +38,7 @@ char * showValuesForHelp(char aCurrentArray[9][9], int x, int y) {
    char iPossibleNumbers[9];
    int iZaehler2;
 
-   for (iZaehler = 0; iZaehler <= 9; iZaehler++) {
+   for (iZaehler = 0; iZaehler < 9; iZaehler++) {
       aCurrentArray[x][y] = iZaehler;
       iRueckgabe = checkIfOk(aCurrentArray, x, y);
       if (iRueckgabe == 1) {
@@ -44,4 +46,5 @@ char * showValuesForHelp(char aCurrentArray[9][9], int x, int y) {
       }
    }
    return iPossibleNumbers;
+   ///// keine Arrays zurückgeben!
 }
