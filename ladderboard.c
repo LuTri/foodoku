@@ -146,6 +146,9 @@ void PersListe()
 	printf ("Geben Sie (1) f\201r Schwer ein.\n");
 	printf ("Geben Sie (2) f\201r Mittel ein.\n");
 	printf ("Geben Sie (3) f\201r Leicht ein.\n");
+
+   ///// Bitte hier gleiche Werte wie im bei der Spielauswahl benutzen (sind verdreht)
+
 	printf ("Bitte geben Sie die Zahl f\201r die ");
 	printf(" gew\201nschte Bestenliste ein: ");
 	fflush (stdin);
