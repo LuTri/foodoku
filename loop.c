@@ -35,7 +35,11 @@ Beschreibung: Aufrufen und Benutzung des UI
 #define NUM_8 '0'+8
 #define NUM_9 '0'+9
 
+///// Formatierung bitte einmal überarbeiten
+///// Keine Tabs benutzen!
 
+
+///// Vielleicht ein switch-case anstatt der ganzen ifs?
 
 void game_loop(int iSchwierigkeit, int iSpielart, int iUserId)
    /*
@@ -153,23 +157,17 @@ void game_loop(int iSchwierigkeit, int iSpielart, int iUserId)
          }
       }
 
-      if(		cTaste == NUM_1
-         ||	cTaste == NUM_2
-         ||	cTaste == NUM_3
-         ||	cTaste == NUM_4
-         ||	cTaste == NUM_5
-         ||	cTaste == NUM_6
-         ||	cTaste == NUM_7
-         ||	cTaste == NUM_8
-         ||	cTaste == NUM_9
-         )
+      if(cTaste >= NUM_1 || cTaste <= cTaste == NUM_9)
+         ///// Überleg dir ob die die Bedingung oben so benutzen möchtest
+         ///// Wenn man mehrmals hintereinander die Enter-Taste drückt wird die
+         ///// letzte Zahl eingetragen -> Vielleicht nach eintragen auf 0 setzen?
          //ZAHLEN(1-9)
       {
          cTempTaste = cTaste;
       }
 
 
-      if(		cTaste == CURS_UP 
+      if(cTaste == CURS_UP 
          ||	cTaste == CURS_DOWN
          ||	cTaste == CURS_LEFT
          ||	cTaste == CURS_RIGHT
@@ -183,7 +181,9 @@ void game_loop(int iSchwierigkeit, int iSpielart, int iUserId)
 
    // Berechnung der Spieldauer
    tEnd = time(&tEnd);
-   this_game.iSeconds = (int) difftime(tBeg, tEnd);
+   this_game.iSeconds = (int) difftime(tEnd, tBeg);
+   ///// Es fehlen noch die angezeigten Hilfe + die automatisch gefüllten Felder
+
    shutdown_sudoku();
    // Insert in Bestenliste
    if(this_game.iUserId != 0){
