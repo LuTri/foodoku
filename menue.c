@@ -349,6 +349,7 @@ void GewertetesSpiel(void)
 	//Aufrufen des Sodokus je nach Schwierigkeitsstufe
 	if(iAuswahlGS == 1)
 	{
+      create_sudoku();
 		game_loop(0,1,iGUserID);
 	}
 
