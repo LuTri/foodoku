@@ -42,7 +42,6 @@
 #define HELP_FACTOR 30
 
 #define QUERY_ERROR_NOSTAT "In der Datenbank ist ein Fehler aufgetreten.\n"
-#define QUERY_ERROR "Ein Fehler ist aufgetreten: \"%s\".\n"
 
 #define DB_USE 1
 #define DB_CLOSE 0

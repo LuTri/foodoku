@@ -8,28 +8,12 @@ Beschreibung: Nutzerführung
 Compiler    : Visual Studio
 Version     : 1.0
 Programmschnittstelle: int main(void)
-Das Programm gibt den Wert 0 oder 1 zurueck.
+Das Programm gibt den Wert 0 oder 1 zurück.
 Das Programm erwartet beim Aufruf keine Argumente
 ========================================================================
 */
 
 #define _CRT_SECURE_NO_DEPRECATE 1
-#define  REGELN ""\
-	"Regeln Sudoku ist ein Zahlenraetsel. Das quadratische Spielfeld ist\n"\
-	"in drei mal drei Bloecke unterteilt. Jeder dieser Bloecke besteht wiederum\n"\
-	"aus 9 Kaestchen. Das gesamte Spielfeld besteht somit aus 81 Kaestchen die\n"\
-	"sich 9 Spalten und 9 Reihen zuordnen lassen. Von diesen 81 Feldern sind\n"\
-	"typischerweise 22 bis 36 Felder vorgegeben, in denen Zahlen zwischen 1 bis 9\n"\
-	"stehen\n"\
-	"\n"\
-	"Das Ziel des Spiels ist, das Spielfeld zu vervollstaendigen. Dabei sind\n"\
-	"die vom Spiel vorgegebenen Zahlen nicht veraenderbar. Die leeren Kaestchen\n"\
-	"muessen mit Ziffern gefuellt werden. Dabei gelten folgende drei Regel\n"\
-	"- In Jeder Zeile duerfen die Ziffern von 1 bis 9 nur einmal vorkommen\n"\
-	"- in jeder Spalte duerfen die Ziffern von 1 bis 9 nur einmal vorkommen\n"\
-	"- In jedem Block duerfen die Ziffern von 1 bis 9 nur einmal vorokmmen\n"\
-	"Das Spiel ist beendet, wenn alle Kaestchen korrekt gefuellt sind\n"\
-	"\n"
 
 /* Microsoft hat alle gängigen Ein- und Ausgabefunktionen
 als gefährlich eingestuft und durch neue Varianten ersetzt.
@@ -121,6 +105,31 @@ void menue (void)
 
 /*
 ==================================
+Starten eines Spieles(gewertet/ungewertet je nach Übergae
+des Wertes 1 oder 0.
+1 Parameter: iAuswahlSpiel(Auswahl der Schwierigkeit oder SChritt ins
+vorherige Menü
+==================================
+*/
+int iSpieleauswahl()
+{
+	//Speicherdeklaration
+	int iAuswahlSpiel;
+
+		printf("1: Anf\204nger\n"
+			   "2: Normal\n"
+			   "3: Profi\n"
+			   "4: zur\201ck\n\n");
+		printf("Auswahl: ");
+		scanf("%i", &iAuswahlSpiel);
+		fflush(stdin);
+	
+	return iAuswahlSpiel;
+		
+}
+
+/*
+==================================
 Anzeigen der Spielregeln für das Sodokuspiel
 ==================================
 */
@@ -134,7 +143,9 @@ void Spieleregeln(void)
 	printf("*************************************");
 	printf("******************************************\n\n");
 	//Anzeige der Sodokuregeln aus #define REGELN
-	printf("%s", REGELN);
+	printf(REGELN);
+
+   
 
 	system("pause");
 
@@ -168,9 +179,10 @@ void Registrieren(void)
 	printf("******************************************\n\n");
 
 	//Eingabe des Spielernamens
-	printf("Gewuenschter Spielername: ");
+	printf("Gew\201nschter Spielername: ");
 	scanf("%s", cNickname);
 	printf("\n");
+	myUser.sNickname =(char*)malloc(sizeof(char)*strlen(cNickname)+1);
 	
 	if (strcmp(cNickname, "abbruch") != 0)
 	{
@@ -178,6 +190,7 @@ void Registrieren(void)
 	printf("Vorname: ");
 	scanf("%s", cName);
 	printf("\n");
+	myUser.sName =(char*)malloc(sizeof(char)*strlen(cName)+1);
 	
 
 	if (strcmp(cName, "abbruch") != 0)
@@ -186,14 +199,16 @@ void Registrieren(void)
 	printf("Nachname: ");
 	scanf("%s", cLastname);
 	printf("\n");
+	myUser.sLastname =(char*)malloc(sizeof(char)*strlen(cLastname)+1);
 	
 	
 	if (strcmp(cLastname, "abbruch") != 0)
 	{
 	//Eingabe des Passwortes
-	printf("Gewuenschtes Password: ");
+	printf("Gew\201nschtes Password: ");
 	scanf("%s", cPassword);
 	printf("\n");
+	myUser.sPassword =(char*)malloc(sizeof(char)*strlen(cPassword)+1);
 	}
 	}
 	}
@@ -201,19 +216,20 @@ void Registrieren(void)
 	if (strcmp(cNickname, "abbruch") != 0 && strcmp(cName, "abbruch") != 0 && 
 		strcmp(cLastname, "abbruch") != 0 && strcmp(cPassword, "abbruch") != 0)
 	{
-	myUser.sNickname =(char*)malloc(sizeof(char)*strlen(cNickname)+1);
+	printf("Registrierung abgeschlossen\n");
 	strcpy(myUser.sNickname, cNickname);
-	myUser.sName =(char*)malloc(sizeof(char)*strlen(cName)+1);
 	strcpy(myUser.sName, cName);
-	myUser.sLastname =(char*)malloc(sizeof(char)*strlen(cLastname)+1);
 	strcpy(myUser.sLastname, cLastname);
-	myUser.sPassword =(char*)malloc(sizeof(char)*strlen(cPassword)+1);
 	strcpy(myUser.sPassword, cPassword);
 
 	//Übergabe der Werte an die Funktion register_user
 	register_user(&myUser);
 	}
 
+/*
+   Wenn "abbruch" bei Name, Nachname, Nickname oder Password eingegeben wird,
+   wird die Registrierung automatisch abgebrochen
+*/
 	if (strcmp(cNickname, "abbruch") == 0 || strcmp(cName, "abbruch") == 0 || 
 		strcmp(cLastname, "abbruch") == 0 || strcmp(cPassword, "abbruch") == 0)
 	{
@@ -260,7 +276,7 @@ void Einloggen(void)
 	//Abfragen der UserID und Aufrufen der Funktion eingeloggt
 	if(iUserID == 0)
 	{
-		printf("Ihr Nutzername oder ihr Password ist falsch\n\n");
+		printf("\nIhr Nutzername oder ihr Password ist falsch\n\n");
 		system("pause");
 	}
 	if(iUserID >= 1)
@@ -273,16 +289,17 @@ void Einloggen(void)
 /*
 ==================================
 Starten eines ungewertete Spieles und auswählen der Schwierigkeit
-1 Parameter: iAuswahlFS(Auswahl der Schwierigkeitsstufe)
+1 Parameter: iAuswahl(Uberprüfung der Eingabe aus iSPieleauswahl()
 ==================================
 */
 void FreiesSpiel(void)
 {
 	//Speicherdeklaration
-	int iAuswahlFS;
-
-	//Schleife solange Auswahl > 4 oder < 1
-	do{
+	int iAuswahl;
+	int iSpieltyp = 0;
+	
+		do
+		{
 		system("cls");
 
 		//Ausgabe der Auswahl und Eingabe der Auswahl
@@ -292,46 +309,38 @@ void FreiesSpiel(void)
 		printf("*************************************");
 		printf("******************************************\n\n");
 
-		printf("1: Anfaenger\n"
-			   "2: Normal\n"
-			   "3: Profi\n"
-			   "4: zurueck\n\n");
-		printf("Auswahl: ");
-		scanf("%i", &iAuswahlFS);
-		fflush(stdin);
-	}
-	while(iAuswahlFS > 4 || iAuswahlFS < 1);
+		iAuswahl = iSpieleauswahl();
+		}
+		while(iAuswahl > 4 || iAuswahl < 1);
 
-	//Aufrufen des Sodokus je nach Schwierigkeitsstufe
-	if(iAuswahlFS == 1)
+		//Aufrufen des Sodokus je nach Schwierigkeitsstufe
+	if(iAuswahl == 1)
 	{
-		//randomfunktion(iGUserID, iAuswahlFS, 0);
+		//randomfunktion(iGUserID, iAuswahl, iSpieltyp);
 	}
 
-	if(iAuswahlFS == 2)
-	{
-		//randomfunktion(iGUserID, iAuswahlFS, 0);
+	if(iAuswahl == 2)
+	{	
+		//randomfunktion(iGUserID, iAuswahl, iSpieltyp);	
 	}
 
-	if(iAuswahlFS == 3)
-	{
-		//randomfunktion(iGUserID, iAuswahlFS, 0,);
+	if(iAuswahl == 3)
+	{	
+		//randomfunktion(iGUserID, iAuswahl, iSpieltyp);	
 	}
 
-	if(iAuswahlFS == 4)
-	{
-	}
 }
 /*
 ==================================
 Starten eines Gewerteten Spieles und auswählen der Schwierigkeit
-1 Parameter: iAuswahlGS(Auswahl der Schwierigkeitsstufe)
+1 Parameter: iAuswahl(Uberprüfung der Eingabe aus iSPieleauswahl()
 ==================================
 */
 void GewertetesSpiel(void)
 {
 	//Speicherdeklaration
-	int iAuswahlGS;
+	int iAuswahl;
+	int iSpieltyp = 1;
 	
 
 	//Schleife solange Auswahl > 4 oder < 1
@@ -345,34 +354,24 @@ void GewertetesSpiel(void)
 		printf("*************************************");
 		printf("******************************************\n\n");
 
-		printf("1: Anfaenger\n"
-			   "2: Normal\n"
-			   "3: Profi\n"
-			   "4: zurueck\n\n");
-		printf("Auswahl: ");
-		scanf("%i", &iAuswahlGS);
-		fflush(stdin);
-	}
-	while(iAuswahlGS > 4 || iAuswahlGS < 1);
+		iAuswahl = iSpieleauswahl();
+		}
+		while(iAuswahl > 4 || iAuswahl < 1);
 
-	//Aufrufen des Sodokus je nach Schwierigkeitsstufe
-	if(iAuswahlGS == 1)
+		//Aufrufen des Sodokus je nach Schwierigkeitsstufe
+	if(iAuswahl == 1)
 	{
-		//randomfunktion(iGUserID, iAuswahlGS, 1);
+		//randomfunktion(iGUserID, iAuswahl, iSpieltyp);
 	}
 
-	if(iAuswahlGS == 2)
-	{
-		//randomfunktion(iGUserID, iAuswahlGS, 1);
+	if(iAuswahl == 2)
+	{	
+		//randomfunktion(iGUserID, iAuswahl, iSpieltyp);	
 	}
 
-	if(iAuswahlGS == 3)
-	{
-		//randomfunktion(iGUserID, iAuswahlGS, 1);
-	}
-
-	if(iAuswahlGS == 4)
-	{
+	if(iAuswahl == 3)
+	{	
+		//randomfunktion(iGUserID, iAuswahl, iSpieltyp);	
 	}
 }
 /*
@@ -400,18 +399,15 @@ void eingeloggt(int iUserID)
 			system("cls");
 			printf("*************************************");
 			printf("******************************************\n\n");
-			printf("Angemeldet als: %s\t\tHauptmen\204\n\n", myuser->sNickname);
+			printf("Angemeldet als: %s\t\tHauptmen\201\n\n", myuser->sNickname);
 			printf("*************************************");
 			printf("******************************************\n\n");
-
-			//Löschen der Userinformationen
-			delete_user_data(myuser, 1);
 
 			//Anzeigen und Eingabe der Auswahl
 			printf("1: Gewertetes Spiel\n"
 				   "2: Freies Spiel\n"
 				   "3: Globale Bestenliste\n"
-				   "4: Persoehnliche Bestenliste\n"
+				   "4: Pers\224hnliche Bestenliste\n"
 				   "5: Ausloggen\n\n"); 
 			printf("Auswahl: ");
 			scanf("%i", &iAuswahl_e);
@@ -446,6 +442,12 @@ void eingeloggt(int iUserID)
 		{
 			PersListe();
 			
+		}
+
+		if(iAuswahl_e == 5)
+		{
+			//Löschen der Userinformationen
+			delete_user_data(myuser, 1);
 		}
 
 	}

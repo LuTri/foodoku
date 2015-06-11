@@ -20,6 +20,8 @@
 */
 #include "tableui.h"
 #include "curses_os.h"
+#include "fancy_box.h"
+#include "menue.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -191,8 +193,10 @@ void show_ui(char cShowHelp)
    /* Falls Hilfe aktiviert, zeige Hilfe an */
    if (cShowHelp)
    {
-      show_help();
+     show_help();
    }
+
+   show_fancy_box(REGELN,0);
 
    /* Daten auf den Bildschirm, Cursor an die richtige Position bringen */
    refresh();
@@ -372,4 +376,25 @@ char get_input(void)
 */
 {
    return wgetch(stdscr);
+}
+
+int getTerminalSize(void) {
+/*
+   ============================================================================
+   Überprüft die derzeitige Größe des Konsolen-Fensters und gibt diese aus.
+      1. Rückgabewert: Entweder 1 falls Fenster größer als 145 x 45 oder 0 bei
+         kleinerer Größe.
+   ============================================================================
+*/
+
+   int iSizeY = getmaxy(stdscr);
+   int iSizeX = getmaxx(stdscr);
+
+   if (iSizeY < 45 || iSizeX < 145) {
+      return 0;
+   }
+
+   initscr();
+
+   return 1;
 }
