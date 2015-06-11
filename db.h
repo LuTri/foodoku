@@ -99,8 +99,6 @@ typedef struct {
 */
 
 sqlite3* handle_db(char cUsage);
-void  close_shutdown(void);
-
 int   authenticate(char* sNickname, char* sPassword);
 
 char  register_user(USER* uUser);
