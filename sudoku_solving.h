@@ -22,6 +22,6 @@
    ============================================================================ 
 */
 
-int checkIfOk(int iCurrentArray[9][9], int x, int y);
+char checkIfOk(char cCurrentArray[9][9], int x, int y);
 
-int setValueForField(int iCurrentArray[9][9], int x, int y);
+char setValueForField(char cCurrentArray[9][9], char cCompleteArray[9][9], int x, int y);

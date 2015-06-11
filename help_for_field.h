@@ -23,4 +23,4 @@
    ============================================================================ 
 */
 
-int showValuesForHelp(int iCurrentArray[9][9], int x, int y);
+char showValuesForHelp(char cCurrentArray[9][9], int x, int y);

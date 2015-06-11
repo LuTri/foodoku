@@ -18,7 +18,7 @@
 #include <stdlib.h>
 #include "sudoku_solving.h"
 
-int checkIfOk(int iCurrentArray[9][9], int x, int y) {
+char checkIfOk(char cCurrentArray[9][9], int x, int y) {
 /*
    ============================================================================
    Überprüft anhand des Spielfeld-Arrays, ob die Zahl an Stelle X Y valide ist,
@@ -40,16 +40,16 @@ int checkIfOk(int iCurrentArray[9][9], int x, int y) {
 
    /* Überprüfung der vertikalen Achse auf doppelten Wert  */
    for (iZaehlerY = 0; iZaehlerY < 9; iZaehlerY++) {
-      if (iZaehlerY != y && iCurrentArray[x][y] != 0 && iCurrentArray[x][iZaehlerY]
-         == iCurrentArray[x][y]) {
+      if (iZaehlerY != y && cCurrentArray[x][y] != 0 && cCurrentArray[x][iZaehlerY]
+         == cCurrentArray[x][y]) {
          /* Wenn Wert schon vorkommt, 0 zurückgeben */
          return 0;
       }
    }
    /* Überprüfung der horizontalen Achse auf doppelten Wert */
    for (iZaehlerX = 0; iZaehlerX < 9; iZaehlerX++) {
-      if (iZaehlerX != x && iCurrentArray[x][y] != 0 && iCurrentArray[iZaehlerX][y]
-         == iCurrentArray[x][y]) {
+      if (iZaehlerX != x && cCurrentArray[x][y] != 0 && cCurrentArray[iZaehlerX][y]
+         == cCurrentArray[x][y]) {
          /* Wenn Wert schon vorkommt, 0 zurückgeben */
          return 0;
       }
@@ -57,9 +57,9 @@ int checkIfOk(int iCurrentArray[9][9], int x, int y) {
    /* Überprüfung des 3*3 Quadrats auf doppelten Wert */
    for (iZaehlerQuadratX = iX1; iZaehlerQuadratX < iX1 + 3; iZaehlerQuadratX++) {
       for (iZaehlerQuadratY = iY1; iZaehlerQuadratY < iY1 + 3; iZaehlerQuadratY++) {
-          if ((iZaehlerQuadratX!=x || iZaehlerQuadratY!=y) && iCurrentArray[x][y]
-            != 0 && iCurrentArray[iZaehlerQuadratX][iZaehlerQuadratY]==
-            iCurrentArray[x][y]) {
+          if ((iZaehlerQuadratX!=x || iZaehlerQuadratY!=y) && cCurrentArray[x][y]
+            != 0 && cCurrentArray[iZaehlerQuadratX][iZaehlerQuadratY]==
+            cCurrentArray[x][y]) {
             /* Wenn Wert schon vorkommt, 0 zurückgeben */
             return 0;
           }
@@ -69,7 +69,7 @@ int checkIfOk(int iCurrentArray[9][9], int x, int y) {
    return 1;
 }
 
-int setValueForField(int iCurrentArray[9][9], int x, int y) {
+char setValueForField(char cCurrentArray[9][9], char cCompleteArray[9][9], int x, int y) {
 /*
    ============================================================================
    Überprüft welche Zahl von 1-9 in das übergebene Feld passt.
@@ -82,21 +82,32 @@ int setValueForField(int iCurrentArray[9][9], int x, int y) {
    ============================================================================
 */
    int iZaehler;
-   int iRueckgabe;
+   char iRueckgabe;
+   int iValidNumbersCounter;
+   int iValidNumbers[9];
 
    /* Zahlen von 1-9 durchtesten und die erste Zahl setzen, die funktioniert */
-
-   ////// ANMERKUNG: Das wird nicht funktionieren - nur wenn genau nur eine Zahl passt kannst du die einsetzen
-   ////// ODER: benutz Backtracking
    for (iZaehler = 0; iZaehler <= 9; iZaehler++) {
-      iCurrentArray[x][y] = iZaehler;
-      iRueckgabe = checkIfOk(iCurrentArray, x, y);
+      cCurrentArray[x][y] = iZaehler;
+      iRueckgabe = checkIfOk(cCurrentArray, x, y);
 
       if(iRueckgabe == 1) {
-         /* Wenn Wert im Feld valide ist, dann diesen zurückgeben */
-         return iZaehler;
+         /* Wenn getestete Zahl für das Feld valide ist,
+            Zahl dem Array hinzufügen und iValidNumbers
+            hochzählen */
+         iValidNumbers[iValidNumbersCounter] = iZaehler;
+         iValidNumbersCounter++;
       }
    }
+
+   if (iValidNumbersCounter > 1) {
+      /* Richtige Zahl aus komplettem Spiel-Array holen und zurückgeben */
+      return cCompleteArray[x][y];
+   } else if(iValidNumbersCounter == 1) {
+      /* Es gibt nur eine Zahl die passt, diese nun zurückgeben. */
+      return iValidNumbers[0];
+   }
+
    /* Wenn kein Wert funktioniert, dann 0 zurückgeben */
    return 0;
 }
