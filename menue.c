@@ -2,13 +2,13 @@
 ========================================================================
 Autor       : GruppeB (Lennard Malessa)
 Firma       : HHBK
-Dateiname   : menue.c
+Dateiname   : men\201.c
 Datum       : 08.06.2015
 Beschreibung: Nutzerführung
 Compiler    : Visual Studio
 Version     : 1.0
 Programmschnittstelle: int main(void)
-Das Programm gibt den Wert 0 oder 1 zurueck.
+Das Programm gibt den Wert 0 oder 1 zurück.
 Das Programm erwartet beim Aufruf keine Argumente
 ========================================================================
 */
@@ -118,9 +118,9 @@ void Spieleregeln(void)
 	printf("*************************************");
 	printf("******************************************\n\n");
 	//Anzeige der Sodokuregeln aus #define REGELN
-	printf("%s", REGELN);
+	printf(REGELN);
 
-   ///// mach hier "printf(REGELN);"
+   
 
 	system("pause");
 
@@ -154,9 +154,10 @@ void Registrieren(void)
 	printf("******************************************\n\n");
 
 	//Eingabe des Spielernamens
-	printf("Gewuenschter Spielername: ");
+	printf("Gew\201nschter Spielername: ");
 	scanf("%s", cNickname);
 	printf("\n");
+	myUser.sNickname =(char*)malloc(sizeof(char)*strlen(cNickname)+1);
 	
 	if (strcmp(cNickname, "abbruch") != 0)
 	{
@@ -164,6 +165,7 @@ void Registrieren(void)
 	printf("Vorname: ");
 	scanf("%s", cName);
 	printf("\n");
+	myUser.sName =(char*)malloc(sizeof(char)*strlen(cName)+1);
 	
 
 	if (strcmp(cName, "abbruch") != 0)
@@ -172,14 +174,16 @@ void Registrieren(void)
 	printf("Nachname: ");
 	scanf("%s", cLastname);
 	printf("\n");
+	myUser.sLastname =(char*)malloc(sizeof(char)*strlen(cLastname)+1);
 	
 	
 	if (strcmp(cLastname, "abbruch") != 0)
 	{
 	//Eingabe des Passwortes
-	printf("Gewuenschtes Password: ");
+	printf("Gew\201nschtes Password: ");
 	scanf("%s", cPassword);
 	printf("\n");
+	myUser.sPassword =(char*)malloc(sizeof(char)*strlen(cPassword)+1);
 	}
 	}
 	}
@@ -187,21 +191,20 @@ void Registrieren(void)
 	if (strcmp(cNickname, "abbruch") != 0 && strcmp(cName, "abbruch") != 0 && 
 		strcmp(cLastname, "abbruch") != 0 && strcmp(cPassword, "abbruch") != 0)
 	{
-	myUser.sNickname =(char*)malloc(sizeof(char)*strlen(cNickname)+1);
+	printf("Registrierung abgeschlossen\n");
 	strcpy(myUser.sNickname, cNickname);
-	myUser.sName =(char*)malloc(sizeof(char)*strlen(cName)+1);
 	strcpy(myUser.sName, cName);
-	myUser.sLastname =(char*)malloc(sizeof(char)*strlen(cLastname)+1);
 	strcpy(myUser.sLastname, cLastname);
-	myUser.sPassword =(char*)malloc(sizeof(char)*strlen(cPassword)+1);
 	strcpy(myUser.sPassword, cPassword);
 
 	//Übergabe der Werte an die Funktion register_user
 	register_user(&myUser);
 	}
 
-
-   ///// Kommentare?
+/*
+   Wenn "abbruch" bei Name, Nachname, Nickname oder Password eingegeben wird,
+   wird die Registrierung automatisch abgebrochen
+*/
 	if (strcmp(cNickname, "abbruch") == 0 || strcmp(cName, "abbruch") == 0 || 
 		strcmp(cLastname, "abbruch") == 0 || strcmp(cPassword, "abbruch") == 0)
 	{
@@ -248,7 +251,7 @@ void Einloggen(void)
 	//Abfragen der UserID und Aufrufen der Funktion eingeloggt
 	if(iUserID == 0)
 	{
-		printf("Ihr Nutzername oder ihr Password ist falsch\n\n");
+		printf("\nIhr Nutzername oder ihr Password ist falsch\n\n");
 		system("pause");
 	}
 	if(iUserID >= 1)
@@ -280,10 +283,10 @@ void FreiesSpiel(void)
 		printf("*************************************");
 		printf("******************************************\n\n");
 
-		printf("1: Anfaenger\n"
+		printf("1: Anf\204nger\n"
 			   "2: Normal\n"
 			   "3: Profi\n"
-			   "4: zurueck\n\n");
+			   "4: zur\201ck\n\n");
 		printf("Auswahl: ");
 		scanf("%i", &iAuswahlFS);
 		fflush(stdin);
@@ -333,10 +336,10 @@ void GewertetesSpiel(void)
 		printf("*************************************");
 		printf("******************************************\n\n");
 
-		printf("1: Anfaenger\n"
+		printf("1: Anf\204nger\n"
 			   "2: Normal\n"
 			   "3: Profi\n"
-			   "4: zurueck\n\n");
+			   "4: zur\201ck\n\n");
 		printf("Auswahl: ");
 		scanf("%i", &iAuswahlGS);
 		fflush(stdin);
@@ -388,18 +391,15 @@ void eingeloggt(int iUserID)
 			system("cls");
 			printf("*************************************");
 			printf("******************************************\n\n");
-			printf("Angemeldet als: %s\t\tHauptmen\204\n\n", myuser->sNickname);
+			printf("Angemeldet als: %s\t\tHauptmen\201\n\n", myuser->sNickname);
 			printf("*************************************");
 			printf("******************************************\n\n");
-
-			//Löschen der Userinformationen
-			delete_user_data(myuser, 1);
 
 			//Anzeigen und Eingabe der Auswahl
 			printf("1: Gewertetes Spiel\n"
 				   "2: Freies Spiel\n"
 				   "3: Globale Bestenliste\n"
-				   "4: Persoehnliche Bestenliste\n"
+				   "4: Pers\224hnliche Bestenliste\n"
 				   "5: Ausloggen\n\n"); 
 			printf("Auswahl: ");
 			scanf("%i", &iAuswahl_e);
@@ -434,6 +434,12 @@ void eingeloggt(int iUserID)
 		{
 			PersListe();
 			
+		}
+
+		if(iAuswahl_e == 5)
+		{
+			//Löschen der Userinformationen
+			delete_user_data(myuser, 1);
 		}
 
 	}

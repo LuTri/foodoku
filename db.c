@@ -342,7 +342,8 @@ char register_user(USER* uUser)
          Falls ein Fehler auftrat, den Fehlertext ausgeben, freigeben und die
          Funktion mit 0-Rückgabe beenden
       */
-      printf(QUERY_ERROR, sErrMsg);
+      printf("Der Benutzername ist bereits vorhanden, " 
+		     "bitte anderen Namen w\204hlen\n");
       free(sErrMsg);
       return 0;
    }
@@ -510,7 +511,7 @@ char insert_game_data(GAME* upGameData)
          Falls ein Fehler auftrat, den Fehlertext ausgeben, freigeben und die
          Funktion mit 0-Rückgabe beenden
       */
-      printf(QUERY_ERROR, sErrMsg);
+      printf("Daten konnten nicht gespeichert werden\n");
       free(sErrMsg);
       return 0;
    }
