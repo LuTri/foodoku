@@ -20,10 +20,8 @@
 */
 #include <stdio.h>
 #include <stdlib.h>
-#include "generate.h"
-#include <time.h>
-#include "curses_os.h"
 #include "menue.h"
+#include "tableui.h"
 
 int main(void)
 /*
@@ -33,6 +31,13 @@ int main(void)
    ==========================================================================
 */
 {
-   menue();
+   if (getTerminalSize()) {
+      menue();
+   } else {
+      printf("Fehler: Ihr Terminal ist zu klein.\n"\
+             "Bitte vergoessern sie die Groesse Ihres Terminals auf mindestens"\
+             " %d x %d Zeichen.", MIN_WIDTH, MIN_HEIGHT);
+      system("pause");
+   }
 	return 0;
 }

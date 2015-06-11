@@ -335,16 +335,16 @@ int getTerminalSize(void) {
          kleinerer Größe.
    ============================================================================
 */
-
-   int iSizeY = getmaxy(stdscr);
-   int iSizeX = getmaxx(stdscr);
-
-   if (iSizeY < 45 || iSizeX < 145) {
-      return 0;
-   }
+   int iSizeY, iSizeX;
 
    initscr();
+   iSizeY = getmaxy(stdscr);
+   iSizeX = getmaxx(stdscr);
+   endwin();
 
+   if (iSizeY < MIN_HEIGHT || iSizeX < MIN_WIDTH) {
+      return 0;
+   }
    return 1;
 }
 

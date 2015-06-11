@@ -17,6 +17,7 @@ Beschreibung: Aufrufen und Benutzung des UI
 #include "db.h"
 #include "tableui.h"
 #include "menue.h"
+#include "generate.h"
 
 //Präprozessorkonstanten
 
@@ -95,6 +96,7 @@ void game_loop(int iSchwierigkeit, int iSpielart, int iUserId)
    //Spielaufbau
 
    startup_sudoku();
+   create_sudoku();
 
    tBeg = time(&tBeg);
 
