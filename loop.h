@@ -16,4 +16,4 @@ Nach außen verfügbare Schnittstellen
 ============================================================================
 */
 
-void create_sudoku(int schwierigkeit, int spielart, int iUserId);
+void game_loop(int schwierigkeit, int spielart, int iUserId);

@@ -13,16 +13,8 @@ Beschreibung: Aufrufen und Benutzung des UI
 
 
 //INCLUDE
-#include "db.h"
 #include "tableui.h"
 #include "menue.h"
-#include "curses.h"
-#include "help_for_field.h"
-
-#include <stdio.h>
-#include <stdlib.h>
-#include <time.h>
-
 
 //Präprozessorkonstanten
 
@@ -43,7 +35,7 @@ Beschreibung: Aufrufen und Benutzung des UI
 
 
 
-void create_sudoku(int iSchwierigkeit, int iSpielart, int iUserId)
+void game_loop(int iSchwierigkeit, int iSpielart, int iUserId)
 /*
 	Erstellen des Sudoku-Feldes
 	1. Parameter:	iSchwierigkeitsgrad
@@ -190,7 +182,7 @@ void create_sudoku(int iSchwierigkeit, int iSpielart, int iUserId)
 		}
 
 // Berechnung der Spieldauer
-		end = time(&end);
+		tEnd = time(&tEnd);
 		this_game.iSeconds = (int) difftime(tBeg, tEnd);
 
 // Insert in Bestenliste
@@ -200,3 +192,4 @@ void create_sudoku(int iSchwierigkeit, int iSpielart, int iUserId)
 
 
 }
+

@@ -349,21 +349,17 @@ void GewertetesSpiel(void)
 	//Aufrufen des Sodokus je nach Schwierigkeitsstufe
 	if(iAuswahlGS == 1)
 	{
-		//randomfunktion(iGUserID, iAuswahlGS, 1);
+		game_loop(0,1,iGUserID);
 	}
 
 	if(iAuswahlGS == 2)
 	{
-		//randomfunktion(iGUserID, iAuswahlGS, 1);
+		game_loop(1,1,iGUserID);
 	}
 
 	if(iAuswahlGS == 3)
 	{
-		//randomfunktion(iGUserID, iAuswahlGS, 1);
-	}
-
-	if(iAuswahlGS == 4)
-	{
+		game_loop(2,1,iGUserID);
 	}
 }
 /*
