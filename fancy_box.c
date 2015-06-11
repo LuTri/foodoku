@@ -17,7 +17,11 @@
 	includes
 */
 #include "fancy_box.h"
+<<<<<<< HEAD
 #include "curses.h"
+=======
+#include "curses_os.h"
+>>>>>>> a8648ecefca005caf7ba8cce9219169e04ec47ac
 #include "tableui.h"
 #include "menue.h"
 
@@ -147,4 +151,8 @@ void fancy_loop(void)
 		show_fancy_box(REGELN, 0);
 
 	}while(cInput != 'q' );
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> a8648ecefca005caf7ba8cce9219169e04ec47ac
