@@ -91,7 +91,7 @@ void DatenAnzeige(GAMERANKING Daten[],int iLength)
 	printf("\t\t\t\tBestenliste\n\n");
 	printf("*************************************");
 	printf("******************************************\n\n");
-	printf("Rang |\t\tName   | ben\224t. Hilfen | Punktzahl |\tDatum\n");
+	printf("Rang |\tName   | ben\224t. Hilfen | gef\201llte Felder | Score |\tDatum\n");
 	printf("*************************************");
 	printf("******************************************\n\n");
 
@@ -101,10 +101,11 @@ void DatenAnzeige(GAMERANKING Daten[],int iLength)
 	while (iZaehler < iLength)
 	{
 		printf("%3i", iZaehler+1);
-		printf("%20s ", Daten[iZaehler].sUserName);
-		printf("\t%3i\t  ", Daten[iZaehler].iHelps);
-		printf("%5i\t\t", Daten[iZaehler].iScore);
-		printf("%s", Daten[iZaehler].sGameDate);
+		printf("%10s ", Daten[iZaehler].sUserName);
+		printf("\t\t%3i\t\t", Daten[iZaehler].iHelps);
+		printf("%3i\t   ", Daten[iZaehler].iFilled);
+		printf("%5i   ", Daten[iZaehler].iScore);
+		printf("%10s", Daten[iZaehler].sGameDate);
 		printf("\n");
 		printf("*************************************");
 		printf("******************************************\n\n");
@@ -181,7 +182,7 @@ void PersonAnzeigen(GAMERANKING pDaten[],int iLength)
 	printf("\t\t\t\t Bestenliste\n\n");
 	printf("*************************************");
 	printf("******************************************\n\n");
-	printf("Rang | ben\224t. Hilfen | Punktzahl |\tDatum\n");
+	printf("Rang | ben\224t. Hilfen | gef\201llte Felder | Score |\tDatum\n");
 	printf("*************************************");
 	printf("******************************************\n\n");
 
@@ -191,10 +192,11 @@ void PersonAnzeigen(GAMERANKING pDaten[],int iLength)
 	{
 		while (iZaehler < iLength)
 		{
-		printf("%3i", iZaehler+1);
-		printf("\t%3i\t  ", pDaten[iZaehler].iHelps);
-		printf("\t%5i\t\t", pDaten[iZaehler].iScore);
-		printf("%s", pDaten[iZaehler].sGameDate);
+		printf("%3i\t    ", iZaehler+1);
+		printf("%3i\t\t", pDaten[iZaehler].iHelps);
+		printf("%3i\t\t  ", pDaten[iZaehler].iFilled);
+		printf("%5i\t  ", pDaten[iZaehler].iScore);
+		printf("%10s", pDaten[iZaehler].sGameDate);
 		printf("\n");
 		printf("*************************************");
 		printf("******************************************\n\n");
