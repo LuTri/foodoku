@@ -71,8 +71,9 @@
 #define QUERY_GET_TOPRANKED ""\
       "SELECT "\
          "game.user, game.game_id, game.zeit, game.schwierigkeit, game.angezei"\
-         "gte_hilfen, game.spielzeitpunkt, user.spielername, game.zeit + game."\
-         "angezeigte_hilfen * %d AS 'score' "\
+         "gte_hilfen, game.gefuellte_felder, game.spielzeitpunkt, user.spiele"\
+         "rname, game.zeit + game.angezeigte_hilfen * %d + game.gefuellte_feld"\
+         "er * %d AS 'score' "\
       "FROM games game INNER JOIN userdata user "\
       "WHERE user.user_id = game.user AND game.schwierigkeit = %d "\
       "ORDER BY score ASC LIMIT %d;"
@@ -84,8 +85,9 @@
 #define QUERY_GET_USER_TOP ""\
       "SELECT "\
          "game.user, game.game_id, game.zeit, game.schwierigkeit, game.angezei"\
-         "gte_hilfen, game.spielzeitpunkt, user.spielername, game.zeit + game."\
-         "angezeigte_hilfen * %d AS 'score' "\
+         "gte_hilfen, game.gefuellte_felder, game.spielzeitpunkt, user.spiele"\
+         "rname, game.zeit + game.angezeigte_hilfen * %d + game.gefuellte_feld"\
+         "er * %d AS 'score' "\
       "FROM games game INNER JOIN userdata user "\
       "WHERE user.user_id = game.user AND game.schwierigkeit = %d "\
          "AND user.user_id = %d "\
@@ -661,7 +663,11 @@ int get_best_games(int iMode, GAMERANKING* rpGames, int iLength)
 
    
    /* Query mit Parametern vorbereiten */
-   sSql = sqlite3_mprintf(QUERY_GET_TOPRANKED,HELP_FACTOR, iMode, iLength);
+   sSql = sqlite3_mprintf(QUERY_GET_TOPRANKED,
+                          HELP_FACTOR,
+                          FILLED_FACTOR,
+                          iMode,
+                          iLength);
 
 
    /* Query auf Datenbank ausführen, Query löschen */
@@ -696,21 +702,22 @@ int get_best_games(int iMode, GAMERANKING* rpGames, int iLength)
       rpGames[iResultLength].iSeconds = atoi((char*)sqlite3_column_text(stmt, 2));
       rpGames[iResultLength].iMode = atoi((char*)sqlite3_column_text(stmt, 3));
       rpGames[iResultLength].iHelps = atoi((char*)sqlite3_column_text(stmt, 4));
+      rpGames[iResultLength].iFilled = atoi((char*)sqlite3_column_text(stmt, 5));
 
       /*
          Der aus der Datenbank erhaltene Text muss kopiert werden.
          Dazu muss entsprechender Speicher alloziert werden.
       */
-      sText = (char*)sqlite3_column_text(stmt, 5);
+      sText = (char*)sqlite3_column_text(stmt, 6);
       rpGames[iResultLength].sGameDate = (char*)malloc(strlen(sText) + 1);
       strcpy(rpGames[iResultLength].sGameDate, sText);
 
       /* Der aus der Datenbank erhaltene Text muss kopiert werden */
-      sText = (char*)sqlite3_column_text(stmt, 6);
+      sText = (char*)sqlite3_column_text(stmt, 7);
       rpGames[iResultLength].sUserName = (char*)malloc(strlen(sText) + 1);
       strcpy(rpGames[iResultLength].sUserName, sText);
 
-      rpGames[iResultLength].iScore = atoi((char*)sqlite3_column_text(stmt, 7));
+      rpGames[iResultLength].iScore = atoi((char*)sqlite3_column_text(stmt, 8));
       iResultLength++;
    }
 
@@ -742,6 +749,7 @@ int get_best_user_games(int iMode, int iUserId, GAMERANKING* rpGames, int iLengt
    /* Query mit Parametern vorbereiten */
    sSql = sqlite3_mprintf(QUERY_GET_USER_TOP,
                           HELP_FACTOR,
+                          FILLED_FACTOR,
                           iMode,
                           iUserId,
                           iLength);
@@ -779,21 +787,22 @@ int get_best_user_games(int iMode, int iUserId, GAMERANKING* rpGames, int iLengt
       rpGames[iResultLength].iSeconds = atoi((char*)sqlite3_column_text(stmt, 2));
       rpGames[iResultLength].iMode = atoi((char*)sqlite3_column_text(stmt, 3));
       rpGames[iResultLength].iHelps = atoi((char*)sqlite3_column_text(stmt, 4));
+      rpGames[iResultLength].iFilled = atoi((char*)sqlite3_column_text(stmt, 5));
 
       /*
          Der aus der Datenbank erhaltene Text muss kopiert werden.
          Dazu muss entsprechender Speicher alloziert werden.
       */
-      sText = (char*)sqlite3_column_text(stmt, 5);
+      sText = (char*)sqlite3_column_text(stmt, 6);
       rpGames[iResultLength].sGameDate = (char*)malloc(strlen(sText) + 1);
       strcpy(rpGames[iResultLength].sGameDate, sText);
 
       /* Der aus der Datenbank erhaltene Text muss kopiert werden */
-      sText = (char*)sqlite3_column_text(stmt, 6);
+      sText = (char*)sqlite3_column_text(stmt, 7);
       rpGames[iResultLength].sUserName = (char*)malloc(strlen(sText) + 1);
       strcpy(rpGames[iResultLength].sUserName, sText);
 
-      rpGames[iResultLength].iScore = atoi((char*)sqlite3_column_text(stmt, 7));
+      rpGames[iResultLength].iScore = atoi((char*)sqlite3_column_text(stmt, 8));
       iResultLength++;
    }
 

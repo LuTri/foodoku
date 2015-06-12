@@ -39,7 +39,8 @@
    Der HELP_FACTOR bestimmt die Gewichtung von angezeigten Hilfen in der
    Bestenliste
 */
-#define HELP_FACTOR 30
+#define HELP_FACTOR 20
+#define FILLED_FACTOR 50
 
 #define QUERY_ERROR_NOSTAT "In der Datenbank ist ein Fehler aufgetreten.\n"
 
@@ -83,6 +84,7 @@ typedef struct {
    int iSeconds;
    int iMode;
    int iHelps;
+   int iFilled;
    int iScore;
 } GAMERANKING;
 
