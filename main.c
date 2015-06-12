@@ -18,8 +18,7 @@
    Das Programm erwartet beim Aufruf keine Argumente
    ========================================================================
 */
-#include <stdio.h>
-#include <stdlib.h>
+#include "os.h"
 #include "menue.h"
 #include "tableui.h"
 
@@ -37,7 +36,7 @@ int main(void)
       printf("Fehler: Ihr Terminal ist zu klein.\n"\
              "Bitte vergoessern sie die Groesse Ihres Terminals auf mindestens"\
              " %d x %d Zeichen.\n", MIN_WIDTH, MIN_HEIGHT);
-      system("pause");
+      SYSTEM_PAUSE
    }
 	return 0;
 }

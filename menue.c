@@ -124,7 +124,7 @@ void Spieleregeln(void)
 	printf("******************************************\n\n");
 	//Anzeige der Sodokuregeln aus #define REGELN
 	printf(REGELN);
-	system("pause");
+	SYSTEM_PAUSE
 }
 /*
 ==================================
@@ -199,7 +199,7 @@ void Registrieren(void)
 	{
 		printf("Registrierung abgebrochen!\n\n");
 	}
-	system("pause");
+	SYSTEM_PAUSE
 }
 /*
 ==================================
@@ -232,7 +232,7 @@ void Einloggen(void)
 	if(iGUserID == 0)
 	{
 		printf("\nIhr Nutzername oder ihr Password ist falsch\n\n");
-		system("pause");
+		SYSTEM_PAUSE
 	}
 	if(iGUserID >= 1)
 	{

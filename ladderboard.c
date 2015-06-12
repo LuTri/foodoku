@@ -71,7 +71,7 @@ void Bestenliste()
 		//Auf der DatanAnzeigen Funktion mit übergabe des Daten Array´s 
 		//und der Anzahl der gefundenen Einträge
 		DatenAnzeige(Daten, iLength);
-		system ("pause");
+		SYSTEM_PAUSE
 	
 }
 /*
@@ -163,7 +163,7 @@ void PersListe()
 	//Auf der PersonAnzeigen Funktion mit übergabe des pDaten Array´s 
 	//und der Anzahl der gefundenen Einträge
 	PersonAnzeigen(pDaten, iLength);
-	system ("pause");
+	SYSTEM_PAUSE
 }
 /*
 ========================================================================

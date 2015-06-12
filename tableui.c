@@ -60,6 +60,8 @@ char cHelp[BOUNDARY][BOUNDARY][BOUNDARY];
 
 char cCursorPos[2] = {0,0};
 
+SCREEN* sTerminal;
+
 char pretty_value(char cValue)
 /*
    ============================================================================
@@ -307,7 +309,7 @@ void startup_sudoku(void)
    ============================================================================
 */
 {
-   initscr();
+   sTerminal = newterm(0,stdin,stdout);
    raw();
    keypad(stdscr, TRUE);
    noecho();
@@ -322,6 +324,7 @@ void shutdown_sudoku(void)
 */
 {
    endwin();
+   delscreen(sTerminal);
 }
 
 char get_input(void)
@@ -346,10 +349,12 @@ int getTerminalSize(void) {
 */
    int iSizeY, iSizeX;
 
-   initscr();
+   sTerminal = newterm(0,stdin,stdout);
    iSizeY = getmaxy(stdscr);
    iSizeX = getmaxx(stdscr);
    endwin();
+   delscreen(sTerminal);
+   fflush(stdout);
 
    if (iSizeY < MIN_HEIGHT || iSizeX < MIN_WIDTH) {
       return 0;
