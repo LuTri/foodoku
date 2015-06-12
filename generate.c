@@ -19,7 +19,7 @@
 */
 
 #include "generate.h"
-#include "curses_os.h"
+#include "os.h"
 #include "tableui.h"
 #include <time.h>
 #include <stdlib.h>

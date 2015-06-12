@@ -23,7 +23,7 @@ Bei Verwendung der alten Funktionen wird eine Warnung ausgegeben.
 Diese Warnung kann durch die obige Definition unterdrückt werden.
 */
 
-#include <stdlib.h>
+#include "os.h"
 #include "db.h"
 #include "menue.h"
 #include <stdio.h>
@@ -53,7 +53,7 @@ void menue (void)
 	{
 		do
 		{
-		system("cls");
+		CLEAR_SCREEN
 		printf("*************************************");
 		printf("******************************************\n\n");
 		printf("\t\t\t\tSUDOKU TASKFORCE\n\n");
@@ -111,7 +111,7 @@ Anzeigen der Spielregeln für das Sodokuspiel
 */
 void Spieleregeln(void)
 {
-	system("cls");
+	CLEAR_SCREEN
 
 	printf("*************************************");
 	printf("******************************************\n\n");
@@ -146,7 +146,7 @@ void Registrieren(void)
 	char cLastname[20];
 	char cPassword[20];
 
-	system("cls");
+	CLEAR_SCREEN
 
 	printf("*************************************");
 	printf("******************************************\n\n");
@@ -229,7 +229,7 @@ void Einloggen(void)
 	char cNutzername[20];
 	char cPassword[20];
 
-   system("cls");
+   CLEAR_SCREEN
 	printf("*************************************");
 	printf("******************************************\n\n");
 	printf("\t\t\t\tAnmelden\n\n");
@@ -274,7 +274,7 @@ void FreiesSpiel(void)
 
 	//Schleife solange Auswahl > 4 oder < 1
 	do{
-		system("cls");
+		CLEAR_SCREEN
 
 		//Ausgabe der Auswahl und Eingabe der Auswahl
 		printf("*************************************");
@@ -327,7 +327,7 @@ void GewertetesSpiel(void)
 
 	//Schleife solange Auswahl > 4 oder < 1
 	do{
-		system("cls");
+		CLEAR_SCREEN
 
 		//Ausgabe der Auswahl und Eingabe der Auswahl
 		printf("*************************************");
@@ -373,7 +373,7 @@ void eingeloggt(int iUserID)
 		//Schleife für die Auswahl
 		do{
 
-			system("cls");
+			CLEAR_SCREEN
 			printf("*************************************");
 			printf("******************************************\n\n");
 			printf("Angemeldet als: %s\t\tHauptmen\201\n\n", myuser->sNickname);

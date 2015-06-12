@@ -99,7 +99,7 @@
 */
 
 #include "db.h"
-#include "curses_os.h"
+#include "os.h"
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>

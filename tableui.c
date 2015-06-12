@@ -19,7 +19,7 @@
    ============================================================================ 
 */
 #include "tableui.h"
-#include "curses_os.h"
+#include "os.h"
 #include "fancy_box.h"
 #include "menue.h"
 

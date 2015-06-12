@@ -18,8 +18,8 @@ Include Dateien
 */
 #define _CRT_SECURE_NO_WARNINGS
 
+#include "os.h"
 #include <stdio.h>
-#include <stdlib.h>
 #include <string.h>
 #include "db.h"
 #include "ladderboard.h"
@@ -85,7 +85,7 @@ void DatenAnzeige(GAMERANKING Daten[],int iLength)
 	int iZaehler = 0;
 
 	//Löschen des Bildschirm und anzeige der Überschriften
-	system("cls");
+	CLEAR_SCREEN
 	printf("*************************************");
 	printf("******************************************\n\n");
 	printf("\t\t\t\tBestenliste\n\n");
@@ -178,7 +178,7 @@ void PersonAnzeigen(GAMERANKING pDaten[],int iLength)
 	int iZaehler = 0;
 
 	//Löschen des Bildschirms und anzeige der Überschriften
-	system("cls");
+	CLEAR_SCREEN
 	printf("*************************************");
 	printf("******************************************\n\n");
 	printf("\t\t\t\t Bestenliste\n\n");

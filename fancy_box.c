@@ -17,7 +17,7 @@
 	includes
 */
 #include "fancy_box.h"
-#include "curses_os.h"
+#include "os.h"
 #include "tableui.h"
 #include "menue.h"
 
