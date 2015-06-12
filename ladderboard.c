@@ -126,7 +126,7 @@ Funktion PersListe()
 void PersListe()
 {
 	//Variablen-Definition
-	GAMERANKING pDaten [9];
+	GAMERANKING pDaten [5];
 	int iZaehler = 0;
 	int iMode = 0;
 	int iLength; 
@@ -157,7 +157,7 @@ void PersListe()
 
 	//Aufruf der get_best_user_games Funktion zur ermittlung der besten Spiele
 	//anhand des gewählten Schwierigkeitgrads
-	iLength = get_best_user_games(iMode,iGUserID,pDaten, 9);
+	iLength = get_best_user_games(iMode,iGUserID,pDaten, 5);
 
 	//Auf der PersonAnzeigen Funktion mit übergabe des pDaten Array´s 
 	//und der Anzahl der gefundenen Einträge
@@ -189,12 +189,11 @@ void PersonAnzeigen(GAMERANKING pDaten[],int iLength)
 	//anhand des Schwierigkeitsgrad
 	if (iLength > 0)
 	{
-		while (iZaehler < iLength || iZaehler == 5)
+		while (iZaehler < iLength)
 		{
 		printf("%3i", iZaehler+1);
-		printf("%20s ", pDaten[iZaehler].sUserName);
 		printf("\t%3i\t  ", pDaten[iZaehler].iHelps);
-		printf("%5i\t\t", pDaten[iZaehler].iScore);
+		printf("\t%5i\t\t", pDaten[iZaehler].iScore);
 		printf("%s", pDaten[iZaehler].sGameDate);
 		printf("\n");
 		printf("*************************************");
