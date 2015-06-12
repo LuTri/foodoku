@@ -20,6 +20,7 @@
 */
 
 void create_sudoku(void);
+void easy_sudoku(int iDifficulty);
 
 #endif
 

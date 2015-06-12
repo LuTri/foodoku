@@ -354,7 +354,6 @@ int getTerminalSize(void) {
    iSizeX = getmaxx(stdscr);
    endwin();
    delscreen(sTerminal);
-   fflush(stdout);
 
    if (iSizeY < MIN_HEIGHT || iSizeX < MIN_WIDTH) {
       return 0;

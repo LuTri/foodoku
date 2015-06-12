@@ -1,7 +1,7 @@
 /* 
    ============================================================================
    Programmname: generate.h
-   Autor       : Tristan Lucas
+   Autor       : Tristan Lucas & Marian Klemm
                  Heinrich-Hertz-Berufskolleg
    Datum       : 09.06.2015
    Thema       : Sudoku
@@ -33,6 +33,8 @@
 
 #define MAX_RECURSION_STEPS 20000
 
+const int iDifficultyArray[3] = {36, 29 ,22};
+
 /*
    ============================================================================
    Typdefinition für eine Struktur "Koordinate", die nur in dieser Modul
@@ -45,7 +47,7 @@ typedef struct {
    int y;
 } COORDINATE;
 
-char can_be_in_square(int iX, int iY, char cVal)
+char can_be_in_square(int iX, int iY, char cVal, int cStatus)
 /*
    ============================================================================
    Prüft, ob die Zahl in das aus tablui.h importierte Sudoku in das an der ge-
@@ -60,6 +62,14 @@ char can_be_in_square(int iX, int iY, char cVal)
    /* Variablen-Definition und Initialisierung */
    int iXStart, iYStart;
    int i, j;
+
+   char (*cUsedSudoku)[BOUNDARY][BOUNDARY];
+
+   if (cStatus) {
+      cUsedSudoku = &cSudoku;
+   } else {
+      cUsedSudoku = &cShownSudoku;
+   }
 
    /*
       Das korrekte kleine Quadrat wird berechnet.
@@ -76,7 +86,7 @@ char can_be_in_square(int iX, int iY, char cVal)
             Es müssen nur die Felder in dem entsprechenden kleinen Quadrat
             geprüft werden
          */
-         if (cSudoku[i + (iYStart * BOUNDARY_ROOT)]
+         if ((*cUsedSudoku)[i + (iYStart * BOUNDARY_ROOT)]
                     [j + (iXStart * BOUNDARY_ROOT)] == cVal) {
             /* 
                Wenn einer der Werte im kleinen Quadrat der gewünschten Zahl
@@ -94,7 +104,7 @@ char can_be_in_square(int iX, int iY, char cVal)
    return 1;
 }
 
-char can_be_in_line(int iX, int iY, char cVal)
+char can_be_in_line(int iX, int iY, char cVal, int cStatus)
 /*
    ============================================================================
    Prüft, ob die Zahl in das aus tablui.h importierte Sudoku in eine Reihe
@@ -109,9 +119,17 @@ char can_be_in_line(int iX, int iY, char cVal)
    /* Variablen-Definition und Initialisierung */
    int i;
 
+   char (*cUsedSudoku)[BOUNDARY][BOUNDARY];
+
+   if (cStatus) {
+      cUsedSudoku = &cSudoku;
+   } else {
+      cUsedSudoku = &cShownSudoku;
+   }
+
    for (i = 0; i < BOUNDARY; i++) {
       /* für alle i in großer Kantenlänge */
-      if ((cSudoku[i][iX] == cVal) || (cSudoku[iY][i] == cVal)) {
+      if (((*cUsedSudoku)[i][iX] == cVal) || ((*cUsedSudoku)[iY][i] == cVal)) {
          /*
             Wenn die Zahl an irgendeiner Stelle in gleicher Spalte oder gleicher
             Zeile schon vorhanden ist gib 0 (kann nicht eingesetzt werden)
@@ -124,7 +142,7 @@ char can_be_in_line(int iX, int iY, char cVal)
    return 1;
 }
 
-int possible_positions(char cValue, COORDINATE coordPositions[BOUNDARY_SQUARE])
+int possible_positions(char cStatus, char cValue, COORDINATE coordPositions[BOUNDARY_SQUARE])
 /*
    ============================================================================
    Berechnet die möglichen Positionen einer Zahl im aus tablui.h importierten
@@ -138,6 +156,14 @@ int possible_positions(char cValue, COORDINATE coordPositions[BOUNDARY_SQUARE])
    /* Variablen-Definition und Initialisierung */
    int iX,iY;
    int iNumPositions = 0;
+   
+   char (*cUsedSudoku)[BOUNDARY][BOUNDARY];
+
+   if (cStatus) {
+      cUsedSudoku = &cSudoku;
+   } else {
+      cUsedSudoku = &cShownSudoku;
+   }
 
    for (iY = 0; iY < BOUNDARY; iY++)
    /* für alle Zeilen */
@@ -145,11 +171,11 @@ int possible_positions(char cValue, COORDINATE coordPositions[BOUNDARY_SQUARE])
       for (iX = 0; iX < BOUNDARY; iX++)
       /* für alle Spalten */
       {
-         if (cSudoku[iY][iX] == 0
+         if ((*cUsedSudoku)[iY][iX] == 0
             /* Wenn das Feld leer ist, */
-            && can_be_in_square(iX,iY,cValue)
+            && can_be_in_square(iX,iY,cValue, cStatus)
             /* die Zahl in das kleine Quadrat eingetraten werden könnte */
-            && can_be_in_line(iX,iY,cValue))
+            && can_be_in_line(iX,iY,cValue, cStatus))
             /* und die Zahl in die Zeile / Spalte eingetragen werden könnte */
          {
 
@@ -287,7 +313,7 @@ char fill_backtrack(int iDepth)
    cValue = (iDepth / BOUNDARY) + 1;
 
    /* Berechne alle möglichen Positionen für die Zahl und die Anzahl dieser */
-   iNumPossible = possible_positions(cValue, coordPossiblePositions);
+   iNumPossible = possible_positions(1, cValue, coordPossiblePositions);
 
    if (iNumPossible == 0)
    {
@@ -349,4 +375,46 @@ void create_sudoku(void)
          erstellt wurde
       */
    } while (fill_backtrack(0) != 1);
+}
+
+void easy_sudoku(int iDifficulty) {
+
+  int iZaehlerX;
+  int iZaehlerY;
+  int iZaehlerX2;
+  int iZaehlerY2;
+  int iZaehler;
+  int iAnzahl = 0;
+  int iFoo;
+
+  COORDINATE coordPossiblePositions[BOUNDARY_SQUARE];
+  COORDINATE coordAllPositions[BOUNDARY_SQUARE];
+  
+  for (iZaehlerX = 0; iZaehlerX < 9; iZaehlerX++)
+  {
+     for (iZaehlerY = 0; iZaehlerY < 9; iZaehlerY++)
+     {
+        cShownSudoku[iZaehlerX][iZaehlerY] = cSudoku[iZaehlerX][iZaehlerY];
+     }
+  }
+
+  for (iZaehler = 0; iZaehler < BOUNDARY_SQUARE; iZaehler++)
+  {
+     coordAllPositions[iZaehler].x = iZaehler / 9;
+     coordAllPositions[iZaehler].y = iZaehler % 9;
+  }
+
+  randomize_coords(BOUNDARY_SQUARE, coordAllPositions);
+  iZaehler = 0;
+  while (iAnzahl < BOUNDARY_SQUARE - iDifficultyArray[iDifficulty])
+  {
+  
+    cShownSudoku[coordAllPositions[iZaehler].y][coordAllPositions[iZaehler].x] = 0;
+    if (!(possible_positions(0, cSudoku[coordAllPositions[iZaehler].y][coordAllPositions[iZaehler].x], coordPossiblePositions) == 1)) {
+      cShownSudoku[coordAllPositions[iZaehler].y][coordAllPositions[iZaehler].x] = cSudoku[coordAllPositions[iZaehler].y][coordAllPositions[iZaehler].x];
+    } else {
+      iAnzahl++;
+    }
+    iZaehler = ++iZaehler % BOUNDARY_SQUARE;
+  }
 }

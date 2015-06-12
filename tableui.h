@@ -41,7 +41,6 @@
 extern char cSudoku[BOUNDARY][BOUNDARY];
 extern char cShownSudoku[BOUNDARY][BOUNDARY];
 
-
 /* 
    ============================================================================
    Nach außen verfügbare Schnittstellen
@@ -69,5 +68,7 @@ int   getTerminalSize(void);
 
 void  prepare_start_sudoku();
 int   check_input(int iX, int iY);
+
+extern char cSudoku[9][9];
 
 #endif
