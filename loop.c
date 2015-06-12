@@ -85,19 +85,7 @@ void game_loop(int iSchwierigkeit, int iSpielart, int iUserId)
 
    GAME this_game;
    this_game.iUserId = iUserId;
-
-
-   for(y = 0; y < 9; y++){
-      for(x = 0; x < 9; x++){
-         cShownSudoku[y][x] = 0;
-      }
-   }
-
-   cShownSudoku[4][5] = 4;
-   cShownSudoku[1][2] = 6;
-   cShownSudoku[3][7] = 2;
-   cShownSudoku[1][1] = 9;
-
+   
    prepare_start_sudoku();
 
    //Zuweisung von User ID und Schwierigkeitsgrad in die Gamedata-Struktur
@@ -112,6 +100,7 @@ void game_loop(int iSchwierigkeit, int iSpielart, int iUserId)
 
    startup_sudoku();
    create_sudoku();
+   easy_sudoku(iSchwierigkeit-1);
 
    tBeg = time(&tBeg);
 
