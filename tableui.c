@@ -48,6 +48,8 @@ char cSudoku[BOUNDARY][BOUNDARY];
 
 char cShownSudoku[BOUNDARY][BOUNDARY];
 
+char cStartSudoku[BOUNDARY][BOUNDARY];
+
 /* 
    ============================================================================
    Für dieses Modul globale Variablen
@@ -372,7 +374,7 @@ void get_cursor_pos(int* iX, int* iY)
 int calc_errors(void)
 {
    int i,j;
-   int iErrors;
+   int iErrors = 0;
 
    for (i = 0; i < BOUNDARY; i++)
    {
@@ -390,7 +392,7 @@ int calc_errors(void)
 int calc_correct_set(void)
 {
    int i,j;
-   int iCorrect;
+   int iCorrect = 0;
 
    for (i = 0; i < BOUNDARY; i++)
    {
@@ -423,8 +425,42 @@ void  show_result(int iHelps, int iFilled, int iSeconds)
    mvprintw(40,2,buff);
    sprintf(buff,"Anzahl automatisch gefüllter Felder: %3d", iFilled);
    mvprintw(41,2,buff);
-   sprintf(buff,"Benoetigte Zeit                    : %3d", iFilled);
+   sprintf(buff,"Benoetigte Zeit                    : %3d", iSeconds);
    mvprintw(42,2,buff);
    refresh();
    get_input();
+}
+
+void prepare_start_sudoku()
+/*
+   ============================================================================
+   Erstellt ein Array mit den Werten, die am Start erstellt werden.
+      1. Rückgabewert: Der eingegebene Wert
+   ============================================================================
+*/
+{
+	int iX;
+	int iY;
+
+	 for(iY = 0; iY < BOUNDARY; iY++){
+		  for(iX = 0; iX < BOUNDARY; iX++){
+			  cStartSudoku[iY][iX] = cShownSudoku[iY][iX];
+		  }
+	  }
+}
+
+int check_input(int iX, int iY)
+/*
+	============================================================================
+	Prüft ob eine Zahl bei der creation vorgeben und somit während des
+	Spiels unveränderbar ist.
+		1. Rückgabewert: 0 wenn nicht veränderbar, 1 wenn veränderbar
+	============================================================================
+*/
+{
+	if(cStartSudoku[iY][iX] != 0){
+		return 0;
+	}else{
+		return 1;
+	}
 }
