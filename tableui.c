@@ -19,7 +19,9 @@
    ============================================================================ 
 */
 #include "tableui.h"
-#include "curses_os.h"
+#include "os.h"
+#include "fancy_box.h"
+#include "menue.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -35,13 +37,22 @@
 #define SEP_INNER "@-----+-----+-----@-----+-----+-----@-----+-----+-----@\n"
 #define SEP_VERTI "@     |     |     @     |     |     @     |     |     @\n"
 
+
 /* 
    ============================================================================
-   Für dieses Modul globale Dateien
+   globale Variablen
    ============================================================================ 
 */
 
 char cSudoku[BOUNDARY][BOUNDARY];
+
+char cShownSudoku[BOUNDARY][BOUNDARY];
+
+/* 
+   ============================================================================
+   Für dieses Modul globale Variablen
+   ============================================================================ 
+*/
 
 char cHelp[BOUNDARY][BOUNDARY][BOUNDARY];
 
@@ -181,86 +192,28 @@ void show_ui(char cShowHelp)
    /* Untersten Trenner ausgeben */
    printw(SEP_OUTER);
 
-   /* Falls ein Hilfetext vorhanden ist, wird dieser angezeigt */
-   cpHelpText = help_text(NULL);
-   if (cpHelpText)
-   {
-      printw("\n\n%s",cpHelpText);
-   }
-
    /* Falls Hilfe aktiviert, zeige Hilfe an */
    if (cShowHelp)
    {
-      show_help();
+     show_help();
    }
+
+   show_fancy_box(REGELN,0);
 
    /* Daten auf den Bildschirm, Cursor an die richtige Position bringen */
    refresh();
    wmove(stdscr,cCursorPos[0] * 4 + 2, cCursorPos[1] * 6 + 3);
 }
 
-char* help_text(char* cpText)
-/*
-   ============================================================================
-   Setzt den anzuzeigenden Hilfetext und gibt ihn zur Weiterverwendung zurück,
-   gibt nur den String zurück falls kein neuer angegeben wird
-      1. Parameter: Der einzutragende Text
-      2. Rückgabewert: Der zwischengespeicherte String
-   ============================================================================
-*/
-{
-   static char* cpHelpText = NULL;
-   
-   if (cpText && cpHelpText)
-      /* Falls schon ein String gespeichert wurde und ein neuer gespeichert
-      werden soll, lösche den alten String und speichere den neuen*/
-   {
-      free(cpHelpText);
-   }
-
-   if (cpText)
-   {
-      cpHelpText = (char*) malloc(strlen(cpText) + 1);
-      strcpy(cpHelpText,cpText);
-   }
-
-   /* Gib in jedem Fall den gespeicherten String zurück */
-   return cpHelpText;
-}
-
-void set_sudoku(char sudoku[BOUNDARY][BOUNDARY])
-/*
-   ============================================================================
-   Setzt das gesamte Spielfeld auf den übergebenen Status
-      1. Parameter: Der neue Spiel-Status als 9x9 Matrix
-   ============================================================================
-*/
-{
+void null_sudoku(void) {
    int i,j;
-
-   for (i = 0; i < BOUNDARY; i++)
-      /* Für jede Zeile */
+   for (i = 0; i < 9; i++)
    {
-      for (j = 0; j < BOUNDARY; j++)
-         /* Für jede Spalte */
+      for (j = 0; j < 9; j++)
       {
-         /* Übernehme den neuen Wert */
-         cSudoku[i][j] = sudoku[i][j];
+         cSudoku[i][j] = 0;
       }
    }
-}
-
-void set_sudoku_pos(int iX, int iY, char cValue)
-/*
-   ============================================================================
-   Setzt den Status des Spiels an der gewünschten Stelle
-      1. Parameter: Die gewünschte x-Koordinate
-      2. Parameter: Die gewünschte y-Koordinate
-      3. Parameter: Der neue Werte
-   ============================================================================
-*/
-{
-   cSudoku[iY][iX] = cValue;
 }
 
 void clear_help(int iX, int iY)
@@ -382,15 +335,29 @@ int getTerminalSize(void) {
          kleinerer Größe.
    ============================================================================
 */
-
-   int iSizeY = getmaxy(stdscr);
-   int iSizeX = getmaxx(stdscr);
-
-   if (iSizeY < 45 || iSizeX < 145) {
-      return 0;
-   }
+   int iSizeY, iSizeX;
 
    initscr();
+   iSizeY = getmaxy(stdscr);
+   iSizeX = getmaxx(stdscr);
+   endwin();
 
+   if (iSizeY < MIN_HEIGHT || iSizeX < MIN_WIDTH) {
+      return 0;
+   }
    return 1;
+}
+
+void get_cursor_pos(int* iX, int* iY)
+/*
+   ============================================================================
+   Schreibt die aktuelle Position des Cursors in iX und iY
+      1. Parameter: Adresse von iX
+      2. Parameter: Adresse von iY
+      3. Rückgabewert: -- 
+   ============================================================================
+*/
+{
+   *iX = cCursorPos[1];
+   *iY = cCursorPos[0];
 }
