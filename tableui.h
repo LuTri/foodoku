@@ -51,6 +51,7 @@ extern char cShownSudoku[BOUNDARY][BOUNDARY];
 void  move_cursor(char cDirection);
 
 void  show_ui(char cShowHelp);
+void  show_result(int iHelps, int iFilled, int iSeconds);
 
 void  null_sudoku(void);
 
@@ -64,8 +65,6 @@ void  shutdown_sudoku(void);
 char  get_input(void);
 void  get_cursor_pos(int* iX, int* iY);
 
-int getTerminalSize(void);
-
-extern char cSudoku[9][9];
+int   getTerminalSize(void);
 
 #endif

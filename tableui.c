@@ -140,7 +140,7 @@ void move_cursor(char cDirection)
    }
 }
 
-void show_ui(char cShowHelp)
+void show_ui(char cShowHelp, char cFinished)
 /*
    ============================================================================
    Zeigt den aktuellen Status des Spiels an
@@ -149,8 +149,15 @@ void show_ui(char cShowHelp)
    ============================================================================
 */
 {
+   char (*cUsedSudoku)[BOUNDARY][BOUNDARY];
    int i,j;
    char* cpHelpText;
+
+   if (cFinished) {
+      cUsedSudoku = &cSudoku;
+   } else {
+      cUsedSudoku = &cShownSudoku;
+   }
 
    move(0,0);
    for (i = 0; i < BOUNDARY; i++)
@@ -181,7 +188,7 @@ void show_ui(char cShowHelp)
          }
          /* Den eingetragenen Wert mit Abständen anzeigen */
          printw("  ");
-         printw("%c", pretty_value(cSudoku[i][j]));
+         printw("%c", pretty_value((*cUsedSudoku)[i][j]));
          printw("  ");
       }
       printw("@\n");
@@ -360,4 +367,64 @@ void get_cursor_pos(int* iX, int* iY)
 {
    *iX = cCursorPos[1];
    *iY = cCursorPos[0];
+}
+
+int calc_errors(void)
+{
+   int i,j;
+   int iErrors;
+
+   for (i = 0; i < BOUNDARY; i++)
+   {
+      for (j = 0; j < BOUNDARY; j++)
+      {
+         if (cSudoku[i][j] != cShownSudoku[i][j] && cShownSudoku[i][j] == 0)
+         {
+            iErrors++;
+         }
+      }
+   }
+   return iErrors;
+}
+
+int calc_correct_set(void)
+{
+   int i,j;
+   int iCorrect;
+
+   for (i = 0; i < BOUNDARY; i++)
+   {
+      for (j = 0; j < BOUNDARY; j++)
+      {
+         if (cSudoku[i][j] == cShownSudoku[i][j])
+         {
+            iCorrect++;
+         }
+      }
+   }
+   return iCorrect;
+}
+
+void  show_result(int iHelps, int iFilled, int iSeconds)
+{
+   char buff[200];
+   int iErrors;
+   int iCorrect;
+
+   iErrors = calc_errors();
+   iCorrect = calc_correct_set();
+   show_ui(0, 1);
+
+   sprintf(buff,"Anzahl Fehler:                       %3d", iErrors);
+   mvprintw(38,2,buff);
+   sprintf(buff,"Anzahl richtig geloest:              %3d", iCorrect);
+   mvprintw(39,2,buff);
+   sprintf(buff,"Anzahl angezeigzer Kandidaten:       %3d", iHelps);
+   mvprintw(40,2,buff);
+   sprintf(buff,"Anzahl automatisch gefüllter Felder: %3d", iFilled);
+   mvprintw(41,2,buff);
+   sprintf(buff,"Benoetigte Zeit                    : %3d", iFilled);
+   mvprintw(42,2,buff);
+   refresh();
+   get_input();
 }
