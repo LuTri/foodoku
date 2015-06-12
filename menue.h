@@ -40,7 +40,8 @@ Das Programm erwartet beim Aufruf keine Argumente
 */
 
 void menue (void);
-void eingeloggt(int);
+int iSpieleauswahl(void);
+void eingeloggt(void);
 void GewertetesSpiel(void);
 void FreiesSpiel(void);
 void Einloggen(void);
