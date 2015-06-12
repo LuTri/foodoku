@@ -105,29 +105,6 @@ char show_fancy_box(char* fancy_output, int page)
 			}
 		}
 	}
-
-	//Positionierung des Textes
-
-	/*
-		while()
-	*/
-	for(iPosition = 0; (iPosition < (int)strlen(fancy_output) 
-		&& iPosition < ( (MAX_WIDTH - 4) * (MAX_HEIGHT -2))); iPosition++)
-	{
-		int posx, posy;
-		posx = 57 + (iPosition%(MAX_WIDTH - 4));
-		posy = 2 + (iPosition/(MAX_WIDTH - 4));
-		if (iPosition + page * ((MAX_HEIGHT - 2) * (MAX_WIDTH - 4)) < strlen(fancy_output)) {
-			int i_to_write = will_fit(posx, 0, fancy_output, iPosition);
-
-			// i_to_write > 0 -> write the fitting word
-			// i_to_write = -1 -> new line WILL_FIT
-			mvaddch(posy,posx
-				,fancy_output[iPosition + page * ((MAX_HEIGHT - 2) * (MAX_WIDTH - 4))] );
-		} else {
-			break;
-		}
-	}
 }
 
 void fancy_loop(void)
