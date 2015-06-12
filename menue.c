@@ -182,7 +182,7 @@ void Registrieren(void)
 	if (strcmp(cNickname, "abbruch") != 0 && strcmp(cName, "abbruch") != 0 &&
 		strcmp(cLastname, "abbruch") != 0 && strcmp(cPassword, "abbruch") != 0)
 	{
-		printf("Registrierung abgeschlossen\n");
+		printf("Registrierung abgeschlossen\n\n");
 		strcpy(myUser.sNickname, cNickname);
 		strcpy(myUser.sName, cName);
 		strcpy(myUser.sLastname, cLastname);
