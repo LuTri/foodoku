@@ -37,7 +37,7 @@
    "------- q: Spiel beenden -------- "\
    "------ r: Regeln anzeigen ------- "\
    "---- k: Kandidaten anzeigen ----- "\
-   "-- f: Feld automatisch fuellen -- "\
+   "-- f: Feld automatisch fuellen -- \n\n\n"\
 
 #define BOX_WIDTH 37
 #define BOX_HEIGHT 37
@@ -215,4 +215,23 @@ void fancy_loop(void)
 
    clear_fancy_box();
    refresh();
+}
+
+char* enhanced_infotext(char* cRootString, char* cAdditionalString) {
+   char* cResult;
+   char* cActualRootString = 0;
+
+   if (cRootString == 0) {
+      cActualRootString = INFO_TEXT;
+   } else {
+      cActualRootString = cRootString;
+   }
+
+   cResult = (char*)malloc(strlen(cActualRootString)
+                   + strlen(cAdditionalString) + 1);
+
+   strcpy(cResult,cActualRootString);
+   strcat(cResult,cAdditionalString);
+
+   return cResult;
 }

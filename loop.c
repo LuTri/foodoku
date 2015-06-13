@@ -66,6 +66,9 @@ void game_loop(int iSchwierigkeit, int iSpielart, int iUserId)
    char cTaste = 0,
         cTempTaste = 0;
 
+   char* cHelpText = 0;
+   char cBuffer[40];
+
    time_t tBeg,
           tEnd;
 
@@ -101,7 +104,22 @@ void game_loop(int iSchwierigkeit, int iSpielart, int iUserId)
    //Rendering-Loop
    while(iPlaying){
       //Spielfeld anzeigen
-      show_ui(iHelp, 0);
+      get_cursor_pos(&iX,&iY);
+      if (!(check_input(iX,iY))) {
+         char* cTemp;
+         if (cHelpText == 0) {
+            cHelpText = enhanced_infotext(0,"\n   DIESES FELD IST VORGEGEBEN!!");
+         } else {
+            cTemp = enhanced_infotext(cHelpText,"\n   DIESES FELD IST VORGEGEBEN!");
+            free(cHelpText);
+            cHelpText = cTemp;
+         }
+      }
+      show_ui(iHelp, 0, cHelpText);
+      if (cHelpText != 0) {
+         free(cHelpText);
+         cHelpText = 0;
+      }
 
       //Abfangen der Tastendrücke
       cTaste = get_input();
@@ -111,7 +129,6 @@ void game_loop(int iSchwierigkeit, int iSpielart, int iUserId)
       {
          //Tasten K für Kandidaten, Q zum Beenden, F um das aktuelle Feld zu lösen, R für die Regeln, Enter für die Eingabe
       case KEY_K:
-         get_cursor_pos(&iX, &iY);
          if (check_input(iX, iY)) {
             iHelp = 1;
          }
@@ -123,7 +140,6 @@ void game_loop(int iSchwierigkeit, int iSpielart, int iUserId)
          break;
 
       case KEY_F:
-         get_cursor_pos(&iX, &iY);
          if (check_input(iX,iY)) {
             this_game.iFilled++;
             cShownSudoku[iY][iX] = cSudoku[iY][iX];
@@ -131,9 +147,6 @@ void game_loop(int iSchwierigkeit, int iSpielart, int iUserId)
          break;
 
       case KEY_ENTER:
-
-         get_cursor_pos(&iX, &iY);
-
          if(cTempTaste != 0 && check_input(iX, iY)){
 
             cShownSudoku[iY][iX] = cTempTaste - '0';
@@ -155,6 +168,8 @@ void game_loop(int iSchwierigkeit, int iSpielart, int iUserId)
       case NUM_7:
       case NUM_8:
       case NUM_9:
+         sprintf(cBuffer,"\n%7c mit ENTER eintragen", cTaste);
+         cHelpText = enhanced_infotext(0,cBuffer);
          cTempTaste = cTaste;
          break;
 

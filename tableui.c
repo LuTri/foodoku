@@ -144,7 +144,7 @@ void move_cursor(char cDirection)
    }
 }
 
-void show_ui(char cShowHelp, char cFinished)
+void show_ui(char cShowHelp, char cFinished, char* cHelpText)
 /*
    ============================================================================
    Zeigt den aktuellen Status des Spiels an
@@ -208,7 +208,7 @@ void show_ui(char cShowHelp, char cFinished)
      show_help();
    }
 
-   show_fancy_box(0);
+   show_fancy_box(cHelpText);
 
    /* Daten auf den Bildschirm, Cursor an die richtige Position bringen */
    refresh();
@@ -419,7 +419,7 @@ char show_result(int iHelps, int iFilled, int iSeconds)
 
    iErrors = calc_errors();
    iCorrect = calc_correct_set();
-   show_ui(0, 1);
+   show_ui(0, 1, 0);
 
    sprintf(buff,"Anzahl Fehler:                       %3d", iErrors);
    mvprintw(38,2,buff);
