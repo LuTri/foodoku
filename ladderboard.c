@@ -41,6 +41,7 @@ void Bestenliste()
 	//Variablen-Definition
 	GAMERANKING Daten [10];
 	int iMode = 0;
+   int iZaehler;
 	int iLength = 0; 
 	int iError = 0;
 
@@ -71,6 +72,11 @@ void Bestenliste()
 		//Auf der DatanAnzeigen Funktion mit übergabe des Daten Array´s 
 		//und der Anzahl der gefundenen Einträge
 		DatenAnzeige(Daten, iLength);
+
+      //Die aus der Datenbank geholten Daten wieder löschen
+      for (iZaehler = 0; iZaehler < iLength; iZaehler++) {
+         delete_gameranking_data(&(Daten[iZaehler]),0);
+      }
 		SYSTEM_PAUSE
 	
 }
@@ -127,7 +133,7 @@ Funktion PersListe()
 void PersListe()
 {
 	//Variablen-Definition
-	GAMERANKING pDaten [5];
+   GAMERANKING pDaten [5];
 	int iZaehler = 0;
 	int iMode = 0;
 	int iLength; 
@@ -163,6 +169,11 @@ void PersListe()
 	//Auf der PersonAnzeigen Funktion mit übergabe des pDaten Array´s 
 	//und der Anzahl der gefundenen Einträge
 	PersonAnzeigen(pDaten, iLength);
+
+   //Die aus der Datenbank geholten Daten wieder löschen
+   for (iZaehler = 0; iZaehler < iLength; iZaehler++) {
+      delete_gameranking_data(&(pDaten[iZaehler]),0);
+   }
 	SYSTEM_PAUSE
 }
 /*
