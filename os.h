@@ -1,12 +1,13 @@
 /* 
    ============================================================================
-   Programmname: os.h
-   Autor       : Tristan Lucas
-                 Heinrich-Hertz-Berufskolleg
-   Datum       : 09.06.2015
-   Thema       : Sudoku
-   Version     : 1.0
-   Beschreibung: Regelt die Cross-Plattform Fähigkeit des Sudoku-Spiels
+   Programmname : os.h
+   Autor        : Tristan Lucas
+                  Heinrich-Hertz-Berufskolleg
+   Datum        : 09.06.2015
+   Thema        : Sudoku
+   Version      : 1.0
+   Beschreibung : Regelt die Cross-Plattform Fähigkeit des Sudoku-Spiels
+   Schnittstelle: Auf Unix-System: pause();
    ============================================================================ 
 */
 
