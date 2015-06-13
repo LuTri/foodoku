@@ -143,7 +143,7 @@ void Registrieren(void)
 	char cNickname[20];
 	char cName[20];
 	char cLastname[20];
-	char cPassword[20];
+	char cPassword[200];
 	CLEAR_SCREEN
 	printf("*************************************");
 	printf("******************************************\n\n");
@@ -173,7 +173,7 @@ void Registrieren(void)
 			{
 				//Eingabe des Passwortes
 				printf("Gew\201nschtes Password: ");
-				scanf("%s", cPassword);
+				passwd_input(cPassword);
 				printf("\n");
 				myUser.sPassword =(char*)malloc(sizeof(char)*strlen(cPassword)+1);
 			}
@@ -224,7 +224,7 @@ void Einloggen(void)
 	scanf("%s", cNutzername);
 	//Eingabe des Passwortes
 	printf("Password ein: ");
-	scanf("%s", cPassword);
+	passwd_input(cPassword);
 	//Aufrufen der Funktion authenticate und übergabe des Rückgabewertes
 	//an den Speicher iUserID
 	iGUserID = authenticate(cNutzername, cPassword);
