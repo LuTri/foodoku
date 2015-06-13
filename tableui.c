@@ -264,28 +264,6 @@ void clear_help(int iX, int iY)
    }
 }
 
-void set_help(char cHelpData[BOUNDARY][BOUNDARY][BOUNDARY])
-/*
-   ============================================================================
-   Überschreibt die gesamten bisherigen Hilfestellungen mit neuen Einträgen
-      1. Parameter: Die neuen Hilfestellungen als 9x9x9 Matrix
-   ============================================================================
-*/
-{
-   int i,j,k;
-   for (i = 0; i < BOUNDARY; i++)
-   {
-      for (j = 0; j < BOUNDARY; j++)
-      {
-         for(k = 0; k < BOUNDARY; k++)
-         {
-            /* Für jede Zeile, Spalte und Werte, übernimm neuen Wert */
-            cHelp[i][j][k] = cHelpData[i][j][k];
-         }
-      }
-   }
-}
-
 void set_help_pos(int iX, int iY, char cValue)
 /*
    ============================================================================

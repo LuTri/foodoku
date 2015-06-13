@@ -55,7 +55,6 @@ char  show_result(int iHelps, int iFilled, int iSeconds);
 void  null_sudoku(void);
 
 void  clear_help(int iX, int iY);
-void  set_help(char cHelpData[BOUNDARY][BOUNDARY][BOUNDARY]);
 void  set_help_pos(int iX, int iY, char iValue);
 
 void  startup_sudoku(void);
