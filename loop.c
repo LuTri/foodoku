@@ -35,12 +35,6 @@
 #define NUM_8 '0'+8
 #define NUM_9 '0'+9
 
-///// Formatierung bitte einmal überarbeiten
-///// Keine Tabs benutzen!
-
-
-///// Vielleicht ein switch-case anstatt der ganzen ifs?
-
 void game_loop(int iSchwierigkeit, int iSpielart, int iUserId)
    /*
    Erstellen des Sudoku-Feldes
