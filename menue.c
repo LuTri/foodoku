@@ -139,6 +139,8 @@ void Registrieren(void)
 {
 	//Speicherdeklaration
 	USER myUser;
+	int icheck;
+	
 	//Speicher für die Registrierungsangaben
 	char cNickname[20];
 	char cName[20];
@@ -174,7 +176,7 @@ void Registrieren(void)
 				//Eingabe des Passwortes
 				printf("Gew\201nschtes Password: ");
 				passwd_input(cPassword);
-				printf("\n");
+				printf("\n\n");
 				myUser.sPassword =(char*)malloc(sizeof(char)*strlen(cPassword)+1);
 			}
 		}
@@ -182,14 +184,26 @@ void Registrieren(void)
 	if (strcmp(cNickname, "abbruch") != 0 && strcmp(cName, "abbruch") != 0 &&
 		strcmp(cLastname, "abbruch") != 0 && strcmp(cPassword, "abbruch") != 0)
 	{
-		printf("Registrierung abgeschlossen\n\n");
 		strcpy(myUser.sNickname, cNickname);
 		strcpy(myUser.sName, cName);
 		strcpy(myUser.sLastname, cLastname);
 		strcpy(myUser.sPassword, cPassword);
 		//Übergabe der Werte an die Funktion register_user
-		register_user(&myUser);
+		icheck = register_user(&myUser);
+		
+		if(icheck == 1)
+		{
+			printf("Registrierung erfolgreich!\n\n");
+		}
+
+		else if (icheck == 0)
+		{
+			printf("Nutzername schon vorhanden, Registrierung "
+			       "konnte nicht abgeschlossen werden!\n\n");
+		}
 	}
+		
+		
 	/*
 	Wenn "abbruch" bei Name, Nachname, Nickname oder Password eingegeben wird,
 	wird die Registrierung automatisch abgebrochen
@@ -214,6 +228,7 @@ void Einloggen(void)
 	char cNutzername[20];
 	char cPassword[20];
 	CLEAR_SCREEN
+
 	printf("*************************************");
 	printf("******************************************\n\n");
 	printf("\t\t\t\tAnmelden\n\n");

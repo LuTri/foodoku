@@ -422,8 +422,6 @@ char register_user(USER* uUser)
          Falls ein Fehler auftrat, den Fehlertext ausgeben, freigeben und die
          Funktion mit 0-Rückgabe beenden
       */
-      printf("Der Benutzername ist bereits vorhanden, " 
-		     "bitte anderen Namen w\204hlen\n");
       free(sErrMsg);
       return 0;
    }
