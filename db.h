@@ -106,10 +106,7 @@ int   authenticate(char* sNickname, char* sPassword);
 char  register_user(USER* uUser);
 char  insert_game_data(GAME* upGameData);
 
-int   get_users(int** ippUserIds);
 USER* get_user_data(int iUserId);
-int   get_user_games(int iUserId, int **ippGameIdList);
-GAME* get_game_data(int iGameId);
 int   get_best_user_games(int iMode, int iUserId, GAMERANKING* rpGames, int iLength);
 int   get_best_games(int iMode, GAMERANKING* rpGames, int iLength);
 
@@ -119,7 +116,6 @@ int   get_best_games(int iMode, GAMERANKING* rpGames, int iLength);
    ============================================================================ 
 */
 void delete_gameranking_data(GAMERANKING* rpGame, char cWholeStruct);
-void delete_game_data(GAME* gpGame, char cWholeStruct);
 void delete_user_data(USER* upUser, char cWholeStruct);
 
 #endif
