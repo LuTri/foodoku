@@ -206,6 +206,118 @@ char* encrypt(char* sClear)
    return sEncrypted;
 }
 
+char init_db(sqlite3* dbpDatabase)
+/*
+   ============================================================================
+   Liest SQL zum Erstellen der notwendigen Tabellen aus einer Datei aus und
+   führt dieses dann auf der Datenbank aus.
+      1. Parameter: Die geöffnete Datenbank
+      2. Rückgabewert: Ob die Datenbank erfolgreich initialisert
+         wurde
+   ============================================================================
+*/
+{
+   /* Variablen-Definition und Initialisierung */
+   char* sSql = NULL;
+   int iReturnCode;
+   int iFileLength;
+   int iReadLength;
+   char cFileRead = 0;
+
+   FILE *fSqlData = fopen("sql/tables.sql", "r");
+   if (fSqlData != NULL) {
+      /* Zum Ende der Datei springen */
+      if (fseek(fSqlData, 0L, SEEK_END) == 0) {
+         /* Die Größe der Datei ( = Länge des SQL ) auslesen */
+         iFileLength = ftell(fSqlData);
+         if (iFileLength != -1) {
+            /* Speicherplatz für das gesamte SQL anlegen */
+            sSql = (char*)malloc(sizeof(char) * (iFileLength + 1));
+
+            /* Zurück zum Anfang der Datei springen */
+            if (fseek(fSqlData, 0L, SEEK_SET) == 0) {
+
+               /* Das gesamte SQL in den Speicher (sSql) lesen */
+               iReadLength = fread(sSql, sizeof(char), iFileLength, fSqlData);
+
+               if (iReadLength != 0) {
+                  /* An dieser Stelle wurde die Datei erfolgreich gelesen */
+                  cFileRead = 1;
+                  /* Der String muss noch terminiert werden */
+                  sSql[iReadLength] = '\0';
+               }
+            }
+         }
+      }
+      /* SQL-Datei wieder schließen */
+      fclose(fSqlData);
+   }
+
+   if (cFileRead) {
+      /* Nur wenn das SQL erfolreicht gelesen wurde darf es ausgeführt werden */
+      iReturnCode = sqlite3_exec(dbpDatabase, sSql, 0, 0, 0);
+      free(sSql);
+
+      if (iReturnCode != SQLITE_OK) {
+         printf(sqlite3_errmsg(dbpDatabase));
+      }
+
+      /*
+         Wenn der sqlite3_exec erfolgreich ausgeführt wurde, wurde auch
+         die Datenbank erfolgreich mit Tabellen gefüllt
+      */
+      return iReturnCode == SQLITE_OK;
+   }
+   /*
+      Wenn die Ausführung bis zu diesem Punkt kommt wurden keine Tabellen
+      angelegt
+   */
+   return 0;
+}
+
+char check_db(sqlite3 *dbpDatabase)
+/*
+   ============================================================================
+   Prüft, ob die Datenbank gültige Tabellen hat oder trägt diese in die
+   Datebank ein. Das SQL zum erstellen der Tabellen wird dabei aus einer Datei
+   gelesen
+      1. Parameter: Die geöffnete Datenbank
+      2. Rückgabewert: Status, ob die Datenbank initialisiert ist
+   ============================================================================
+*/
+{
+   /* Variablen-Definition und Initialisierung */
+   const char* sSql = "SELECT * FROM sqlite_master WHERE type='table'";
+   int iReturnCode;
+   int iNumTables = 0;
+   sqlite3_stmt *stmt;
+
+
+   /* Query auf der Datenbank ausführen */
+   iReturnCode = sqlite3_prepare_v2(dbpDatabase, sSql, -1, &stmt, NULL);
+   if (iReturnCode == SQLITE_OK) {
+      while (sqlite3_step( stmt ) == SQLITE_ROW)
+      {
+         /* Merken der Anzahl der Tabellen in der Datenbank */
+         iNumTables++;
+      }
+
+      /* 
+         Wenn keine Tabelle in der Datenbank vorhanden ist müssen die nötigen
+         Einträge angelegt werden
+      */
+      if (iNumTables == 0) {
+         return init_db(dbpDatabase);
+      } else {
+         /* Ansonsten ist die Datenbank initialisiert */
+         return 1;
+      }
+   }
+
+   /* Wenn die Ausführung hier ankommt ist ein Fehler aufgetreten */
+   return 0;
+}
+
 sqlite3* handle_db(char cUsage)
 /*
    ============================================================================
@@ -238,6 +350,16 @@ sqlite3* handle_db(char cUsage)
    }
    else if (cUsage == DB_CLOSE)
    {
+      sqlite3_close(dbpDatabase);
+      dbpDatabase = NULL;
+   }
+
+   if (!check_db(dbpDatabase)) {
+      /*
+         Wenn die Datenbank nicht initialisiert ist oder wurde wird ein Fehler
+         ausgegeben
+      */
+      printf("EIN KRITISCHER FEHLER IST AUFGETRETEN!\n");
       sqlite3_close(dbpDatabase);
       dbpDatabase = NULL;
    }
