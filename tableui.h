@@ -50,7 +50,7 @@ extern char cShownSudoku[BOUNDARY][BOUNDARY];
 void  move_cursor(char cDirection);
 
 void  show_ui(char cShowHelp, char cFinished);
-void  show_result(int iHelps, int iFilled, int iSeconds);
+char  show_result(int iHelps, int iFilled, int iSeconds);
 
 void  null_sudoku(void);
 

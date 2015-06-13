@@ -1,13 +1,13 @@
 /*
-============================================================================
-Programmname: loop.c
-Autor : Jan Gützlaff
-Heinrich-Hertz-Berufskolleg
-Datum : 08.06.2015
-Thema : Sudoku
-Version : 1.0
-Beschreibung: Aufrufen und Benutzung des UI
-============================================================================
+   ============================================================================
+   Programmname: loop.c
+   Autor : Jan Gützlaff
+   Heinrich-Hertz-Berufskolleg
+   Datum : 08.06.2015
+   Thema : Sudoku
+   Version : 1.0
+   Beschreibung: Aufrufen und Benutzung des UI
+   ============================================================================
 */
 
 
@@ -58,37 +58,20 @@ void game_loop(int iSchwierigkeit, int iSpielart, int iUserId)
    Ranglisten-Spiel (0 oder 1), aktueller Tastendruck, Zeitvariablen
    */
 
-   int iPlaying = 1, iHelp = 0, iX, iY;
+   int iPlaying = 1,
+       iHelp = 0,
+       iX,
+       iY;
 
-   int x;
-   int y;
-
-   char	cRanked,
-      cTaste = 0,
-      cTempTaste = 0;
+   char cTaste = 0,
+        cTempTaste = 0;
 
    time_t tBeg,
-      tEnd;
-
-
-   // Gamedata-Struktur
-
-   typedef struct {
-      int iUserId;
-      int iMode;
-      int iSeconds;
-      int iHelps;
-      int iFilled;
-      char cFinished;
-      char cRanked;
-      char* sDate;
-   } GAME;
+          tEnd;
 
    GAME this_game;
    this_game.iUserId = iUserId;
    
-   prepare_start_sudoku();
-
    //Zuweisung von User ID und Schwierigkeitsgrad in die Gamedata-Struktur
 
    this_game.iHelps = 0;
@@ -98,10 +81,13 @@ void game_loop(int iSchwierigkeit, int iSpielart, int iUserId)
 
 
    //Spielaufbau
-
    startup_sudoku();
+   //gelöstes Sudoku erstellen
    create_sudoku();
+   //lösbare Sudoku aus gelöstem Sudoku erstellen
    easy_sudoku(iSchwierigkeit-1);
+   //Start-Sudoku merken
+   prepare_start_sudoku();
 
    tBeg = time(&tBeg);
 
@@ -125,7 +111,10 @@ void game_loop(int iSchwierigkeit, int iSpielart, int iUserId)
       {
          //Tasten K für Kandidaten, Q zum Beenden, F um das aktuelle Feld zu lösen, R für die Regeln, Enter für die Eingabe
       case KEY_K:
-         get_cursor_pos(&iY, &iX);
+         get_cursor_pos(&iX, &iY);
+         if (check_input(iX, iY)) {
+            iHelp = 1;
+         }
          this_game.iHelps++;
          break;
 
@@ -134,7 +123,11 @@ void game_loop(int iSchwierigkeit, int iSpielart, int iUserId)
          break;
 
       case KEY_F:
-         this_game.iFilled++;
+         get_cursor_pos(&iX, &iY);
+         if (check_input(iX,iY)) {
+            this_game.iFilled++;
+            cShownSudoku[iY][iX] = cSudoku[iY][iX];
+         }
          break;
 
       case KEY_ENTER:
@@ -170,6 +163,8 @@ void game_loop(int iSchwierigkeit, int iSpielart, int iUserId)
       case CURS_DOWN:
       case CURS_LEFT:
       case CURS_RIGHT:
+         clear_help(-1,-1);
+         iHelp = 0;
          move_cursor(cTaste);
          cTempTaste = 0;
          break;
@@ -181,7 +176,9 @@ void game_loop(int iSchwierigkeit, int iSpielart, int iUserId)
    tEnd = time(&tEnd);
    this_game.iSeconds = (int) difftime(tEnd, tBeg);
 
-   show_result(this_game.iHelps, this_game.iFilled, this_game.iSeconds);
+   this_game.cFinished = show_result(this_game.iHelps,
+                                     this_game.iFilled,
+                                     this_game.iSeconds);
    shutdown_sudoku();
    // Insert in Bestenliste
    if(this_game.iUserId != 0){

@@ -18,8 +18,8 @@
    Includedateien
    ============================================================================ 
 */
-#include "tableui.h"
 #include "os.h"
+#include "tableui.h"
 #include "fancy_box.h"
 #include "menue.h"
 
@@ -155,8 +155,7 @@ void show_ui(char cShowHelp, char cFinished)
 {
    char (*cUsedSudoku)[BOUNDARY][BOUNDARY];
    int i,j;
-   char* cpHelpText;
-
+ 
    if (cFinished) {
       cUsedSudoku = &cSudoku;
    } else {
@@ -402,7 +401,8 @@ int calc_correct_set(void)
    {
       for (j = 0; j < BOUNDARY; j++)
       {
-         if (cSudoku[i][j] == cShownSudoku[i][j])
+         if (cSudoku[i][j] == cShownSudoku[i][j]
+             && cShownSudoku[i][j] != cStartSudoku[i][j])
          {
             iCorrect++;
          }
@@ -411,7 +411,7 @@ int calc_correct_set(void)
    return iCorrect;
 }
 
-void  show_result(int iHelps, int iFilled, int iSeconds)
+char show_result(int iHelps, int iFilled, int iSeconds)
 {
    char buff[200];
    int iErrors;
@@ -433,6 +433,7 @@ void  show_result(int iHelps, int iFilled, int iSeconds)
    mvprintw(42,2,buff);
    refresh();
    get_input();
+   return iErrors == 0;   
 }
 
 void prepare_start_sudoku()

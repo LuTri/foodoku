@@ -365,7 +365,7 @@ void create_sudoku(void)
 */
 {
    /* Initialisiere den Zufallszahlengenerator */
-   srand(time(NULL));
+   srand((unsigned int)time(NULL));
    do
    {
       null_sudoku();
