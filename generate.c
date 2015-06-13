@@ -381,11 +381,8 @@ void easy_sudoku(int iDifficulty) {
 
   int iZaehlerX;
   int iZaehlerY;
-  int iZaehlerX2;
-  int iZaehlerY2;
   int iZaehler;
   int iAnzahl = 0;
-  int iFoo;
 
   COORDINATE coordPossiblePositions[BOUNDARY_SQUARE];
   COORDINATE coordAllPositions[BOUNDARY_SQUARE];

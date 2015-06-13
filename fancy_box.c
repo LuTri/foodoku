@@ -73,7 +73,7 @@ int will_fit(int iColumn, const char* fancy_output, int iStringpos)
 	
 	while( fancy_output[iLength + iStringpos] != '\n'
           && fancy_output[iLength + iStringpos] != ' '
-          && (iLength + iStringpos) < strlen(fancy_output))
+          && (iLength + iStringpos) < (int)strlen(fancy_output))
 	{	
 		iLength++;
 	}
@@ -97,7 +97,7 @@ void make_page(const char* ccText, char cFancyPage[TEXT_HEIGHT][TEXT_WIDTH + 1])
    int iNFitting;
    int i;
 
-   while (iStringPos < strlen(ccText)) {
+   while (iStringPos < (int)strlen(ccText)) {
       iNFitting = will_fit(iPosX, ccText, iStringPos);
       if (iNFitting == SPACE) {
          if (iPosX < TEXT_WIDTH - 1)
@@ -157,7 +157,7 @@ void clear_fancy_box(void)
 	}
 }
 
-int show_fancy_box(const char* fancy_output)
+void show_fancy_box(const char* fancy_output)
 /*
 	anzeigen des Feldes für Hilfen und Hinweise
 	1. Parameter	: Inhalt des Feldes
@@ -166,9 +166,8 @@ int show_fancy_box(const char* fancy_output)
 */
 {
 	// initislisiere Variabeln
-	int iHoehe, iBreite, iPosition;
-   int iPosX, iPosY, iPos;
-   int iNToWrite;
+	int iHoehe, iBreite;
+   int iPosY;
    const char *cUsedString;
 
    char cFancyPage[TEXT_HEIGHT][TEXT_WIDTH + 1];

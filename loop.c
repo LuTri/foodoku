@@ -13,6 +13,7 @@
 
 
 //INCLUDE
+#include "os.h"
 #include <time.h>
 #include "db.h"
 #include "tableui.h"
@@ -22,11 +23,8 @@
 
 //Präprozessorkonstanten
 
-#define KEY_K 'k'
-#define KEY_Q 'q'
-#define KEY_F 'f'
-#define KEY_R 'r'
-#define KEY_ENTER 13
+#define KEY_RETURN 13
+
 #define NUM_1 '0'+1
 #define NUM_2 '0'+2
 #define NUM_3 '0'+3
@@ -128,25 +126,25 @@ void game_loop(int iSchwierigkeit, int iSpielart, int iUserId)
       switch(cTaste)
       {
          //Tasten K für Kandidaten, Q zum Beenden, F um das aktuelle Feld zu lösen, R für die Regeln, Enter für die Eingabe
-      case KEY_K:
+      case 'k':
          if (check_input(iX, iY)) {
             iHelp = 1;
          }
          this_game.iHelps++;
          break;
 
-      case KEY_Q:
+      case 'q':
          iPlaying = 0;
          break;
 
-      case KEY_F:
+      case 'f':
          if (check_input(iX,iY)) {
             this_game.iFilled++;
             cShownSudoku[iY][iX] = cSudoku[iY][iX];
          }
          break;
 
-      case KEY_ENTER:
+      case KEY_RETURN:
          if(cTempTaste != 0 && check_input(iX, iY)){
 
             cShownSudoku[iY][iX] = cTempTaste - '0';
@@ -154,7 +152,7 @@ void game_loop(int iSchwierigkeit, int iSpielart, int iUserId)
          }
          break;
 
-      case KEY_R:
+      case 'r':
          fancy_loop();
          break;
 

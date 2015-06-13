@@ -18,7 +18,7 @@
    ============================================================================
 */
 
-int show_fancy_box(const char* fancy_output);
+void show_fancy_box(const char* fancy_output);
 void fancy_loop(void);
 
 char *enhanced_infotext(char* cRootString, char* cAdditionalString);
