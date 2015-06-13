@@ -353,7 +353,14 @@ void get_cursor_pos(int* iX, int* iY)
 }
 
 int calc_errors(void)
+/*
+   ============================================================================
+   Berechnet die Anzahl der falsch eingetragenen Werte
+      2. Rückgabewert: Die Anzahl der falsch eingetragenen Werte
+   ============================================================================
+*/ 
 {
+   /* Variablen-Definition und Initialisierung */
    int i,j;
    int iErrors = 0;
 
@@ -361,8 +368,13 @@ int calc_errors(void)
    {
       for (j = 0; j < BOUNDARY; j++)
       {
+         /*
+            Für alle Felder im Sudoku, überprüfe ob der eingetragene Wert
+            mit dem tatsächlich gesuchten übereinstimmt
+         */
          if (cSudoku[i][j] != cShownSudoku[i][j] && cShownSudoku[i][j] == 0)
          {
+            /* Wenn die Werte nicht übereinstimmen, erhöhe die Fehler um 1*/
             iErrors++;
          }
       }
@@ -371,7 +383,14 @@ int calc_errors(void)
 }
 
 int calc_correct_set(void)
+/*
+   ============================================================================
+   Berechnet die Anzahl der falsch eingetragenen Werte
+      2. Rückgabewert: Die Anzahl der falsch eingetragenen Werte
+   ============================================================================
+*/ 
 {
+   /* Variablen-Definition und Initialisierung */
    int i,j;
    int iCorrect = 0;
 
@@ -379,9 +398,17 @@ int calc_correct_set(void)
    {
       for (j = 0; j < BOUNDARY; j++)
       {
+         /*
+            Für alle Felder im Sudoku
+         */
          if (cSudoku[i][j] == cShownSudoku[i][j]
              && cShownSudoku[i][j] != cStartSudoku[i][j])
          {
+            /*
+               Die Anzahl der korrekten Eintragungen wird erhöht wenn
+                  1. Der Eintrag mit dem gesuchten übereinstimmt
+                  2. Der Eintrag kein vorgegebener Eintrag war
+            */
             iCorrect++;
          }
       }
@@ -390,28 +417,54 @@ int calc_correct_set(void)
 }
 
 char show_result(int iHelps, int iFilled, int iSeconds)
+/*
+   ============================================================================
+   Zeigt das gelöste Sudoku und Statistiken auf dem Bildschirm an und bestimmt,
+   ob das Spiel abgeschlossen wurde oder nicht
+      1. Parameter: Die Anzahl der angezeigten möglichen Kandidaten
+      2. Parameter: Die Anzahl der vom Spiel auf Anfrage gelösten Felder
+      3. Parameter: Die gespielte Zeit in Sekunden
+      4. Rückgabewert: Der Status, ob das Spiel abgeschlossen wurde
+   ============================================================================
+*/ 
 {
+   /* Variablen-Definition und Initialisierung */
    char buff[200];
    int iErrors;
    int iCorrect;
 
+   /* Berechne die fehlerhaften und korrekten Einträge */
    iErrors = calc_errors();
    iCorrect = calc_correct_set();
+   /* Zeige das gelöste Sudoku an */
    show_ui(0, 1, 0);
 
+   /* Bereite die Anzeige der Fehler vor */
    sprintf(buff,"Anzahl Fehler:                       %3d", iErrors);
    mvprintw(38,2,buff);
+   /* Bereite die Anzeige der korrekten Eingabe vor */
    sprintf(buff,"Anzahl richtig geloest:              %3d", iCorrect);
    mvprintw(39,2,buff);
-   sprintf(buff,"Anzahl angezeigzer Kandidaten:       %3d", iHelps);
+   /* Bereite die Anzeige der angezeigten Kandidaten */
+   sprintf(buff,"Anzahl angezeigter Kandidaten:       %3d", iHelps);
    mvprintw(40,2,buff);
+   /* Bereite die Anzeige vom Spiel gefüllten Felder vor */
    sprintf(buff,"Anzahl automatisch gefüllter Felder: %3d", iFilled);
    mvprintw(41,2,buff);
+   /* Bereite die Anzeige der benötigten Sekunden vor */
    sprintf(buff,"Benoetigte Zeit                    : %3d", iSeconds);
    mvprintw(42,2,buff);
+
+   /* PDcurses: Schreibe die gewünschen Informationen auf den Bildschirm */
    refresh();
+   /* Warte auf einen Tastendruck */
    get_input();
-   return iErrors == 0;   
+
+   /* 
+      Das Sudoku wurde erfolgreich abgeschlossen, wenn der Nutzer keine Fehler
+      gemacht hat
+   */
+   return iErrors == 0;
 }
 
 void prepare_start_sudoku()
