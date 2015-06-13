@@ -1,4 +1,4 @@
-/*
+*/*
 ========================================================================
 <<<<<<< HEAD
 Autor       : GruppeB (Lennard Malessa)
@@ -230,7 +230,7 @@ void Registrieren(void)
 		strcpy(myUser.sLastname, cLastname);
 		strcpy(myUser.sPassword, cPassword);
 		//Übergabe der Werte an die Funktion register_user
-		register_user(&myUser);
+		icheck = register_user(&myUser);
 
 		if(icheck == 1)
 		{
