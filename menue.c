@@ -14,11 +14,11 @@
 */
 #define _CRT_SECURE_NO_DEPRECATE 1
 /* Microsoft hat alle gängigen Ein- und Ausgabefunktionen
-als gefährlich eingestuft und durch neue Varianten ersetzt.
-Mit den neuen Funktionen sind die Programme aber nicht
-kompatible zu anderen Entwicklungsumgebungen.
-Bei Verwendung der alten Funktionen wird eine Warnung ausgegeben.
-Diese Warnung kann durch die obige Definition unterdrückt werden.
+   als gefährlich eingestuft und durch neue Varianten ersetzt.
+   Mit den neuen Funktionen sind die Programme aber nicht
+   kompatible zu anderen Entwicklungsumgebungen.
+   Bei Verwendung der alten Funktionen wird eine Warnung ausgegeben.
+   Diese Warnung kann durch die obige Definition unterdrückt werden.
 */
 
 #include "os.h"

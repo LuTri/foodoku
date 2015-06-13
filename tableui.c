@@ -209,7 +209,7 @@ void show_ui(char cShowHelp, char cFinished)
      show_help();
    }
 
-   show_fancy_box(REGELN,0);
+   show_fancy_box(0);
 
    /* Daten auf den Bildschirm, Cursor an die richtige Position bringen */
    refresh();

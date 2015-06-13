@@ -18,6 +18,7 @@ Beschreibung: Aufrufen und Benutzung des UI
 #include "tableui.h"
 #include "menue.h"
 #include "generate.h"
+#include "fancy_box.h"
 
 //Präprozessorkonstanten
 
@@ -148,11 +149,7 @@ void game_loop(int iSchwierigkeit, int iSpielart, int iUserId)
          break;
 
       case KEY_R:
-         if(iHelp == 0){
-            iHelp = 1;
-         }else{
-            iHelp = 0;
-         }
+         fancy_loop();
          break;
 
          //Eingabe der Zahlen 1-9
