@@ -18,8 +18,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "sudoku_solving.h"
+#include "tableui.h"
 
-int * showValuesForHelp(int iCurrentArray[9][9], int x, int y) {
+
+///// benutz bitte das globale Array
+void showValuesForHelp(char aCurrentArray[9][9], int x, int y) {
 /*
    ============================================================================
    Zeigt dem Nutzer eine Auswahl an Zahlen an, die in dem Feld, wo die Hilfe
@@ -33,15 +36,14 @@ int * showValuesForHelp(int iCurrentArray[9][9], int x, int y) {
    
    int iRueckgabe;
    int iZaehler;
-   int iPossibleNumbers[9];
+   char iPossibleNumbers[9];
    int iZaehler2;
 
-   for (iZaehler = 0; iZaehler <= 9; iZaehler++) {
-      iCurrentArray[x][y] = iZaehler;
-      iRueckgabe = checkIfOk(iCurrentArray, x, y);
+   for (iZaehler = 0; iZaehler < 9; iZaehler++) {
+      aCurrentArray[x][y] = iZaehler;
+      iRueckgabe = checkIfOk(aCurrentArray, x, y);
       if (iRueckgabe == 1) {
-         iPossibleNumbers[iZaehler] = iZaehler;
-       }
-    }
-    return iPossibleNumbers;
+         iValidNumbersForHelp[iZaehler] = iZaehler;
+      }
+   }
 }
