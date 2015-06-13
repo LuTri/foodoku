@@ -64,7 +64,7 @@
    Limit.
    Die Spiele werden aufsteigend sortiert - dabei wird die tatsächliche Wertung
    mit der Formel
-      score = zeit + Hilfen * HELP_FACTOR
+      score = zeit + Hilfen * HELP_FACTOR + gefüllte Felder * FILLED_FACTOR
    bestimmt.
    Ein niedrigerer Score ist besser.
 */
@@ -76,6 +76,7 @@
          "er * %d AS 'score' "\
       "FROM games game INNER JOIN userdata user "\
       "WHERE user.user_id = game.user AND game.schwierigkeit = %d "\
+         "AND game.gewertet = 1 AND game.abgeschlossen = 1 "\
       "ORDER BY score ASC LIMIT %d;"
 
 /*
@@ -90,6 +91,7 @@
          "er * %d AS 'score' "\
       "FROM games game INNER JOIN userdata user "\
       "WHERE user.user_id = game.user AND game.schwierigkeit = %d "\
+         "AND game.abgeschlossen = 1 "\
          "AND user.user_id = %d "\
       "ORDER BY score ASC LIMIT %d;"
 
