@@ -1,26 +1,24 @@
 /* 
    ============================================================================
-   Programmname: generate.h
+   Dateiname   : sudoku.h
    Autor       : Tristan Lucas
                  Heinrich-Hertz-Berufskolleg
-   Datum       : 
+   Datum       : 07.06.2015
    Thema       : Sudoku
    Version     : 1.0
-   Beschreibung: Modularisierung der Erstellung eines gelösten Sudokus mit Hilfe
-                 eines "backtracking"-Algorithmus
+   Beschreibung: Implementierung von Basis Sudoku Regeln
    ============================================================================ 
 */
-#ifndef _GENERATE_H
-#define _GENERATE_H
+
+#ifndef _SUDOKU_H
+#define _SUDOKU_H
 
 /* 
    ============================================================================
-   Nach außen verfügbare Schnittstellen
+   Funktionsprototypen
    ============================================================================ 
 */
 
-void create_sudoku(int iDifficulty);
-void easy_sudoku(int iDifficulty);
+char can_be_on_coord(int iX, int iY, char cVal, char cUseRootSudoku);
 
 #endif
-

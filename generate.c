@@ -21,6 +21,7 @@
 #include "generate.h"
 #include "os.h"
 #include "tableui.h"
+#include "sudoku.h"
 #include <time.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -47,102 +48,7 @@ typedef struct {
    int y;
 } COORDINATE;
 
-char can_be_in_square(int iX, int iY, char cVal, int cStatus)
-/*
-   ============================================================================
-   Prüft, ob die Zahl in das aus tablui.h importierte Sudoku in das an der ge-
-   wünschten Position befindliche kleine Quadrat eingefügt werden könnte
-      1. Parameter: die gewünschte x-Ordinate
-      2. Parameter: die gewünschte x-Ordinate
-      3. Parameter: Die gewünschte Zahl
-      4. Rückgabewert: ob die Zahl eingesetzt werden könnte (1) oder nicht (0)
-   ============================================================================
-*/
-{
-   /* Variablen-Definition und Initialisierung */
-   int iXStart, iYStart;
-   int i, j;
-
-   char (*cUsedSudoku)[BOUNDARY][BOUNDARY];
-
-   if (cStatus) {
-      cUsedSudoku = &cSudoku;
-   } else {
-      cUsedSudoku = &cShownSudoku;
-   }
-
-   /*
-      Das korrekte kleine Quadrat wird berechnet.
-      Die beiden Ordinaten haben dabei immer Werte zwischen 0 und 2
-   */
-   iXStart = iX / BOUNDARY_ROOT;
-   iYStart = iY / BOUNDARY_ROOT;
-
-   for (i = 0; i < BOUNDARY_ROOT; i++) {
-      /* für alle i in kleiner Kantenlänge */
-      for (j = 0; j < BOUNDARY_ROOT; j++) {
-         /*
-            für alle j in kleiner Kantenlänge
-            Es müssen nur die Felder in dem entsprechenden kleinen Quadrat
-            geprüft werden
-         */
-         if ((*cUsedSudoku)[i + (iYStart * BOUNDARY_ROOT)]
-                    [j + (iXStart * BOUNDARY_ROOT)] == cVal) {
-            /* 
-               Wenn einer der Werte im kleinen Quadrat der gewünschten Zahl
-               entspricht gib 0 (kann nicht eingesetzt werden) zurück
-            */
-            return 0;
-         }
-      }
-   }
-
-   /*
-      An dieser Stelle wurde die Zahl nicht in dem kleinen Quadrat gefunden, die
-      Zahl könnte als eingesetzt werden
-   */
-   return 1;
-}
-
-char can_be_in_line(int iX, int iY, char cVal, int cStatus)
-/*
-   ============================================================================
-   Prüft, ob die Zahl in das aus tablui.h importierte Sudoku in eine Reihe
-   oder Spalte eingefügt werden könnte
-      1. Parameter: die gewünschte x-Ordinate
-      2. Parameter: die gewünschte x-Ordinate
-      3. Parameter: Die gewünschte Zahl
-      4. Rückgabewert: ob die Zahl eingesetzt werden könnte (1) oder nicht (0)
-   ============================================================================
-*/
-{
-   /* Variablen-Definition und Initialisierung */
-   int i;
-
-   char (*cUsedSudoku)[BOUNDARY][BOUNDARY];
-
-   if (cStatus) {
-      cUsedSudoku = &cSudoku;
-   } else {
-      cUsedSudoku = &cShownSudoku;
-   }
-
-   for (i = 0; i < BOUNDARY; i++) {
-      /* für alle i in großer Kantenlänge */
-      if (((*cUsedSudoku)[i][iX] == cVal) || ((*cUsedSudoku)[iY][i] == cVal)) {
-         /*
-            Wenn die Zahl an irgendeiner Stelle in gleicher Spalte oder gleicher
-            Zeile schon vorhanden ist gib 0 (kann nicht eingesetzt werden)
-            zurück
-         */
-         return 0;
-      }
-   }
-   /* Die Zahl wurde in der Spalte und der Zeile nicht gefunden */
-   return 1;
-}
-
-int possible_positions(char cStatus, char cValue, COORDINATE coordPositions[BOUNDARY_SQUARE])
+int possible_positions(char cUseRootSudoku, char cValue, COORDINATE coordPositions[BOUNDARY_SQUARE])
 /*
    ============================================================================
    Berechnet die möglichen Positionen einer Zahl im aus tablui.h importierten
@@ -159,7 +65,7 @@ int possible_positions(char cStatus, char cValue, COORDINATE coordPositions[BOUN
    
    char (*cUsedSudoku)[BOUNDARY][BOUNDARY];
 
-   if (cStatus) {
+   if (cUseRootSudoku) {
       cUsedSudoku = &cSudoku;
    } else {
       cUsedSudoku = &cShownSudoku;
@@ -173,10 +79,8 @@ int possible_positions(char cStatus, char cValue, COORDINATE coordPositions[BOUN
       {
          if ((*cUsedSudoku)[iY][iX] == 0
             /* Wenn das Feld leer ist, */
-            && can_be_in_square(iX,iY,cValue, cStatus)
-            /* die Zahl in das kleine Quadrat eingetraten werden könnte */
-            && can_be_in_line(iX,iY,cValue, cStatus))
-            /* und die Zahl in die Zeile / Spalte eingetragen werden könnte */
+            && can_be_on_coord(iX,iY,cValue, cUseRootSudoku))
+            /* die Zahl keine Regeln in dieser Stelle keine Regelen verletzt */
          {
 
             /* 
@@ -356,7 +260,8 @@ char fill_backtrack(int iDepth)
    return cSuccess;
 }
 
-void create_sudoku(void)
+
+void create_sudoku(int iDifficulty)
 /*
    ============================================================================
    Erstellt ein gelöstes Sudoku
