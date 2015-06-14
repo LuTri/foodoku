@@ -17,7 +17,7 @@ Das Programm erwartet beim Aufruf keine Argumente
 #include <stdlib.h>
 
 #define  REGELN ""\
-	"Regeln:\n"\
+	"Regeln: (q zum verlassen)\n"\
    "Sudoku ist ein Zahlenraetsel. Das quadratische Spielfeld ist "\
 	"in drei mal drei Bloecke unterteilt. Jeder dieser Bloecke besteht wiederum "\
 	"aus 9 Kaestchen. Das gesamte Spielfeld besteht somit aus 81 Kaestchen die "\
