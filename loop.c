@@ -78,9 +78,9 @@ void game_loop(int iSchwierigkeit, int iSpielart, int iUserId)
    //Spielaufbau
    startup_sudoku();
    //gelöstes Sudoku erstellen
-   create_sudoku();
+   create_sudoku(iSchwierigkeit-1);
    //lösbare Sudoku aus gelöstem Sudoku erstellen
-   easy_sudoku(iSchwierigkeit-1);
+   //easy_sudoku();
    //Start-Sudoku merken
    prepare_start_sudoku();
 
@@ -136,16 +136,11 @@ void game_loop(int iSchwierigkeit, int iSpielart, int iUserId)
             this_game.iFilled++;
             cShownSudoku[iY][iX] = cSudoku[iY][iX];
          }
+         clear_help(-1,-1);
+         iHelp = 0;
+         move_cursor(cTaste);
+         cTempTaste = 0;
          break;
-
-      case KEY_RETURN:
-         if(cTempTaste != 0 && check_input(iX, iY)){
-
-            cShownSudoku[iY][iX] = cTempTaste - '0';
-            cTempTaste = 0;
-         }
-         break;
-
       case 'r':
          fancy_loop();
          break;
@@ -166,6 +161,13 @@ void game_loop(int iSchwierigkeit, int iSpielart, int iUserId)
          break;
 
          //Navigation durch Pfeiltasten
+
+      case KEY_RETURN:
+         if(cTempTaste != 0 && check_input(iX, iY)){
+
+            cShownSudoku[iY][iX] = cTempTaste - '0';
+            cTempTaste = 0;
+         }
       case CURS_UP:
       case CURS_DOWN:
       case CURS_LEFT:
