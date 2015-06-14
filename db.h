@@ -40,7 +40,7 @@
    Bestenliste
 */
 #define HELP_FACTOR 20
-#define FILLED_FACTOR 50
+#define FILLED_FACTOR 300
 
 #define QUERY_ERROR_NOSTAT "In der Datenbank ist ein Fehler aufgetreten.\n"
 
