@@ -261,6 +261,57 @@ char fill_backtrack(int iDepth)
    return cSuccess;
 }
 
+void fill_shown(void)
+{
+   int i;
+   for (i = 0; i < BOUNDARY_SQUARE; i++)
+   {
+      cShownSudoku[i/9][i%9] = cSudoku[i/9][i%9];
+   }
+}
+
+int find_filled(COORDINATE coordFilled[BOUNDARY_SQUARE]) {
+   int iNumFilled = 0;
+   int i;
+
+   for (i = 0; i < BOUNDARY_SQUARE; i++) {
+      if (cShownSudoku[i/9][i%9] != 0) {
+         coordFilled[iNumFilled].x = i % 9;
+         coordFilled[iNumFilled++].y = i / 9;
+      }
+   }
+
+   return iNumFilled;
+}
+
+char remove_backtrack(int iDepth, int iTargetDepth) {
+   int iNumFilled;
+   int iActCoord = 0;
+   char cSuccess = 0;
+   char cTempValue;
+
+   COORDINATE coordFilled[BOUNDARY_SQUARE];
+
+   if (iDepth == iTargetDepth) {
+      return 1;
+   }
+
+   iNumFilled = find_filled(coordFilled);
+
+   randomize_coords(iNumFilled,coordFilled);
+
+   while (iActCoord < iNumFilled && ! cSuccess) {
+      cTempValue = cShownSudoku[coordFilled[iActCoord].y][coordFilled[iActCoord].x];
+      cShownSudoku[coordFilled[iActCoord].y][coordFilled[iActCoord].x] = 0;
+
+      cSuccess = remove_backtrack(iDepth + 1, iTargetDepth);
+      if (!cSuccess) {
+         cShownSudoku[coordFilled[iActCoord].y][coordFilled[iActCoord].x] = cTempValue;
+      }
+      iActCoord++;
+   }
+   return cSuccess;
+}
 
 void create_sudoku(int iDifficulty)
 /*
@@ -281,6 +332,9 @@ void create_sudoku(int iDifficulty)
          erstellt wurde
       */
    } while (fill_backtrack(0) != 1);
+
+   fill_shown();
+   remove_backtrack(0, BOUNDARY_SQUARE - iDifficultyArray[iDifficulty]);
 }
 
 void easy_sudoku(int iDifficulty) {
