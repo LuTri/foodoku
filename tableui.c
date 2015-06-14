@@ -2,6 +2,7 @@
    ============================================================================
    Programmname: tableui.c
    Autor       : Tristan Lucas
+                 Jan Gützlaff
                  Heinrich-Hertz-Berufskolleg
    Datum       : 
    Thema       : Sudoku
@@ -48,13 +49,13 @@ char cSudoku[BOUNDARY][BOUNDARY];
 
 char cShownSudoku[BOUNDARY][BOUNDARY];
 
-char cStartSudoku[BOUNDARY][BOUNDARY];
-
 /* 
    ============================================================================
    Für dieses Modul globale Variablen
    ============================================================================ 
 */
+
+char cStartSudoku[BOUNDARY][BOUNDARY];
 
 char cHelp[BOUNDARY][BOUNDARY][BOUNDARY];
 
@@ -150,6 +151,8 @@ void show_ui(char cShowHelp, char cFinished, char* cHelpText)
    Zeigt den aktuellen Status des Spiels an
       1. Parameter: entscheidet, ob die Hilfe am aktuellen Cursor angezeigt
          werden soll
+      2. Parameter: entscheidet, ob das gelöste Sudoku angezeigt werden soll
+      3. Parameter: Der Text, der als Hilfe angezeigt werden soll
    ============================================================================
 */
 {
@@ -162,7 +165,9 @@ void show_ui(char cShowHelp, char cFinished, char* cHelpText)
       cUsedSudoku = &cShownSudoku;
    }
 
+   /* Den Cursor der PDcurses Umgebung auf 0.0 setzen */
    move(0,0);
+
    for (i = 0; i < BOUNDARY; i++)
       /* Für alle Zeilen */
    {
@@ -208,7 +213,26 @@ void show_ui(char cShowHelp, char cFinished, char* cHelpText)
      show_help();
    }
 
+   /* In der Fancybox den Hilfetext anzeigen */
    show_fancy_box(cHelpText);
+
+   /*
+      Wenn das gelöste Sudoku angezeigt werden soll zeige zusätzlich, zum
+      Vergleich die Eingaben des Nutzers
+   */
+   if (cFinished) {
+      for (i = 0; i < BOUNDARY; i++)
+      {
+         for (j = 0; j < BOUNDARY; j++)
+         {
+            /*
+               Für jede Spalte und Zeile, schreibe die Eingabe an die korrekte 
+               Stelle
+            */
+            mvaddch(i * 4 + 3,j * 6 + 4,pretty_value(cShownSudoku[i][j]));
+         }
+      }
+   }
 
    /* Daten auf den Bildschirm, Cursor an die richtige Position bringen */
    refresh();
@@ -275,7 +299,7 @@ void set_help_pos(int iX, int iY, char cValue)
 */
 {
    /* Der Wert wird an den Koordinaten an der eigenen Stelle eingefügt */
-   cHelp[iY][iX][cValue] = cValue;
+   cHelp[iY][iX][cValue-1] = cValue;
 }
 
 void startup_sudoku(void)
@@ -379,6 +403,8 @@ int calc_errors(void)
          }
       }
    }
+
+   /* Rückgabe der Anzahl der fehlerhaften Einträge */
    return iErrors;
 }
 
@@ -413,6 +439,8 @@ int calc_correct_set(void)
          }
       }
    }
+
+   /* Rückgabe der Anzahl der korrekten Einträge */
    return iCorrect;
 }
 
@@ -432,12 +460,15 @@ char show_result(int iHelps, int iFilled, int iSeconds)
    char buff[200];
    int iErrors;
    int iCorrect;
+   char* cHint;
 
    /* Berechne die fehlerhaften und korrekten Einträge */
    iErrors = calc_errors();
    iCorrect = calc_correct_set();
    /* Zeige das gelöste Sudoku an */
-   show_ui(0, 1, 0);
+   cHint = enhanced_infotext(0," Ein Taste zum beenden druecken!");
+   show_ui(0, 1, cHint);
+   free(cHint);
 
    /* Bereite die Anzeige der Fehler vor */
    sprintf(buff,"Anzahl Fehler:                       %3d", iErrors);
