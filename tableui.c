@@ -241,11 +241,21 @@ void show_ui(char cShowHelp, char cFinished, char* cHelpText)
 }
 
 void null_sudoku(void) {
+/*
+   ============================================================================
+   Setzt das Sudoku auf 0 zurück
+      Keine Parameter
+   ============================================================================
+*/
    int i,j;
    for (i = 0; i < 9; i++)
    {
       for (j = 0; j < 9; j++)
       {
+         /* 
+            Für jede Zeile unde jede Spalte, setze den Wert an der Koordinate 
+            den Wert 0
+         */
          cSudoku[i][j] = 0;
       }
    }

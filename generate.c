@@ -264,76 +264,100 @@ char fill_backtrack(int iDepth)
    return cSuccess;
 }
 
-int is_in_array(COORDINATE array[BOUNDARY_SQUARE - DIFF_MAX_EASY],
-                COORDINATE coordWert, int iAnzahl)
+void fill_shown(void)
 /*
-   Funktion zum vergleichen der X und Y Koordinaten, um doppelte Werte aus dem
-   Sudoku Feld zu negieren.
-      1. Parameter:  Array mit dem Wert der maximal vorgegebenen Ziffern und 
-                     der im 3x3 Feld
-      2. Parameter:  der zu vergleichende Koordianten Wert
-      3. Parameter:  Anzahl der Felder je Schwierigkeitsgrad
-      Rückegabewert: 1 für Bedingung ist wahr
+   ============================================================================
+   Übertrag die Einträge aus dem vom Programm erstellen Sudoku in das angezeigte
+   Sudoku
+      Keine Parameter / Rückgabewerte
+   ============================================================================
 */
 {
-   //Variabeln Deklaration und Definition
    int i;
-
-   //FOR-Schleife um das Array durchzugehen
-   for(i = 0; i < iAnzahl; i++)
+   for (i = 0; i < BOUNDARY_SQUARE; i++)
    {
-      //IF-Abfragem, um zwei Koordinaten zu vergleichen
-      if(array[i].x == coordWert.x && array[i].y == coordWert.y)
-      {
-         //Rückgabewert 1
-         return 1;
-      }
+      cShownSudoku[i/9][i%9] = cSudoku[i/9][i%9];
    }
-   //Rückgabewert 0
-   return 0;
 }
 
-void generate_player_sudoku(int iDifficulty)
+int find_filled(COORDINATE coordFilled[BOUNDARY_SQUARE])
 /*
    ============================================================================
+   Findet die Koordinaten im angezeigten Sudoku, in denen Einträge vorhanden
+   sind (und die Anzahl dieser)
+      1. Parameter: Das Array, in welches die Koordinaten eingetragen werden
+                    sollen
+      2. Rückgabewert: Die Anzahl der gefunden gefüllten Felder
    ============================================================================
 */
 {
-	//Variabel Deklaration und Definition
-	int iAnzahl;
+   int iNumFilled = 0;
+   int i;
 
-	int iZaehlerX;
-	int iZaehlerY;
-
-   COORDINATE array[BOUNDARY_SQUARE - DIFF_MAX_EASY];
-   COORDINATE coordWert;
-	time_t t;
-    time(&t);
-    srand((unsigned int)t);
-
-   //FOR-Schleife um 
-	for (iZaehlerX = 0; iZaehlerX < 9; iZaehlerX++)
-	{
-		for (iZaehlerY = 0; iZaehlerY < 9; iZaehlerY++)
-		{
-			cShownSudoku[iZaehlerX][iZaehlerY] = cSudoku[iZaehlerX][iZaehlerY];
-		}
-	}
-
-   for (iAnzahl = 0;
-      iAnzahl < BOUNDARY_SQUARE - iDifficultyArray[iDifficulty]; iAnzahl++)
-   {
-      do
-      {
-         coordWert.x = rand() % 9 + 1;
-         coordWert.y = rand() % 9 + 1;   
-      }while(is_in_array(array,coordWert,iAnzahl));
-
-      array[iAnzahl].x = coordWert.x;
-      array[iAnzahl].y = coordWert.y;
-
-      cShownSudoku[coordWert.x][coordWert.y] = 0;
+   for (i = 0; i < BOUNDARY_SQUARE; i++) {
+      /* Im gesamten Sudoku */
+      if (cShownSudoku[i/9][i%9] != 0) {
+         /* 
+            Wenn der Eintrag an der aktuellen Position nicht 0 ist, trage die
+            Koordinate in das Array ein
+         */
+         coordFilled[iNumFilled].x = i % 9;
+         coordFilled[iNumFilled++].y = i / 9;
+      }
    }
+
+   /* Gib die Anzahl der Koordinaten zurück */
+   return iNumFilled;
+}
+
+char remove_recursive(int iDepth, int iTargetDepth)
+/*
+   ============================================================================
+   Entfernt Einträge aus dem angezeigten Sudoku, bis zu einer bestimmten Anzahl
+      1. Parameter: Die aktuelle Rekursionstiefe
+      2. Parameter: Die Ziel-Rekurstionstiefe ( = Anzahl der zu löschenden
+         Felder)
+   ============================================================================
+*/
+{
+   /* Variablendeklaration und Initialisierung */
+   int iNumFilled;
+   int iActCoord = 0;
+   char cSuccess = 0;
+   char cTempValue;
+
+   COORDINATE coordFilled[BOUNDARY_SQUARE];
+
+   /* 
+      Wenn die Ziel-Rekursionstiefe erreicht wurde kann der Vorgang beendet 
+      werden.
+   */
+   if (iDepth == iTargetDepth) {
+      return 1;
+   }
+
+   /* 
+      Die noch gefüllten Positionen im Sudoku (Koordinaten) finden und die Liste
+      mischen
+   */
+   iNumFilled = find_filled(coordFilled);
+   randomize_coords(iNumFilled,coordFilled);
+
+   /* 
+      Nimm die erste Koordinate aus der gemischten Liste und lösche den Eintrag
+      an der entsprechenden Stelle
+   */
+   cTempValue = cShownSudoku[coordFilled[0].y][coordFilled[0].x];
+   cShownSudoku[coordFilled[0].y][coordFilled[0].x] = 0;
+
+
+   /* 
+      Führe die Rekursion weiter, bis die gewünschte Anzahl an Einträgen
+      entfernt wurde
+   */
+   cSuccess = remove_recursive(iDepth + 1, iTargetDepth);
+
+   return cSuccess;
 }
 
 void create_sudoku(int iDifficulty)
@@ -356,5 +380,19 @@ void create_sudoku(int iDifficulty)
       */
    } while (fill_backtrack(0) != 1);
 
-   generate_player_sudoku(iDifficulty);
+   /* 
+      Das angezeigte Sudoku vorbereiten und entsprechend der Schwierigkeit
+      Felder aus dem angezeigten Sudoku löschen
+   */
+   fill_shown();
+   remove_recursive(0, BOUNDARY_SQUARE - iDifficultyArray[iDifficulty]);
+
+   /*
+      ANMERKUNG:
+      Aufgrund fehlender Rechenleistung und fehlender Algorithmen können wir
+      aktuelle kein eindeutig lösbares Sudoku erstellen. Das führt dazu, dass
+      die Funktion zum automatischen Füllen eines Feldes nicht garantiert
+      richtige Ergebnisse liefert.
+      Dies wird in einer der nächsten Versionen behoben
+   */
 }
