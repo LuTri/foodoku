@@ -18,6 +18,7 @@
    ============================================================================ 
 */
 
+#include "sudoku_solving.h"
 #include "generate.h"
 #include "os.h"
 #include "tableui.h"
@@ -417,4 +418,53 @@ void easy_sudoku(int iDifficulty) {
     }
     iZaehler = ++iZaehler % BOUNDARY_SQUARE;
   }
+}
+
+void generate_player_sudoku(int iDifficulty) {
+	
+	int iAnzahl;
+
+	time_t t;
+    time(&t);
+    srand((unsigned int)t);
+
+	int iZaehlerX;
+	int iZaehlerY;
+	int iRandomX;
+	int iRandomY;
+
+	for (iZaehlerX = 0; iZaehlerX < 9; iZaehlerX++)
+	{
+		for (iZaehlerY = 0; iZaehlerY < 9; iZaehlerY++)
+		{
+			cShownSudoku[iZaehlerX][iZaehlerY] = cSudoku[iZaehlerX][iZaehlerY];
+		}
+	}
+
+	for (iAnzahl = 0; iAnzahl < iDifficultyArray[iDifficulty]; iAnzahl++)
+	{
+		iRandomX = rand() % 9 + 1;
+		iRandomY = rand() % 9 + 1;
+		cShownSudoku[iRandomX][iRandomY] = 0;
+	}
+
+}
+
+int check_on_finished(char cFinishedSudoku[BOUNDARY][BOUNDARY]) {
+
+	int iZaehlerX;
+	int iZaehlerY;
+
+	for (iZaehlerX = 0; iZaehlerX < 9; iZaehlerX++)
+	{
+		for (iZaehlerY = 0; iZaehlerY < 9; iZaehlerY++)
+		{
+			if (checkIfOk(cFinishedSudoku, iZaehlerX, iZaehlerY)) {
+			} else {
+				return 0;
+			}
+		}
+	}
+
+	return 1;
 }
