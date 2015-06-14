@@ -20,6 +20,7 @@
 #include "menue.h"
 #include "generate.h"
 #include "fancy_box.h"
+#include "help_for_field.h"
 
 //Präprozessorkonstanten
 
@@ -124,6 +125,7 @@ void game_loop(int iSchwierigkeit, int iSpielart, int iUserId)
          if (check_input(iX, iY)) {
             iHelp = 1;
          }
+         MakeValuesForHelp(iX,iY);
          this_game.iHelps++;
          break;
 

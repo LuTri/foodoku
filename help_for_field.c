@@ -15,13 +15,13 @@
    ========================================================================    
 */
 
-#include <stdio.h>
-#include <stdlib.h>
-#include "sudoku_solving.h"
+#include "generate.h"
+#include "help_for_field.h"
+#include "tableui.h"
+#include "sudoku.h"
 
 
-///// benutz bitte das globale Array
-char * showValuesForHelp(char aCurrentArray[9][9], int x, int y) {
+void MakeValuesForHelp(int x, int y) {
 /*
    ============================================================================
    Zeigt dem Nutzer eine Auswahl an Zahlen an, die in dem Feld, wo die Hilfe
@@ -38,13 +38,10 @@ char * showValuesForHelp(char aCurrentArray[9][9], int x, int y) {
    char iPossibleNumbers[9];
    int iZaehler2;
 
-   for (iZaehler = 0; iZaehler < 9; iZaehler++) {
-      aCurrentArray[x][y] = iZaehler;
-      iRueckgabe = checkIfOk(aCurrentArray, x, y);
-      if (iRueckgabe == 1) {
-         iPossibleNumbers[iZaehler] = iZaehler;
+   for (iZaehler = 1; iZaehler < 10; iZaehler++) {
+      if (can_be_on_coord(x,y,iZaehler,0))
+      {
+         set_help_pos(x,y,iZaehler);
       }
    }
-   return iPossibleNumbers;
-   ///// keine Arrays zurückgeben!
 }
