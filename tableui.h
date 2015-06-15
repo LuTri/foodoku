@@ -2,6 +2,8 @@
    ============================================================================
    Programmname: tableui.h
    Autor       : Tristan Lucas
+                 Jan Gützlaff
+                 Lennard Malessa
                  Heinrich-Hertz-Berufskolleg
    Datum       : 
    Thema       : Sudoku
@@ -67,5 +69,7 @@ int   getTerminalSize(void);
 
 void  prepare_start_sudoku();
 int   check_input(int iX, int iY);
+
+char isfullfilled();
 
 #endif

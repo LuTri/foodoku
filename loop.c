@@ -2,6 +2,8 @@
    ============================================================================
    Programmname: loop.c
    Autor : Jan Gützlaff
+           Tristan Lucas
+           Lennard Malessa
    Heinrich-Hertz-Berufskolleg
    Datum : 08.06.2015
    Thema : Sudoku
@@ -108,6 +110,18 @@ void game_loop(int iSchwierigkeit, int iSpielart, int iUserId)
             cHelpText = cTemp;
          }
       }
+
+      //Info das alle Felder ausgefüllt sind und das Spiel beendet werden kann
+      if(isfullfilled() == 1)
+      {
+         char* cTemp;
+         cTemp = enhanced_infotext(cHelpText,"\n Alle Felder ausgefuellt.\n"
+            " Spiel mit Q beenden.");
+         free(cHelpText);
+         cHelpText = cTemp;
+      }
+
+
       show_ui(iHelp, 0, cHelpText);
       if (cHelpText != 0) {
          free(cHelpText);

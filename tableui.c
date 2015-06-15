@@ -3,6 +3,7 @@
    Programmname: tableui.c
    Autor       : Tristan Lucas
                  Jan Gützlaff
+                 Lennard Malessa
                  Heinrich-Hertz-Berufskolleg
    Datum       : 
    Thema       : Sudoku
@@ -466,7 +467,7 @@ char show_result(int iHelps, int iFilled, int iSeconds)
    iErrors = calc_errors();
    iCorrect = calc_correct_set();
    /* Zeige das gelöste Sudoku an */
-   cHint = enhanced_infotext(0," Ein Taste zum beenden druecken!");
+   cHint = enhanced_infotext(0," Das Sudoku ist beendet!");
    show_ui(0, 1, cHint);
    free(cHint);
 
@@ -480,7 +481,7 @@ char show_result(int iHelps, int iFilled, int iSeconds)
    sprintf(buff,"Anzahl angezeigter Kandidaten:       %3d", iHelps);
    mvprintw(40,2,buff);
    /* Bereite die Anzeige vom Spiel gefüllten Felder vor */
-   sprintf(buff,"Anzahl automatisch gefüllter Felder: %3d", iFilled);
+   sprintf(buff,"Anzahl automatisch gefuellter Felder: %3d", iFilled);
    mvprintw(41,2,buff);
    /* Bereite die Anzeige der benötigten Sekunden vor */
    sprintf(buff,"Benoetigte Zeit                    : %3d", iSeconds);
@@ -530,4 +531,27 @@ int check_input(int iX, int iY)
 	}else{
 		return 1;
 	}
+}
+
+char isfullfilled()
+{
+   /*
+	============================================================================
+	Prüft ob alle Felder im Sudoku größer als 0 sind
+	============================================================================
+   */
+   int i, j;
+
+   for(i = 0; i<BOUNDARY; i++)
+   {
+      for(j = 0; j<BOUNDARY; j++)
+      {
+         if (cShownSudoku[i][j] == 0)
+         {
+            return 0;
+         }
+      }
+   }
+
+   return 1;
 }
