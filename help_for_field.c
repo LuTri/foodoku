@@ -33,11 +33,7 @@ void MakeValuesForHelp(int x, int y) {
    ============================================================================
 */
    
-   int iRueckgabe;
    int iZaehler;
-   char iPossibleNumbers[9];
-   int iZaehler2;
-
    for (iZaehler = 1; iZaehler < 10; iZaehler++) {
       if (can_be_on_coord(x,y,iZaehler,0))
       {
