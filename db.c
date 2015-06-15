@@ -728,7 +728,8 @@ void delete_gameranking_data(GAMERANKING* rpGame, char cWholeStruct)
    ============================================================================
    Löscht die aus der Datenbank kopierten Strings in der GAMERANKING-Struktur
    und bei Bedarf die Struktur selbst
-      1. Parameter: das Usergame
+      1. Parameter: das GAMERANKING (Struktur)
+      2. Parameter: Ob die gesamte Struktur gelöscht werden soll
    ============================================================================
 */
 {
@@ -750,6 +751,7 @@ void delete_user_data(USER* upUser, char cWholeStruct)
    Löscht die aus der Datenbank kopierten Strings in der USER-Struktur und bei
    Bedarf die Struktur selbst
       1. Parameter: Die Userdaten
+      2. Parameter: Ob die gesamte Struktur gelöscht werden soll
    ============================================================================
 */
 {
