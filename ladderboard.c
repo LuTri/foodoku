@@ -3,9 +3,9 @@
 Autor       : GruppeB (Kevin Schorn)
 Firma       : HHBK
 Dateiname   : ladderboard.c
-Datum       : 08.06.15	
+Datum       : 15.06.15	
 Beschreibung: Darstellung der gesamten sowie der Persönlichen 
-: Bestenlisten
+              Bestenlisten
 Version     : 1.0
 Programmschnittstelle: 
 ========================================================================
@@ -45,6 +45,7 @@ void Bestenliste()
    int iLength = 0; 
    int iError = 0;
 
+   //Schleife zur richtigen Übergabe des Schwierigkeitgrads
    while (iMode < 1 || iMode > 3)
    {
       //Ausgabe welche Anzeige gewünscht ist
@@ -66,10 +67,10 @@ void Bestenliste()
       iError = scanf ("%i", &iMode);
    }
 
-   //Aufruf der get_best_games Funktion zur ermittlung der besten Spiele
+   //Aufruf der get_best_games() Funktion zur ermittlung der besten Spiele
    iLength = get_best_games(iMode, Daten, 10);
 
-   //Auf der DatanAnzeigen Funktion mit übergabe des Daten Array´s 
+   //Aufruf der DatanAnzeigen() Funktion mit übergabe des Daten Array´s 
    //und der Anzahl der gefundenen Einträge
    DatenAnzeige(Daten, iLength);
 
@@ -97,13 +98,14 @@ void DatenAnzeige(GAMERANKING Daten[],int iLength)
    printf("\t\t\t\tBestenliste\n\n");
    printf("*************************************");
    printf("******************************************\n\n");
-   printf("Rang |\tName   | ben\224t. Hilfen | gef\201llte Felder | Score |\tDatum\n");
+   printf("Rang |\tName   | ben\224t. Hilfen | gef\201llte Felder ");
+   printf("| Score |\tDatum\n");
    printf("*************************************");
    printf("******************************************\n\n");
 
    if (iLength > 0)
    {
-      //Schleichen zum Anzeigen der Besten Spiele 
+      //Schleife zum Anzeigen der Besten Spiele 
       while (iZaehler < iLength)
       {
          printf("%3i", iZaehler+1);
@@ -139,7 +141,7 @@ void PersListe()
    int iLength; 
    int iError = 0;
 
-
+   //Schleife zur richtigen übergabe des Schwierigkeitgrads
    while (iMode < 1 || iMode > 3)
    {
       //Ausgabe welche Anzeige gewünscht
@@ -198,9 +200,10 @@ void PersonAnzeigen(GAMERANKING pDaten[],int iLength)
    printf("******************************************\n\n");
 
    //Schleifen zum Anzeigen der Besten Spiele 
-   //anhand des Schwierigkeitsgrad
+   //Anhand des Schwierigkeitsgrad
    if (iLength > 0)
    {
+      //Schleife zur Darstellung der Daten 
       while (iZaehler < iLength)
       {
          printf("%3i\t    ", iZaehler+1);
