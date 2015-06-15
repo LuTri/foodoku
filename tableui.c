@@ -397,7 +397,7 @@ int calc_errors(void)
             Für alle Felder im Sudoku, überprüfe ob der eingetragene Wert
             mit dem tatsächlich gesuchten übereinstimmt
          */
-         if (cSudoku[i][j] != cShownSudoku[i][j] && cShownSudoku[i][j] == 0)
+         if (cSudoku[i][j] != cShownSudoku[i][j] && cShownSudoku[i][j] != 0)
          {
             /* Wenn die Werte nicht übereinstimmen, erhöhe die Fehler um 1*/
             iErrors++;
@@ -472,19 +472,19 @@ char show_result(int iHelps, int iFilled, int iSeconds)
    free(cHint);
 
    /* Bereite die Anzeige der Fehler vor */
-   sprintf(buff,"Anzahl Fehler:                       %3d", iErrors);
+   sprintf(buff,"Anzahl Fehler:                        %3d", iErrors);
    mvprintw(38,2,buff);
    /* Bereite die Anzeige der korrekten Eingabe vor */
-   sprintf(buff,"Anzahl richtig geloest:              %3d", iCorrect);
+   sprintf(buff,"Anzahl richtig geloest:               %3d", iCorrect);
    mvprintw(39,2,buff);
    /* Bereite die Anzeige der angezeigten Kandidaten */
-   sprintf(buff,"Anzahl angezeigter Kandidaten:       %3d", iHelps);
+   sprintf(buff,"Anzahl angezeigter Kandidaten:        %3d", iHelps);
    mvprintw(40,2,buff);
    /* Bereite die Anzeige vom Spiel gefüllten Felder vor */
    sprintf(buff,"Anzahl automatisch gefuellter Felder: %3d", iFilled);
    mvprintw(41,2,buff);
    /* Bereite die Anzeige der benötigten Sekunden vor */
-   sprintf(buff,"Benoetigte Zeit                    : %3d", iSeconds);
+   sprintf(buff,"Benoetigte Zeit:                      %3d", iSeconds);
    mvprintw(42,2,buff);
 
    /* PDcurses: Schreibe die gewünschen Informationen auf den Bildschirm */

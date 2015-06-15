@@ -304,8 +304,6 @@ void generate_player_sudoku(int iDifficulty)
 
 	int iZaehlerX;
 	int iZaehlerY;
-	int iRandomX;
-	int iRandomY;
 
    COORDINATE array[BOUNDARY_SQUARE - DIFF_MAX_EASY];
    COORDINATE coordWert;
