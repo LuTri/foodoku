@@ -1,7 +1,8 @@
 /* 
    ============================================================================
    Programmname: generate.h
-   Autor       : Tristan Lucas & Marian Klemm
+   Autor       : Tristan Lucas
+                 Marian Klemm
                  Heinrich-Hertz-Berufskolleg
    Datum       : 09.06.2015
    Thema       : Sudoku
@@ -18,9 +19,8 @@
    ============================================================================ 
 */
 
-#include "sudoku_solving.h"
 #include "generate.h"
-#include "os.h"
+#include "system.h"
 #include "tableui.h"
 #include "sudoku.h"
 #include <time.h>

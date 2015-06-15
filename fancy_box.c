@@ -17,7 +17,7 @@ Programmschnittstelle: Siehe zugehörige Header-Datei
 includes
 */
 #include "fancy_box.h"
-#include "os.h"
+#include "system.h"
 #include "tableui.h"
 #include "menue.h"
 

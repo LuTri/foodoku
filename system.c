@@ -1,19 +1,18 @@
 /* 
    ============================================================================
-   Programmname: password.c
+   Programmname: system.c
    Autor       : Tristan Lucas
                  Heinrich-Hertz-Berufskolleg
-   Datum       : 12.06.2015
+   Datum       : 09.06.2015
    Thema       : Sudoku
    Version     : 1.0
    Beschreibung: Stellt eine Eingabe-verschleiernde Funktion zur Passwort-
                  Eingabe bereit
-
    Programmschnittstelle: Siehe zugehörige Header-Datei  
    ============================================================================ 
 */
-#include "password.h"
-#include <conio.h>
+
+#include "conio.h"
 
 void passwd_input(char cBuff[200])
 /* 

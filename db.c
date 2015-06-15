@@ -95,7 +95,7 @@
 */
 
 #include "db.h"
-#include "os.h"
+#include "system.h"
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>

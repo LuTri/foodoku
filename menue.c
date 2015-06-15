@@ -21,7 +21,7 @@
    Diese Warnung kann durch die obige Definition unterdrückt werden.
 */
 
-#include "os.h"
+#include "system.h"
 #include "db.h"
 #include "menue.h"
 #include <stdio.h>

@@ -18,7 +18,7 @@
    Das Programm erwartet beim Aufruf keine Argumente
    ========================================================================
 */
-#include "os.h"
+#include "system.h"
 #include "menue.h"
 #include "tableui.h"
 

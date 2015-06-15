@@ -25,44 +25,19 @@
 */
 
 #include <stdlib.h>
-#include <stdio.h>
-#include "password.h"
-
-#ifndef OS_LINUX
-/*
-   ============================================================================
-   Standardmäßig wird mit Windows-kompatiblen defines gearbeitet
-   ============================================================================
-*/
-
 #include "curses.h"
 
 #define FREE_SQL(x) free(x);
 #define CLEAR_SCREEN system("cls"); fflush(stdin); fflush(stdout);
 #define SYSTEM_PAUSE system("pause");
 
-#else
-
-/*
-   ============================================================================
-   Dieser Bereich wird vom Präprozessor ausgeführt, wenn das Define "OS_LINUX"
-   an den Compiler übergeben wird
-   ============================================================================
-*/
-
-#include <ncurses.h>
-
-#define FREE_SQL(x)
-#define CLEAR_SCREEN system("clear"); fflush(stdin); fflush(stdout);
-#define SYSTEM_PAUSE pause();
-
-#endif
-
 /*
    ============================================================================
    Funktionsprototypen
    ============================================================================
 */
+
+void passwd_input(char cBuff[200]);
 
 #endif
 
