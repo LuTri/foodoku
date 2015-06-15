@@ -34,8 +34,11 @@
 */
 
 #define MAX_RECURSION_STEPS 20000
+#define DIFF_MAX_EASY 36
+#define DIFF_MAX_MEDIUM 29
+#define DIFF_MAX_HARD 22
 
-const int iDifficultyArray[3] = {36, 29 ,22};
+const int iDifficultyArray[3] = {DIFF_MAX_EASY, DIFF_MAX_MEDIUM ,DIFF_MAX_HARD};
 
 /*
    ============================================================================
@@ -261,8 +264,42 @@ char fill_backtrack(int iDepth)
    return cSuccess;
 }
 
-void generate_player_sudoku(int iDifficulty) {
-	
+int is_in_array(COORDINATE array[BOUNDARY_SQUARE - DIFF_MAX_EASY],
+                COORDINATE coordWert, int iAnzahl)
+/*
+   Funktion zum vergleichen der X und Y Koordinaten, um doppelte Werte aus dem
+   Sudoku Feld zu negieren.
+      1. Parameter:  Array mit dem Wert der maximal vorgegebenen Ziffern und 
+                     der im 3x3 Feld
+      2. Parameter:  der zu vergleichende Koordianten Wert
+      3. Parameter:  Anzahl der Felder je Schwierigkeitsgrad
+      Rückegabewert: 1 für Bedingung ist wahr
+*/
+{
+   //Variabeln Deklaration und Definition
+   int i;
+
+   //FOR-Schleife um das Array durchzugehen
+   for(i = 0; i < iAnzahl; i++)
+   {
+      //IF-Abfragem, um zwei Koordinaten zu vergleichen
+      if(array[i].x == coordWert.x && array[i].y == coordWert.y)
+      {
+         //Rückgabewert 1
+         return 1;
+      }
+   }
+   //Rückgabewert 0
+   return 0;
+}
+
+void generate_player_sudoku(int iDifficulty)
+/*
+   ============================================================================
+   ============================================================================
+*/
+{
+	//Variabel Deklaration und Definition
 	int iAnzahl;
 
 	int iZaehlerX;
@@ -270,10 +307,13 @@ void generate_player_sudoku(int iDifficulty) {
 	int iRandomX;
 	int iRandomY;
 
+   COORDINATE array[BOUNDARY_SQUARE - DIFF_MAX_EASY];
+   COORDINATE coordWert;
 	time_t t;
     time(&t);
     srand((unsigned int)t);
 
+   //FOR-Schleife um 
 	for (iZaehlerX = 0; iZaehlerX < 9; iZaehlerX++)
 	{
 		for (iZaehlerY = 0; iZaehlerY < 9; iZaehlerY++)
@@ -282,14 +322,20 @@ void generate_player_sudoku(int iDifficulty) {
 		}
 	}
 
-	for (iAnzahl = 0;
+   for (iAnzahl = 0;
       iAnzahl < BOUNDARY_SQUARE - iDifficultyArray[iDifficulty]; iAnzahl++)
-	{
-		iRandomX = rand() % 9 + 1;
-		iRandomY = rand() % 9 + 1;
-		cShownSudoku[iRandomX][iRandomY] = 0;
-	}
+   {
+      do
+      {
+         coordWert.x = rand() % 9 + 1;
+         coordWert.y = rand() % 9 + 1;   
+      }while(is_in_array(array,coordWert,iAnzahl));
 
+      array[iAnzahl].x = coordWert.x;
+      array[iAnzahl].y = coordWert.y;
+
+      cShownSudoku[coordWert.x][coordWert.y] = 0;
+   }
 }
 
 void create_sudoku(int iDifficulty)
