@@ -4,6 +4,7 @@
 *.o
 *.swp
 Debug/
+Release/
 ipch/
 *.opensdf
 *.suo

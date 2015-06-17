@@ -111,8 +111,8 @@ int iSpieleauswahl()
           "4: zur\201ck\n\n");
 
    printf("Auswahl: ");
-   scanf("%i", &iAuswahlSpiel);
    fflush(stdin);
+   scanf("%i", &iAuswahlSpiel);
 
    return iAuswahlSpiel;
 }
@@ -379,8 +379,8 @@ void eingeloggt(void)
             "5: Ausloggen\n\n");
 
          printf("Auswahl: ");
-         scanf("%i", &iAuswahl_e);
          fflush(stdin);
+         scanf("%i", &iAuswahl_e);
       }
       while(iAuswahl_e > 5 || iAuswahl_e < 1);
       //Aufrufen der Funktionen je nach getroffener Auswahl
