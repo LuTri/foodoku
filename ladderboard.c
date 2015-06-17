@@ -57,8 +57,8 @@ void Bestenliste()
       printf("******************************************\n\n");
       printf ("Bitte W\204hlen Sie den Schwierigkeitsgrad aus\n");
       printf ("Geben Sie (1) f\201r Leicht ein.\n");
-      printf ("Geben Sie (2) f\201r Mittel ein.\n");
-      printf ("Geben Sie (3) f\201r Profi ein.\n");
+      printf ("Geben Sie (2) f\201r Normal ein.\n");
+      printf ("Geben Sie (3) f\201r Schwierig ein.\n");
       printf ("Bitte geben Sie die Zahl f\201r die ");
       printf(" gew\201nschte Bestenliste ein: ");
       fflush (stdin);
@@ -153,8 +153,8 @@ void PersListe()
       printf("******************************************\n\n");
       printf ("Bitte W\204hlen Sie den Schwierigkeitsgrad aus\n");
       printf ("Geben Sie (1) f\201r Leicht ein.\n");
-      printf ("Geben Sie (2) f\201r Mittel ein.\n");
-      printf ("Geben Sie (3) f\201r Profi ein.\n");
+      printf ("Geben Sie (2) f\201r Normal ein.\n");
+      printf ("Geben Sie (3) f\201r Schwierig ein.\n");
       printf ("Bitte geben Sie die Zahl f\201r die ");
       printf(" gew\201nschte Bestenliste ein: ");
       fflush (stdin);
