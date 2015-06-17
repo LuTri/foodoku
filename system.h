@@ -37,7 +37,7 @@
    ============================================================================
 */
 
-void passwd_input(char cBuff[200]);
+void passwd_input(char cBuff[500]);
 
 #endif
 

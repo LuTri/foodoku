@@ -156,7 +156,7 @@ void Registrieren(void)
    char cNickname[20];
    char cName[20];
    char cLastname[20];
-   char cPassword[200];
+   char cPassword[500];
 
    CLEAR_SCREEN
 

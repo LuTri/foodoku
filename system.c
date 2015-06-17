@@ -14,7 +14,7 @@
 
 #include "conio.h"
 
-void passwd_input(char cBuff[200])
+void passwd_input(char cBuff[500])
 /* 
    ============================================================================
    Liest ein maximal 200 Zeichen langes Passwort ein und verschleiert dabei die
@@ -31,7 +31,7 @@ void passwd_input(char cBuff[200])
    cCharacter = _getch();
    /* Für jede gedrückte Taste wirde ein '*' auf dem Bildschirm ausgegeben */
    _putch('*');
-   while (cCharacter != '\n' && cCharacter != '\r' && i < 200)
+   while (cCharacter != '\n' && cCharacter != '\r' && i < 499)
    {
       /*
          Solange der Nutzer nicht die Enter-Taste drückt oder das Passwort zu
@@ -39,8 +39,18 @@ void passwd_input(char cBuff[200])
       */
       cBuff[i++] = cCharacter;
       cCharacter = _getch();
-      _putch('*');
+         _putch('*');
    }
    /* Der String wird terminiert */
    cBuff[i] = '\0';
+
+   while (cCharacter != '\n' && cCharacter != '\r') {
+      /* 
+         Gruppe C wollte die Möglichkeit haben, dass der Nutzer mehr Zeichen
+         eingeben kann als der Puffer Speicher hat. Wir haben uns entschieden
+         die überlappende Eingabe zu simulieren und zu ignorieren
+      */
+      cCharacter = _getch();
+      _putch('*');
+   }
 }
