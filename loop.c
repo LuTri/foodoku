@@ -27,6 +27,7 @@
 //Präprozessorkonstanten
 
 #define KEY_RETURN 13
+#define KEY_NUMPAD_RETURN -53
 
 #define NUM_1 '0'+1
 #define NUM_2 '0'+2
@@ -81,9 +82,8 @@ void game_loop(int iSchwierigkeit, int iSpielart, int iUserId)
    //Spielaufbau
    startup_sudoku();
    //gelöstes Sudoku erstellen
-   create_sudoku(iSchwierigkeit-1);
    //lösbare Sudoku aus gelöstem Sudoku erstellen
-   //easy_sudoku();
+   create_sudoku(iSchwierigkeit-1);
    //Start-Sudoku merken
    prepare_start_sudoku();
 
@@ -179,6 +179,7 @@ void game_loop(int iSchwierigkeit, int iSpielart, int iUserId)
          //Navigation durch Pfeiltasten
 
       case KEY_RETURN:
+      case KEY_NUMPAD_RETURN:
          if(cTempTaste != 0 && check_input(iX, iY)){
 
             cShownSudoku[iY][iX] = cTempTaste - '0';
