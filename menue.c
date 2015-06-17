@@ -105,9 +105,9 @@ int iSpieleauswahl()
    int iAuswahlSpiel;
 
    //Auswahl der Schwierigkeit
-   printf("1: Anf\204nger\n"
+   printf("1: Leicht\n"
           "2: Normal\n"
-          "3: Profi\n"
+          "3: Schwierig\n"
           "4: zur\201ck\n\n");
 
    printf("Auswahl: ");
@@ -153,9 +153,9 @@ void Registrieren(void)
    int icheck;
 
    //Speicher für die Registrierungsangaben
-   char cNickname[20];
-   char cName[20];
-   char cLastname[20];
+   char cNickname[500];
+   char cName[500];
+   char cLastname[500];
    char cPassword[500];
 
    CLEAR_SCREEN
@@ -168,7 +168,7 @@ void Registrieren(void)
 
    //Eingabe des Spielernamens
    printf("Gew\201nschter Spielername: ");
-   scanf("%s", cNickname);
+   scanf("%499s", cNickname);
    printf("\n");
    myUser.sNickname =(char*)malloc(sizeof(char)*strlen(cNickname)+1);
 
@@ -176,7 +176,7 @@ void Registrieren(void)
    {
       //Eingabe des Vornamens
       printf("Vorname: ");
-      scanf("%s", cName);
+      scanf("%499s", cName);
       printf("\n");
       myUser.sName =(char*)malloc(sizeof(char)*strlen(cName)+1);
 
@@ -184,7 +184,7 @@ void Registrieren(void)
       {
          //Eingabe des Nachnamens
          printf("Nachname: ");
-         scanf("%s", cLastname);
+         scanf("%499s", cLastname);
          printf("\n");
          myUser.sLastname =(char*)malloc(sizeof(char)*strlen(cLastname)+1);
 
