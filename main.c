@@ -35,7 +35,10 @@ int main(void)
    } else {
       printf("Fehler: Ihr Terminal ist zu klein.\n"\
              "Bitte vergoessern sie die Groesse Ihres Terminals auf mindestens"\
-             " %d x %d Zeichen.\n", MIN_WIDTH, MIN_HEIGHT);
+             " %d x %d Zeichen.\n\nRechts-klicken sie dafuer auf den oberen"\
+             " Rahmen dieses Terminals und bearbeiten sie die Standardwerte"\
+             " dementsprechend.\n\nDie Werte werden erst nach Neustart "\
+             "uebernommen.\n\n", MIN_WIDTH, MIN_HEIGHT);
       SYSTEM_PAUSE
    }
 	return 0;
